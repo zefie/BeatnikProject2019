@@ -613,6 +613,8 @@
             // loopcb
             // 
             this.loopcb.AutoSize = true;
+            this.loopcb.Checked = true;
+            this.loopcb.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loopcb.Location = new System.Drawing.Point(536, 150);
             this.loopcb.Name = "loopcb";
             this.loopcb.Size = new System.Drawing.Size(97, 17);
