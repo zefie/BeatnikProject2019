@@ -51,7 +51,7 @@ namespace BXPatchSwitcher
             // store selected patch
             int patchidx = bxpatchcb.SelectedIndex;
 
-            string rawopts = patchidx.ToString();
+            string rawopts = patchidx.ToString() + " " + junctionchk.Checked.ToString();
             string outopts = "";
 
             // for handling session data from BXPlayerGUI
@@ -63,69 +63,55 @@ namespace BXPatchSwitcher
                 list.RemoveAt(0);
                 rawopts += " " + ZefieLib.Data.Base64Encode(String.Join("|", options));
                 outopts = ZefieLib.Data.Base64Encode(String.Join("|", list.ToArray()));
-                Debug.WriteLine("Received Session Data: " + rawopts);
+                Debug.WriteLine("Received Session Data: " + rawopts.Split(' ')[2]);
                 Debug.WriteLine("Return Session Data: " + outopts);
             }
-
-            if (!InstallPatch(patchidx, rawopts, true))
+            string res = InstallPatch(patchidx, rawopts);
+            if (res != "OK")
             {
                 if (CheckAdministrator(rawopts))
                 {
                     InstallPatch(patchidx, rawopts);
                 }
             }
-            Init_Form();
         }
 
-        private bool InstallPatch(int patchidx, string outopts, bool noerror = false)
+        private string InstallPatch(int patchidx, string outopts, bool noerror = false)
         {
             try
             {
                 string source_file = GetHSBFileByIndex(patchidx);
-                Debug.WriteLine("src: " + source_file);
                 if (File.Exists(bxpatch_dest))
                 {
-                    Debug.WriteLine(bxpatch_dest + " exists; set normal flags");
                     File.SetAttributes(bxpatch_dest, FileAttributes.Normal);
                 }
-                if (junctionchk.Checked && !junctioned && (bxpatch_dest != bxpatch_preferred_dest))
+                if (junctionchk.Checked && !junctioned)
                 {
-                    Debug.WriteLine("unjunctioned -> junctioned");
-                    if (File.Exists(bxpatch_dest))
+                    if (File.Exists(bxpatch_default_dest))
                     {
-                        Debug.WriteLine("delete "+ bxpatch_dest);
-                        File.Delete(bxpatch_dest);
+                        File.Delete(bxpatch_default_dest);
                     }
                     if (File.Exists(bxpatch_preferred_dest))
                     {
-                        Debug.WriteLine("delete " + bxpatch_preferred_dest);
                         File.Delete(bxpatch_preferred_dest);
                     }
-                    Debug.WriteLine("copy src to " + bxpatch_preferred_dest);
                     File.Copy(source_file, bxpatch_preferred_dest);
-                    Debug.WriteLine("junction" + bxpatch_dest + " to " + bxpatch_preferred_dest);
-                    ZefieLib.Path.CreateSymbolicLink(bxpatch_dest, bxpatch_preferred_dest,ZefieLib.Path.SymbolicLink.File);
+                    ZefieLib.Path.CreateSymbolicLink(bxpatch_default_dest, bxpatch_preferred_dest, ZefieLib.Path.SymbolicLink.File);
                     bxpatch_dest = bxpatch_preferred_dest;
                     junctioned = true;
-                    Debug.WriteLine("junctioning complete");
                 }
                 else
                 {
                     if (File.Exists(bxpatch_dest))
                     {
-                        Debug.WriteLine("delete " + bxpatch_dest);
                         File.Delete(bxpatch_dest);
                     }
                     if (!junctionchk.Checked && junctioned)
                     {
-                        Debug.WriteLine("junctioned -> unjunctioned");
-                        Debug.WriteLine("delete junction " + bxpatch_default_dest);                        
                         File.Delete(bxpatch_default_dest);
                         bxpatch_dest = bxpatch_default_dest;
                         junctioned = false;
-                        Debug.WriteLine("unjunctioning complete");
                     }
-                    Debug.WriteLine("copy src to " + bxpatch_dest);
                     File.Copy(source_file, bxpatch_dest);
                 }
                 File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
@@ -139,23 +125,30 @@ namespace BXPatchSwitcher
                             Arguments = outopts
                         };
                         Process.Start(startInfo);
+                        Application.Exit();
                     }
-                    Application.Exit();
+                    else
+                    {
+                        Init_Form();
+                        return "OK";
+                    }
                 }
                 else
                 {
                     MessageBox.Show("Successfully installed patchset!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
-                    return true;
+                    Init_Form();
+                    return "OK";
                 }
             }
             catch (Exception f)
             {
-                if (!noerror)
+                if (f.GetType().ToString() != "System.UnauthorizedAccessException")
                 {
-                    MessageBox.Show("Error:\n\n" + f.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error ("+f.GetType().ToString()+"):\n\n" + f.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                return f.Message;
             }
-            return false;
+            return "???";
         }
 
         private string GetHSBFileByIndex(int index)
@@ -223,6 +216,7 @@ namespace BXPatchSwitcher
 
         private void Init_Form()
         {
+            junctionchk.Checked = true;
             if (File.Exists(bxpatch_default_dest))
             {
                 try
@@ -232,7 +226,7 @@ namespace BXPatchSwitcher
                 }
                 catch
                 {
-                    junctioned = true;
+                    junctionchk.Checked = true;
                     bxinsthsb.Text = "~ CANNOT READ, BROKEN JUNCTION ~";
                     Debug.WriteLine("Could not read " + bxpatch_default_dest + ", bad junction?");
                 }
@@ -243,7 +237,6 @@ namespace BXPatchSwitcher
                 bxinsthsb.Text = "None";
             }
 
-            junctionchk.Checked = junctioned;
 
             if (File.Exists(bankfile))
             {
@@ -278,6 +271,9 @@ namespace BXPatchSwitcher
                                         {
                                             Debug.WriteLine("Detected " + patchname + " as currently installed");
                                             bxinsthsb.Text = patchname;
+                                            if (junctioned) {
+                                                bxinsthsb.Text += " (Junctioned)";
+                                            }
                                             bxpatchcb.SelectedIndex = (bxpatchcb.Items.Count - 1);
                                         }
                                     }
@@ -313,19 +309,35 @@ namespace BXPatchSwitcher
                     bxpatchcb.SelectedIndex = argidx;
                     has_index = true;
                 }
+                if (args.Length > 3)
+                {
+                    junctionchk.Checked = Convert.ToBoolean(args[2]);
+                    options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[3])).Split('|');
+                    if (File.Exists(options[0]))
+                    {
+                        return_exe = options[0];
+                    }
+                }
                 if (args.Length > 2 || !has_index)
                 {
-                    try
+                    if (has_index)
                     {
-                        int argidx2 = has_index ? 2 : 1;
-                        
-                        options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[argidx2])).Split('|');
-                        if (File.Exists(options[0]))
-                        {
-                            return_exe = options[0];
-                        }
+                        junctionchk.Checked = Convert.ToBoolean(args[2]);
                     }
-                    catch { }
+                    else
+                    {
+                        try
+                        {
+                            int argidx2 = has_index ? 2 : 1;
+
+                            options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[argidx2])).Split('|');
+                            if (File.Exists(options[0]))
+                            {
+                                return_exe = options[0];
+                            }
+                        }
+                        catch { }
+                    }
                 }
                 if (has_index)
                 {
