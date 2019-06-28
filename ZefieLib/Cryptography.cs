@@ -89,7 +89,7 @@ namespace ZefieLib
         /// </summary>
         /// <param name="bits">length in bits</param>
         /// <returns>A hexadecimal string</returns>
-        public static string GenerateenHash(int bits = 256)
+        public static string GenerateHash(int bits = 256)
         {
             return Cryptography.GenerateCryptoString((bits / 8), "0123456789ABCDEF");
         }

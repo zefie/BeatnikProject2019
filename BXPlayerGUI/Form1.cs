@@ -10,6 +10,7 @@ using BXPlayer;
 using BXPlayerEvents;
 using System.ComponentModel;
 using System.Text;
+using System.Collections.Generic;
 
 namespace BXPlayerGUI
 {
@@ -100,8 +101,99 @@ namespace BXPlayerGUI
                 {
                     PlayFile(args[1], loopcb.Checked);
                 }
+                else
+                {
+                    ProcessStartupOptions(args[1]);
+                }
             }
         }
+
+        private void ProcessStartupOptions(string serialized_data)
+        {
+            try
+            {
+                // session data comes back without the exe in slot 0
+
+                string[] options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(serialized_data)).Split('|');
+                SetCheckBoxChecked(loopcb, Convert.ToBoolean(options[5]));
+                if (options[0].Length > 0)
+                {
+                    PlayFile(options[0], loopcb.Checked);
+                }
+
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += new DoWorkEventHandler(
+                    delegate (object o, DoWorkEventArgs arg)
+                    {
+                        while (bx.Duration == 0 && bx.PlayState == PlayState.Playing)
+                        {
+                            // fucking terrible I know
+                            Thread.Sleep(100);
+                        }
+
+                        bx.Volume = Convert.ToInt32(options[1]);
+                        bx.Tempo = Convert.ToInt32(options[2]);
+                        bx.Transpose = Convert.ToInt32(options[3]);
+                        bx.Position = Convert.ToInt32(options[4]);
+                        SetCheckBoxChecked(midichk_1, Convert.ToBoolean(options[6]));
+                        SetCheckBoxChecked(midichk_2, Convert.ToBoolean(options[7]));
+                        SetCheckBoxChecked(midichk_3, Convert.ToBoolean(options[8]));
+                        SetCheckBoxChecked(midichk_4, Convert.ToBoolean(options[9]));
+                        SetCheckBoxChecked(midichk_5, Convert.ToBoolean(options[10]));
+                        SetCheckBoxChecked(midichk_6, Convert.ToBoolean(options[11]));
+                        SetCheckBoxChecked(midichk_7, Convert.ToBoolean(options[12]));
+                        SetCheckBoxChecked(midichk_8, Convert.ToBoolean(options[13]));
+                        SetCheckBoxChecked(midichk_9, Convert.ToBoolean(options[14]));
+                        SetCheckBoxChecked(midichk_10, Convert.ToBoolean(options[15]));
+                        SetCheckBoxChecked(midichk_11, Convert.ToBoolean(options[16]));
+                        SetCheckBoxChecked(midichk_12, Convert.ToBoolean(options[17]));
+                        SetCheckBoxChecked(midichk_13, Convert.ToBoolean(options[18]));
+                        SetCheckBoxChecked(midichk_14, Convert.ToBoolean(options[19]));
+                        SetCheckBoxChecked(midichk_15, Convert.ToBoolean(options[20]));
+                        SetCheckBoxChecked(midichk_16, Convert.ToBoolean(options[21]));
+                        GC.Collect();
+                    }
+                );
+                bw.RunWorkerAsync();
+
+            }
+            catch { }
+        }
+
+        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string SerializeData()
+        {
+            string options = Process.GetCurrentProcess().MainModule.FileName + "|" +
+                current_file + "|" +
+                bx.Volume.ToString() + "|" +
+                bx.Tempo.ToString() + "|" +
+                bx.Transpose.ToString() + "|" +
+                bx.Position.ToString() + "|" +
+                loopcb.Checked.ToString() + "|" +
+                midichk_1.Checked.ToString() + "|" +
+                midichk_2.Checked.ToString() + "|" +
+                midichk_3.Checked.ToString() + "|" +
+                midichk_4.Checked.ToString() + "|" +
+                midichk_5.Checked.ToString() + "|" +
+                midichk_6.Checked.ToString() + "|" +
+                midichk_7.Checked.ToString() + "|" +
+                midichk_8.Checked.ToString() + "|" +
+                midichk_9.Checked.ToString() + "|" +
+                midichk_10.Checked.ToString() + "|" +
+                midichk_11.Checked.ToString() + "|" +
+                midichk_12.Checked.ToString() + "|" +
+                midichk_13.Checked.ToString() + "|" +
+                midichk_14.Checked.ToString() + "|" +
+                midichk_15.Checked.ToString() + "|" +
+                midichk_16.Checked.ToString();
+
+            return ZefieLib.Data.Base64Encode(options);
+        }
+
 
         private void Bx_ProgressChanged(object sender, ProgressEvent e)
         {
@@ -150,11 +242,9 @@ namespace BXPlayerGUI
         {
             Debug.WriteLine("filechanged fired");
             default_tempo = e.Tempo;
-
             SetTrackbarValue(tempoControl, e.Tempo);
             SetTrackbarValue(transposeControl, 0);
             SetLabelText(transposevalbl, "0");
-            current_file = e.File;
             SetLabelText(durationlbl, FormatTime(e.Duration));
             SetTrackbarValue(seekbar, 0, e.Duration);
             SetLabelText(statusfile, Path.GetFileName(e.File));
@@ -401,8 +491,13 @@ namespace BXPlayerGUI
         {
             try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo(cwd+_patchswitcher_exe);
-                System.Diagnostics.Process.Start(startInfo);
+                string serialized_data = SerializeData();
+                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe)
+                {
+                    Arguments = serialized_data
+                };
+                Debug.WriteLine("Sending Session Data: "+serialized_data);
+                Process.Start(startInfo);
                 Application.Exit();
             }
             catch (Exception f)

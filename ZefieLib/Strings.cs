@@ -13,7 +13,7 @@ namespace ZefieLib
         /// <returns>A hexadecimal string</returns>
         public static string GenerateHexString(int length)
         {
-            return Cryptography.GenerateenHash(length * 8);
+            return Cryptography.GenerateHash(length * 8);
         }
         /// <summary>
         /// Generates a random string

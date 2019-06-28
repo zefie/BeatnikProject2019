@@ -4,6 +4,8 @@ using System.Xml;
 using System.IO;
 using System.Diagnostics;
 using System.Security.Principal;
+using System.Collections.Generic;
+using System.Text;
 
 namespace BXPatchSwitcher
 {
@@ -14,19 +16,43 @@ namespace BXPatchSwitcher
         private readonly string[] args = Environment.GetCommandLineArgs();
         private readonly string patches_dir;
         private readonly string bankfile;
+        private string[] options;
+        private string return_exe;
         private string current_hash;
 
         public Form1()
         {
             InitializeComponent();
+#if DEBUG
+            patches_dir = "E:\\zefie\\Documents\\Visual Studio 2019\\Projects\\BeatnikProject2019\\BXPlayerGUI\\bin\\x86\\Debug\\BXBanks\\";
+#else
             patches_dir = cwd + "BXBanks\\";
+#endif
             bankfile = patches_dir + "BXBanks.xml";
         }
-
+   
         private void BxpatchBtn_Click(object sender, EventArgs e)
         {
+            // store selected patch
             int patchidx = bxpatchcb.SelectedIndex;
-            if (CheckAdministrator(patchidx.ToString())) {
+
+            string rawopts = patchidx.ToString();
+            string outopts = "";
+
+            // for handling session data from BXPlayerGUI
+            
+            if (options != null)
+            {
+                List<string> list;
+                list = new List<string>(options);
+                list.RemoveAt(0);
+                rawopts += " " + ZefieLib.Data.Base64Encode(String.Join("|", options));
+                outopts = ZefieLib.Data.Base64Encode(String.Join("|", list.ToArray()));
+                Debug.WriteLine("Received Session Data: " + rawopts);
+                Debug.WriteLine("Return Session Data: " + outopts);
+            }
+
+            if (CheckAdministrator(rawopts)) {
                 {
                     try
                     {
@@ -36,13 +62,23 @@ namespace BXPatchSwitcher
                         if (File.Exists(bxpatch_dest)) File.Delete(bxpatch_dest);
                         File.Copy(source_file, bxpatch_dest);
                         File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
-                        DialogResult result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
-                        if (result == DialogResult.Yes)
+                        if (return_exe != null)
                         {
-                            ProcessStartInfo startInfo = new ProcessStartInfo("BXPlayerGUI.exe");
-                            Process.Start(startInfo);
+                            DialogResult result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                            if (result == DialogResult.Yes)
+                            {
+                                ProcessStartInfo startInfo = new ProcessStartInfo(return_exe)
+                                {
+                                    Arguments = outopts
+                                };
+                                Process.Start(startInfo);
+                            }
+                            Application.Exit();
                         }
-                        Application.Exit();
+                        else
+                        {
+                            MessageBox.Show("Successfully installed patchset!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
+                        }
                     }
                     catch (Exception f)
                     {
@@ -167,6 +203,7 @@ namespace BXPatchSwitcher
         private void Form1_Load(object sender, EventArgs e)
         {
             Init_Form();
+            bool has_index = false;
             if (args.Length > 1)
             {
                 int argidx = -1;
@@ -175,6 +212,24 @@ namespace BXPatchSwitcher
                 if (argidx >= 0)
                 {
                     bxpatchcb.SelectedIndex = argidx;
+                    has_index = true;
+                }
+                if (args.Length > 2 || !has_index)
+                {
+                    try
+                    {
+                        int argidx2 = has_index ? 2 : 1;
+                        
+                        options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[argidx2])).Split('|');
+                        if (File.Exists(options[0]))
+                        {
+                            return_exe = options[0];
+                        }
+                    }
+                    catch { }
+                }
+                if (has_index)
+                {
                     BxpatchBtn_Click(null, null);
                 }
             }

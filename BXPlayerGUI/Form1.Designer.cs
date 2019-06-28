@@ -117,8 +117,8 @@
             // 
             this.midichpnl.ColumnCount = 16;
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
-            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.977556F));
-            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.491272F));
+            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
+            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
@@ -334,9 +334,9 @@
             this.midichk_3.AutoSize = true;
             this.midichk_3.Checked = true;
             this.midichk_3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.midichk_3.Location = new System.Drawing.Point(64, 18);
+            this.midichk_3.Location = new System.Drawing.Point(53, 18);
             this.midichk_3.Name = "midichk_3";
-            this.midichk_3.Size = new System.Drawing.Size(8, 14);
+            this.midichk_3.Size = new System.Drawing.Size(15, 14);
             this.midichk_3.TabIndex = 18;
             this.midichk_3.UseVisualStyleBackColor = true;
             this.midichk_3.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
@@ -471,9 +471,9 @@
             // midichlbl3
             // 
             this.midichlbl3.AutoSize = true;
-            this.midichlbl3.Location = new System.Drawing.Point(64, 0);
+            this.midichlbl3.Location = new System.Drawing.Point(53, 0);
             this.midichlbl3.Name = "midichlbl3";
-            this.midichlbl3.Size = new System.Drawing.Size(8, 13);
+            this.midichlbl3.Size = new System.Drawing.Size(13, 13);
             this.midichlbl3.TabIndex = 2;
             this.midichlbl3.Text = "3";
             // 
@@ -567,7 +567,7 @@
             this.statustitle.AutoSize = false;
             this.statustitle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.statustitle.Name = "statustitle";
-            this.statustitle.Size = new System.Drawing.Size(546, 17);
+            this.statustitle.Size = new System.Drawing.Size(547, 17);
             this.statustitle.Spring = true;
             this.statustitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
