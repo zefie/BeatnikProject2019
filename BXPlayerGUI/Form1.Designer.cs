@@ -619,6 +619,7 @@
             // loopcb
             // 
             this.loopcb.AutoSize = true;
+            this.loopcb.BackColor = System.Drawing.Color.Transparent;
             this.loopcb.Checked = true;
             this.loopcb.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loopcb.Location = new System.Drawing.Point(95, 4);
@@ -626,7 +627,7 @@
             this.loopcb.Size = new System.Drawing.Size(97, 17);
             this.loopcb.TabIndex = 21;
             this.loopcb.Text = "Loop Playback";
-            this.loopcb.UseVisualStyleBackColor = true;
+            this.loopcb.UseVisualStyleBackColor = false;
             this.loopcb.CheckedChanged += new System.EventHandler(this.Loopcb_CheckedChanged);
             // 
             // midichrstbtn
@@ -865,6 +866,7 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(116, 16);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
@@ -902,9 +904,9 @@
             // 
             // miniControlPanel
             // 
+            this.miniControlPanel.Controls.Add(this.loopcb);
             this.miniControlPanel.Controls.Add(this.pictureBox1);
             this.miniControlPanel.Controls.Add(this.bxversionlbl);
-            this.miniControlPanel.Controls.Add(this.loopcb);
             this.miniControlPanel.Controls.Add(this.openfile);
             this.miniControlPanel.Controls.Add(this.playbut);
             this.miniControlPanel.Controls.Add(this.stopbut);
