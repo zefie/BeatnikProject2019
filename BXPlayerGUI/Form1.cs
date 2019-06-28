@@ -65,31 +65,64 @@ namespace BXPlayerGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            bool patchloaded = true;
             if (File.Exists(bxpatch_dest))
             {
-                current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_dest);
-                Debug.WriteLine("Current Patches Hash: " + current_hash);
-                if (File.Exists(bankfile))
+                try
                 {
-                    using (XmlReader reader = XmlReader.Create(bankfile))
+                    current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_dest);
+                    Debug.WriteLine("Current Patches Hash: " + current_hash);
+
+                    if (File.Exists(bankfile))
                     {
-                        while (reader.Read())
+                        using (XmlReader reader = XmlReader.Create(bankfile))
                         {
-                            if (reader.NodeType == XmlNodeType.Element)
+                            while (reader.Read())
                             {
-                                if (reader.Name == "bank")
+                                if (reader.NodeType == XmlNodeType.Element)
                                 {
-                                    string patchfile = patches_dir + reader.GetAttribute("src");
-                                    string patchname = reader.GetAttribute("name");
-                                    string patchhash = reader.GetAttribute("sha1");
-                                    if (patchhash == current_hash)
+                                    if (reader.Name == "bank")
                                     {
-                                        Debug.WriteLine("Detected " + patchname + " as currently installed");
-                                        SetLabelText(bxinsthsb, patchname);
+                                        string patchfile = patches_dir + reader.GetAttribute("src");
+                                        string patchname = reader.GetAttribute("name");
+                                        string patchhash = reader.GetAttribute("sha1");
+                                        if (patchhash == current_hash)
+                                        {
+                                            Debug.WriteLine("Detected " + patchname + " as currently installed");
+                                            SetLabelText(bxinsthsb, patchname);
+                                        }
                                     }
                                 }
                             }
                         }
+                    }
+                }
+                catch
+                {
+                    patchloaded = false;
+                }
+            }
+            else
+            {
+                patchloaded = false;
+            }
+            if (patchloaded)
+            {
+                bx.MetaDataChanged += Bx_MetaDataChanged;
+                bx.FileChanged += Bx_FileChanged;
+                bx.PlayStateChanged += Bx_PlayStateChanged;
+                bx.ProgressChanged += Bx_ProgressChanged;
+                bx.BXInit();
+                SetLabelText(bxversionlbl, "v" + bx.Version);
+                if (args.Length > 1)
+                {
+                    if (File.Exists(args[1]))
+                    {
+                        PlayFile(args[1], loopcb.Checked);
+                    }
+                    else
+                    {
+                        ProcessStartupOptions(args[1]);
                     }
                 }
             }
@@ -99,23 +132,6 @@ namespace BXPlayerGUI
                 SetLabelText(bxinsthsb, "None");
                 SetControlEnabled(loopcb, false);
                 SetControlEnabled(openfile, false);
-            }
-            bx.MetaDataChanged += Bx_MetaDataChanged;
-            bx.FileChanged += Bx_FileChanged;
-            bx.PlayStateChanged += Bx_PlayStateChanged;
-            bx.ProgressChanged += Bx_ProgressChanged;
-            bx.BXInit();
-            SetLabelText(bxversionlbl, "v" + bx.Version);
-            if (args.Length > 1)
-            {
-                if (File.Exists(args[1]))
-                {
-                    PlayFile(args[1], loopcb.Checked);
-                }
-                else
-                {
-                    ProcessStartupOptions(args[1]);
-                }
             }
         }
 
