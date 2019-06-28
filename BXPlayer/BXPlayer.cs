@@ -136,12 +136,15 @@ namespace BXPlayer
             {
                 if (text.Length > 1)
                 {
-                    Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
-                    MetaDataEvent mevt = new MetaDataEvent
+                    if (text != "loopstart" && text != "loopend")
                     {
-                        Title = Title
-                    };
-                    OnMetaDataChanged(this, mevt);
+                        Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
+                        MetaDataEvent mevt = new MetaDataEvent
+                        {
+                            Title = Title
+                        };
+                        OnMetaDataChanged(this, mevt);
+                    }
                 }
             }
             else if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
