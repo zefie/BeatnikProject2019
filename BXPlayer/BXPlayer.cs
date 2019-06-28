@@ -225,7 +225,10 @@ namespace BXPlayer
 
         public void PlayFile(string file, bool loop = false, string real_file = null)
         {
-            Stop();
+            if (PlayState == PlayState.Playing || PlayState == PlayState.Playing)
+            {
+                Stop();
+            }
             
             FileName = real_file ?? Path.GetFileName(file);
 

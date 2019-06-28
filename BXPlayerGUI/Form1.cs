@@ -493,9 +493,9 @@ namespace BXPlayerGUI
         {
             foreach (Control c in midichpnl.Controls)
             {
-                if (c is CheckBox)
+                if (c is CheckBox cb)
                 {
-                    SetCheckBoxChecked((CheckBox)c, false);
+                    SetCheckBoxChecked(cb, false);
                 }
             }
         }
@@ -511,6 +511,17 @@ namespace BXPlayerGUI
             }
         }
 
+        private void Midichrstbtn_Click(object sender, EventArgs e)
+        {
+            foreach (Control c in midichpnl.Controls)
+            {
+                if (c is CheckBox cb)
+                {
+                    SetCheckBoxChecked(cb, true);
+                }
+            }
+        }
+
         private void Transposerstbtn_Click(object sender, EventArgs e)
         {
             SetTrackbarValue(transposeControl, 0);
@@ -521,17 +532,6 @@ namespace BXPlayerGUI
         private void Transposetb_Scroll(object sender, EventArgs e)
         {
             SetTranspose(transposeControl.Value);
-        }
-
-        private void Midichrstbtn_Click(object sender, EventArgs e)
-        {
-            foreach (Control c in midichpnl.Controls)
-            {
-                if (c is CheckBox)
-                {
-                    SetCheckBoxChecked((CheckBox)c, true);
-                }               
-            }
         }
 
         private void Patchswlnchr_Click(object sender, EventArgs e)
@@ -696,7 +696,6 @@ namespace BXPlayerGUI
             short midich = (short)Convert.ToInt16(thebox.Name.Split('_')[1]);
             bool muted = !thebox.Checked;
             bx.MuteChannel(midich, muted);
-            Debug.WriteLine("MIDI Channel " + midich + " Muted: " + muted);
         }
     }
 }
