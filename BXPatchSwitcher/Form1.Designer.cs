@@ -33,6 +33,7 @@
             this.bxpatchlbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.bxinsthsb = new System.Windows.Forms.Label();
+            this.junctionchk = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // bxpatchBtn
@@ -81,11 +82,23 @@
             this.bxinsthsb.Text = "Unknown";
             this.bxinsthsb.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // junctionchk
+            // 
+            this.junctionchk.AutoSize = true;
+            this.junctionchk.Location = new System.Drawing.Point(74, 83);
+            this.junctionchk.Name = "junctionchk";
+            this.junctionchk.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.junctionchk.Size = new System.Drawing.Size(202, 30);
+            this.junctionchk.TabIndex = 11;
+            this.junctionchk.Text = "Use NTFS Junction to prevent future\r\nadministrative privledge requirements.";
+            this.junctionchk.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(288, 89);
+            this.ClientSize = new System.Drawing.Size(288, 125);
+            this.Controls.Add(this.junctionchk);
             this.Controls.Add(this.bxinsthsb);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bxpatchBtn);
@@ -109,6 +122,7 @@
         private System.Windows.Forms.Label bxpatchlbl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label bxinsthsb;
+        private System.Windows.Forms.CheckBox junctionchk;
     }
 }
 

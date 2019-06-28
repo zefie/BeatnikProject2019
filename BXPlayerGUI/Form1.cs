@@ -65,30 +65,40 @@ namespace BXPlayerGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_dest);
-            Debug.WriteLine("Current Patches Hash: " + current_hash);
-            if (File.Exists(bankfile))
+            if (File.Exists(bxpatch_dest))
             {
-                using (XmlReader reader = XmlReader.Create(bankfile))
+                current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_dest);
+                Debug.WriteLine("Current Patches Hash: " + current_hash);
+                if (File.Exists(bankfile))
                 {
-                    while (reader.Read())
+                    using (XmlReader reader = XmlReader.Create(bankfile))
                     {
-                        if (reader.NodeType == XmlNodeType.Element)
+                        while (reader.Read())
                         {
-                            if (reader.Name == "bank")
+                            if (reader.NodeType == XmlNodeType.Element)
                             {
-                                string patchfile = patches_dir + reader.GetAttribute("src");
-                                string patchname = reader.GetAttribute("name");
-                                string patchhash = reader.GetAttribute("sha1");
-                                if (patchhash == current_hash)
+                                if (reader.Name == "bank")
                                 {
-                                    Debug.WriteLine("Detected " + patchname + " as currently installed");
-                                    bxinsthsb.Text = patchname;
+                                    string patchfile = patches_dir + reader.GetAttribute("src");
+                                    string patchname = reader.GetAttribute("name");
+                                    string patchhash = reader.GetAttribute("sha1");
+                                    if (patchhash == current_hash)
+                                    {
+                                        Debug.WriteLine("Detected " + patchname + " as currently installed");
+                                        SetLabelText(bxinsthsb, patchname);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
+            else
+            {
+                Debug.WriteLine("WARN: No patches installed!");
+                SetLabelText(bxinsthsb, "None");
+                SetControlEnabled(loopcb, false);
+                SetControlEnabled(openfile, false);
             }
             bx.MetaDataChanged += Bx_MetaDataChanged;
             bx.FileChanged += Bx_FileChanged;
@@ -359,6 +369,18 @@ namespace BXPlayerGUI
             else
             {
                 c.Visible = visible;
+            }
+        }
+
+        private void SetControlEnabled(Control c, bool enabled)
+        {
+            if (c.InvokeRequired)
+            {
+                c.Invoke(new MethodInvoker(delegate { c.Enabled = enabled; }));
+            }
+            else
+            {
+                c.Enabled = enabled;
             }
         }
 

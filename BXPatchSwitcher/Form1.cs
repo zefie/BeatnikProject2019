@@ -11,11 +11,15 @@ namespace BXPatchSwitcher
 {
     public partial class Form1 : Form
     {
-        private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
-        private readonly string bxpatch_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
+        private readonly string cwd;
+        private readonly string bxpatch_default_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
+        private readonly string bxpatch_preferred_dest;
         private readonly string[] args = Environment.GetCommandLineArgs();
         private readonly string patches_dir;
         private readonly string bankfile;
+        private string bxpatch_dest;
+        private bool junctioned = false;
+        private int default_index;
         private string[] options;
         private string return_exe;
         private string current_hash;
@@ -24,11 +28,22 @@ namespace BXPatchSwitcher
         {
             InitializeComponent();
 #if DEBUG
-            patches_dir = "E:\\zefie\\Documents\\Visual Studio 2019\\Projects\\BeatnikProject2019\\BXPlayerGUI\\bin\\x86\\Debug\\BXBanks\\";
+            cwd = "E:\\zefie\\Documents\\Visual Studio 2019\\Projects\\BeatnikProject2019\\BXPlayerGUI\\bin\\x86\\Debug\\";
 #else
-            patches_dir = cwd + "BXBanks\\";
+            cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";            
 #endif
+            patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
+            bxpatch_preferred_dest = cwd + "\\patches.hsb";
+            bxpatch_dest = bxpatch_default_dest;
+            if (File.Exists(bxpatch_preferred_dest) && File.Exists(bxpatch_default_dest))
+            {
+                if (ZefieLib.Cryptography.Hash.SHA1(bxpatch_preferred_dest) == ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest))
+                {
+                    bxpatch_dest = bxpatch_preferred_dest;
+                    junctioned = true;
+                }
+            }
         }
    
         private void BxpatchBtn_Click(object sender, EventArgs e)
@@ -52,40 +67,95 @@ namespace BXPatchSwitcher
                 Debug.WriteLine("Return Session Data: " + outopts);
             }
 
-            if (CheckAdministrator(rawopts)) {
+            if (!InstallPatch(patchidx, rawopts, true))
+            {
+                if (CheckAdministrator(rawopts))
                 {
-                    try
-                    {
-                        string source_file = GetHSBFileByIndex(patchidx);
-                        Console.WriteLine("Copying " + source_file + " to " + bxpatch_dest);
-                        File.SetAttributes(bxpatch_dest, FileAttributes.Normal);
-                        if (File.Exists(bxpatch_dest)) File.Delete(bxpatch_dest);
-                        File.Copy(source_file, bxpatch_dest);
-                        File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
-                        if (return_exe != null)
-                        {
-                            DialogResult result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
-                            if (result == DialogResult.Yes)
-                            {
-                                ProcessStartInfo startInfo = new ProcessStartInfo(return_exe)
-                                {
-                                    Arguments = outopts
-                                };
-                                Process.Start(startInfo);
-                            }
-                            Application.Exit();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Successfully installed patchset!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
-                        }
-                    }
-                    catch (Exception f)
-                    {
-                        MessageBox.Show("Error:\n\n"+ f.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    InstallPatch(patchidx, rawopts);
                 }
             }
+            Init_Form();
+        }
+
+        private bool InstallPatch(int patchidx, string outopts, bool noerror = false)
+        {
+            try
+            {
+                string source_file = GetHSBFileByIndex(patchidx);
+                Debug.WriteLine("src: " + source_file);
+                if (File.Exists(bxpatch_dest))
+                {
+                    Debug.WriteLine(bxpatch_dest + " exists; set normal flags");
+                    File.SetAttributes(bxpatch_dest, FileAttributes.Normal);
+                }
+                if (junctionchk.Checked && !junctioned && (bxpatch_dest != bxpatch_preferred_dest))
+                {
+                    Debug.WriteLine("unjunctioned -> junctioned");
+                    if (File.Exists(bxpatch_dest))
+                    {
+                        Debug.WriteLine("delete "+ bxpatch_dest);
+                        File.Delete(bxpatch_dest);
+                    }
+                    if (File.Exists(bxpatch_preferred_dest))
+                    {
+                        Debug.WriteLine("delete " + bxpatch_preferred_dest);
+                        File.Delete(bxpatch_preferred_dest);
+                    }
+                    Debug.WriteLine("copy src to " + bxpatch_preferred_dest);
+                    File.Copy(source_file, bxpatch_preferred_dest);
+                    Debug.WriteLine("junction" + bxpatch_dest + " to " + bxpatch_preferred_dest);
+                    ZefieLib.Path.CreateSymbolicLink(bxpatch_dest, bxpatch_preferred_dest,ZefieLib.Path.SymbolicLink.File);
+                    bxpatch_dest = bxpatch_preferred_dest;
+                    junctioned = true;
+                    Debug.WriteLine("junctioning complete");
+                }
+                else
+                {
+                    if (File.Exists(bxpatch_dest))
+                    {
+                        Debug.WriteLine("delete " + bxpatch_dest);
+                        File.Delete(bxpatch_dest);
+                    }
+                    if (!junctionchk.Checked && junctioned)
+                    {
+                        Debug.WriteLine("junctioned -> unjunctioned");
+                        Debug.WriteLine("delete junction " + bxpatch_default_dest);                        
+                        File.Delete(bxpatch_default_dest);
+                        bxpatch_dest = bxpatch_default_dest;
+                        junctioned = false;
+                        Debug.WriteLine("unjunctioning complete");
+                    }
+                    Debug.WriteLine("copy src to " + bxpatch_dest);
+                    File.Copy(source_file, bxpatch_dest);
+                }
+                File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
+                if (return_exe != null)
+                {
+                    DialogResult result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                    if (result == DialogResult.Yes)
+                    {
+                        ProcessStartInfo startInfo = new ProcessStartInfo(return_exe)
+                        {
+                            Arguments = outopts
+                        };
+                        Process.Start(startInfo);
+                    }
+                    Application.Exit();
+                }
+                else
+                {
+                    MessageBox.Show("Successfully installed patchset!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
+                    return true;
+                }
+            }
+            catch (Exception f)
+            {
+                if (!noerror)
+                {
+                    MessageBox.Show("Error:\n\n" + f.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return false;
         }
 
         private string GetHSBFileByIndex(int index)
@@ -153,11 +223,32 @@ namespace BXPatchSwitcher
 
         private void Init_Form()
         {
-            current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_dest);
-            Debug.WriteLine("Current Patches Hash: " + current_hash);
+            if (File.Exists(bxpatch_default_dest))
+            {
+                try
+                {
+                    current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest);
+                    Debug.WriteLine("Current Patches Hash: " + current_hash);
+                }
+                catch
+                {
+                    junctioned = true;
+                    bxinsthsb.Text = "~ CANNOT READ, BROKEN JUNCTION ~";
+                    Debug.WriteLine("Could not read " + bxpatch_default_dest + ", bad junction?");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("WARN: No patches installed!");
+                bxinsthsb.Text = "None";
+            }
+
+            junctionchk.Checked = junctioned;
+
             if (File.Exists(bankfile))
             {
                 bxpatchcb.Items.Clear();
+                int idx = 0;
                 using (XmlReader reader = XmlReader.Create(bankfile))
                 {
                     while (reader.Read())
@@ -169,6 +260,13 @@ namespace BXPatchSwitcher
                                 string patchfile = patches_dir + reader.GetAttribute("src");
                                 string patchname = reader.GetAttribute("name");
                                 string patchsha1_expected = reader.GetAttribute("sha1");
+                                string @default = reader.GetAttribute("default"); if (@default != null)
+                                {
+                                    if (Convert.ToBoolean(@default))
+                                    {
+                                        default_index = idx;
+                                    }
+                                }
                                 if (File.Exists(patchfile))
                                 {
                                     string patchsha1 = ZefieLib.Cryptography.Hash.SHA1(patchfile);
@@ -184,13 +282,14 @@ namespace BXPatchSwitcher
                                         }
                                     }
                                 }
+                                idx++;
                             }
                         }
                     }
                 }
-                if (bxinsthsb.Text == "Unknown")
+                if (bxinsthsb.Text == "Unknown" || bxinsthsb.Text == "None" || bxinsthsb.Text.Substring(0,1) == "~")
                 {
-                    bxpatchcb.SelectedIndex = 0;
+                    bxpatchcb.SelectedIndex = default_index;
                 }
             }
             else

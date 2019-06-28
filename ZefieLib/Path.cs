@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ZefieLib
 {
@@ -26,6 +27,15 @@ namespace ZefieLib
                 catch { }
             }
             return null;
+        }
+
+        [DllImport("kernel32.dll")]
+        public static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
+
+        public enum SymbolicLink
+        {
+            File = 0,
+            Directory = 1
         }
     }
 }
