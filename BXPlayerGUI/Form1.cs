@@ -95,6 +95,7 @@ namespace BXPlayerGUI
             bx.PlayStateChanged += Bx_PlayStateChanged;
             bx.ProgressChanged += Bx_ProgressChanged;
             bx.BXInit();
+            SetLabelText(bxversionlbl, "v" + bx.Version);
             if (args.Length > 1)
             {
                 if (File.Exists(args[1]))
@@ -132,9 +133,12 @@ namespace BXPlayerGUI
                         }
 
                         bx.Volume = Convert.ToInt32(options[1]);
-                        bx.Tempo = Convert.ToInt32(options[2]);
-                        bx.Transpose = Convert.ToInt32(options[3]);
-                        bx.Position = Convert.ToInt32(options[4]);
+                        if (bx.PlayState != PlayState.Stopped)
+                        {
+                            bx.Tempo = Convert.ToInt32(options[2]);
+                            bx.Transpose = Convert.ToInt32(options[3]);
+                            bx.Position = Convert.ToInt32(options[4]);
+                        }
                         SetCheckBoxChecked(midichk_1, Convert.ToBoolean(options[6]));
                         SetCheckBoxChecked(midichk_2, Convert.ToBoolean(options[7]));
                         SetCheckBoxChecked(midichk_3, Convert.ToBoolean(options[8]));

@@ -225,7 +225,7 @@ namespace BXPlayer
 
         public void PlayFile(string file, bool loop = false, string real_file = null)
         {
-
+            
             FileName = real_file ?? Path.GetFileName(file);
 
             if (debug)
@@ -241,6 +241,13 @@ namespace BXPlayer
                 fileChangeHelperTimer.Start();
             }
         }
+
+        public int AudioDevicePriority
+        {
+            get { return bx.getAudioDevicePriority(); }
+            set { bx.setAudioDevicePriority(value); }
+        }
+
 
         public int Volume
         {
@@ -274,6 +281,10 @@ namespace BXPlayer
 
         public int Duration => bx.getPlayLength();
 
+        public int FileSize => bx.getFileSize();
+
+        public string Version => bx.getVersion();
+
         public int Position
         {
             get => bx.getPosition();
@@ -284,7 +295,7 @@ namespace BXPlayer
         {
             get => _state;
             private set
-            {
+            {                
                 _state = value;
                 if (value == PlayState.Playing)
                 {

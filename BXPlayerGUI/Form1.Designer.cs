@@ -100,6 +100,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
             this.miniControlPanel = new System.Windows.Forms.Panel();
+            this.bxversionlbl = new System.Windows.Forms.Label();
             this.midichpnl.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
@@ -527,7 +528,7 @@
             // 
             // openfile
             // 
-            this.openfile.Location = new System.Drawing.Point(2, 2);
+            this.openfile.Location = new System.Drawing.Point(2, 1);
             this.openfile.Name = "openfile";
             this.openfile.Size = new System.Drawing.Size(75, 23);
             this.openfile.TabIndex = 2;
@@ -620,7 +621,7 @@
             this.loopcb.AutoSize = true;
             this.loopcb.Checked = true;
             this.loopcb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loopcb.Location = new System.Drawing.Point(95, 6);
+            this.loopcb.Location = new System.Drawing.Point(95, 4);
             this.loopcb.Name = "loopcb";
             this.loopcb.Size = new System.Drawing.Size(97, 17);
             this.loopcb.TabIndex = 21;
@@ -643,7 +644,7 @@
             // playbut
             // 
             this.playbut.Enabled = false;
-            this.playbut.Location = new System.Drawing.Point(2, 34);
+            this.playbut.Location = new System.Drawing.Point(2, 43);
             this.playbut.Name = "playbut";
             this.playbut.Size = new System.Drawing.Size(25, 23);
             this.playbut.TabIndex = 26;
@@ -654,7 +655,7 @@
             // stopbut
             // 
             this.stopbut.Enabled = false;
-            this.stopbut.Location = new System.Drawing.Point(54, 34);
+            this.stopbut.Location = new System.Drawing.Point(54, 43);
             this.stopbut.Name = "stopbut";
             this.stopbut.Size = new System.Drawing.Size(23, 23);
             this.stopbut.TabIndex = 27;
@@ -865,10 +866,11 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(95, 16);
+            this.pictureBox1.Location = new System.Drawing.Point(116, 16);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 41);
+            this.pictureBox1.Size = new System.Drawing.Size(79, 36);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 40;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.PictureBox1_Click);
@@ -900,8 +902,9 @@
             // 
             // miniControlPanel
             // 
-            this.miniControlPanel.Controls.Add(this.loopcb);
             this.miniControlPanel.Controls.Add(this.pictureBox1);
+            this.miniControlPanel.Controls.Add(this.bxversionlbl);
+            this.miniControlPanel.Controls.Add(this.loopcb);
             this.miniControlPanel.Controls.Add(this.openfile);
             this.miniControlPanel.Controls.Add(this.playbut);
             this.miniControlPanel.Controls.Add(this.stopbut);
@@ -909,6 +912,14 @@
             this.miniControlPanel.Name = "miniControlPanel";
             this.miniControlPanel.Size = new System.Drawing.Size(200, 66);
             this.miniControlPanel.TabIndex = 42;
+            // 
+            // bxversionlbl
+            // 
+            this.bxversionlbl.Location = new System.Drawing.Point(83, 38);
+            this.bxversionlbl.Name = "bxversionlbl";
+            this.bxversionlbl.Size = new System.Drawing.Size(114, 27);
+            this.bxversionlbl.TabIndex = 41;
+            this.bxversionlbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // Form1
             // 
@@ -1020,6 +1031,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel mainControlPanel;
         private System.Windows.Forms.Panel miniControlPanel;
+        private System.Windows.Forms.Label bxversionlbl;
     }
 }
 
