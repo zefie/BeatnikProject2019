@@ -533,12 +533,13 @@ namespace BXPlayerGUI
         {
             try
             {
-                string serialized_data = SerializeData();
-                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe)
+                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe);
+                if (bx.active)
                 {
-                    Arguments = serialized_data
-                };
-                Debug.WriteLine("Sending Session Data: "+serialized_data);
+                    string serialized_data = SerializeData();
+                    startInfo.Arguments = serialized_data;
+                    Debug.WriteLine("Sending Session Data: " + serialized_data);
+                }
                 Process.Start(startInfo);
                 Application.Exit();
             }
