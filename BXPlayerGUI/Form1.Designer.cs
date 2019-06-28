@@ -782,7 +782,7 @@
             // 
             // transposeControl
             // 
-            this.transposeControl.LargeChange = 1;
+            this.transposeControl.LargeChange = 3;
             this.transposeControl.Location = new System.Drawing.Point(6, 85);
             this.transposeControl.Minimum = -10;
             this.transposeControl.Name = "transposeControl";
