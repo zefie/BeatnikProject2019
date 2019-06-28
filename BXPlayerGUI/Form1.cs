@@ -580,7 +580,7 @@ namespace BXPlayerGUI
                     statusfile.Text = "";
                     current_file = file;
                     SetVolume(volumeControl.Value);
-                    PlayFile(file);
+                    PlayFile(file,loopcb.Checked);
                 }
             }
         }
