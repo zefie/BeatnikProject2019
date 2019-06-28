@@ -11,15 +11,14 @@ namespace BXPatchSwitcher
     {
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
         private readonly string bxpatch_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
+        private readonly string[] args = Environment.GetCommandLineArgs();
         private readonly string patches_dir;
         private readonly string bankfile;
-        private readonly string[] args;
         private string current_hash;
 
         public Form1()
         {
             InitializeComponent();
-            args = Environment.GetCommandLineArgs();
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
         }
@@ -37,11 +36,11 @@ namespace BXPatchSwitcher
                         if (File.Exists(bxpatch_dest)) File.Delete(bxpatch_dest);
                         File.Copy(source_file, bxpatch_dest);
                         File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
-                        var result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information,MessageBoxDefaultButton.Button2);
+                        DialogResult result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
                         if (result == DialogResult.Yes)
                         {
                             ProcessStartInfo startInfo = new ProcessStartInfo("BXPlayerGUI.exe");
-                            System.Diagnostics.Process.Start(startInfo);
+                            Process.Start(startInfo);
                         }
                         Application.Exit();
                     }
@@ -153,7 +152,10 @@ namespace BXPatchSwitcher
                         }
                     }
                 }
-                if (bxinsthsb.Text == "Unknown") bxpatchcb.SelectedIndex = 0;
+                if (bxinsthsb.Text == "Unknown")
+                {
+                    bxpatchcb.SelectedIndex = 0;
+                }
             }
             else
             {

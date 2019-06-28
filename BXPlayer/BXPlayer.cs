@@ -58,9 +58,33 @@ namespace BXPlayer
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
         }
 
+        public void BXInit()
+        {
+            bx = new BeatnikXClass();
+            bx.enableMetaEvents(true);
+            bx.OnMetaEvent += Bx_OnMetaEvent;
+            active = true;
+            if (debug)
+            {
+                Debug.WriteLine("BeatnikX Initalized");
+            }
+        }
+
+
         private void FileChangeHelperTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            FileChangeHelper();
+            if (Duration != 0 && Tempo != 0)
+            {
+                FileChangeEvent fevt = new FileChangeEvent
+                {
+                    File = FileName,
+                    Duration = Duration,
+                    Tempo = Tempo
+                };
+                OnFileChanged(this, fevt);
+                PlayState = PlayState.Playing;
+                fileChangeHelperTimer.Stop();
+            }
         }
 
         private void ProgressMonitor_Elapsed(object sender, ElapsedEventArgs e)
@@ -91,63 +115,10 @@ namespace BXPlayer
             OnProgressChanged(this, pevt);
         }
 
-        public void AboutBox()
-        {
-            bx.AboutBox();
-        }
-
-        public string GetInfo(string info)
-        {
-            return bx.getInfo(info);
-        }
-
-        public void SetPanelDisplay(object display)
-        {
-            bx.setPanelDisplay(display);
-        }
-
-        private void OnFileChanged(object sender, FileChangeEvent e)
-        {
-            FileChanged?.Invoke(this, e);
-        }
-
-        private void OnMetaDataChanged(object sender, MetaDataEvent e)
-        {
-            MetaDataChanged?.Invoke(this, e);
-        }
-
-        private void OnPlayStateChanged(object sender, PlayStateEvent e)
-        {
-            PlayStateChanged?.Invoke(this, e);
-        }
-
-        private void OnProgressChanged(object sender, ProgressEvent e)
-        {
-            ProgressChanged?.Invoke(this, e);
-        }
-
-
-        public void BXInit()
-        {
-            bx = new BeatnikXClass();
-            bx.enableMetaEvents(true);
-            bx.OnMetaEvent += Bx_OnMetaEvent;
-            active = true;
-            if (debug)
-            {
-                Debug.WriteLine("BeatnikX Initalized");
-            }
-        }
-
         public void Play()
         {
             bx.playSimple();
             PlayState = PlayState.Playing;
-        }
-
-        public void DoMenuItem(string menuItem)
-        {
-            bx.doMenuItem(menuItem);
         }
 
         private void Bx_HandlePlayState()
@@ -165,12 +136,7 @@ namespace BXPlayer
             {
                 if (text.Length > 1)
                 {
-                    if (FileHasLyrics)
-                        Title = lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title;
-                    else
-                    {
-                        Title = text;
-                    }
+                    Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
                     MetaDataEvent mevt = new MetaDataEvent
                     {
                         Title = Title
@@ -234,11 +200,13 @@ namespace BXPlayer
             {
                 if (debug)
                 {
+                    // unknown metadata
                     Debug.WriteLine(@event + ": '" + text + "'");
                 }
             }
             if (debug && debug_meta)
             {
+                // all metadata
                 Debug.WriteLine(@event + ": '" + text + "'");
             }
         }
@@ -257,39 +225,19 @@ namespace BXPlayer
         public void PlayFile(string file, bool loop = false, string real_file = null)
         {
 
-            if (real_file != null)
-            {
-                FileName = real_file;
-            }
-            else
-            {
-                FileName = Path.GetFileName(file);
-            }
+            FileName = real_file ?? Path.GetFileName(file);
 
             if (debug)
             {
                 Debug.WriteLine("Loading file: " + file);
                 Debug.WriteLine("Loop enabled: " + loop);
             }
+
             bx.play(loop, file);
+
             if (!fileChangeHelperTimer.Enabled)
             {
                 fileChangeHelperTimer.Start();
-            }
-        }
-
-        private void FileChangeHelper()
-        {
-            if (Duration!= 0 && Tempo!= 0)
-            {
-                FileChangeEvent fevt = new FileChangeEvent
-                {
-                    File = FileName,
-                    Duration = Duration,
-                    Tempo = Tempo                };
-                OnFileChanged(this, fevt);
-                PlayState = PlayState.Playing;
-                fileChangeHelperTimer.Stop();
             }
         }
 
@@ -309,10 +257,27 @@ namespace BXPlayer
             set => bx.setTempo(value);
         }
 
+        public void AboutBox() => bx.AboutBox();
+
+        public string GetInfo(string info) => bx.getInfo(info);
+
+        private void OnFileChanged(object sender, FileChangeEvent e) => FileChanged?.Invoke(this, e);
+
+        private void OnMetaDataChanged(object sender, MetaDataEvent e) => MetaDataChanged?.Invoke(this, e);
+
+        private void OnPlayStateChanged(object sender, PlayStateEvent e) => PlayStateChanged?.Invoke(this, e);
+
+        private void OnProgressChanged(object sender, ProgressEvent e) => ProgressChanged?.Invoke(this, e);
+
+        public void DoMenuItem(string menuItem) => bx.doMenuItem(menuItem);
+
         public int Duration => bx.getPlayLength();
 
-        public int Position { get => bx.getPosition();
-            set => bx.setPosition(value); }
+        public int Position
+        {
+            get => bx.getPosition();
+            set => bx.setPosition(value);
+        }
 
         public PlayState PlayState
         {
@@ -341,8 +306,11 @@ namespace BXPlayer
         public string Title { get; private set; } = null;
         public bool IsReady => bx.IsReady();
 
-        public int Transpose { get => bx.getTranspose();
-            set => bx.setTranspose(Convert.ToInt16(value)); }
+        public int Transpose
+        {
+            get => bx.getTranspose();
+            set => bx.setTranspose(Convert.ToInt16(value));
+        }
 
         public void Pause() => bx.pause();
 
@@ -357,14 +325,16 @@ namespace BXPlayer
 
         public void PlayPause()
         {
-            if (_state == PlayState.Playing)
+            switch (_state)
             {
-                PlayState = PlayState.Paused;
-                Pause();
-            }
-            if (_state == PlayState.Paused)
-            {
-                Play();
+                case PlayState.Playing:
+                    PlayState = PlayState.Paused;
+                    Pause();
+                    break;
+
+                default:
+                    Play();
+                    break;
             }
         }
 
