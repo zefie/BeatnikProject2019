@@ -225,6 +225,7 @@ namespace BXPlayer
 
         public void PlayFile(string file, bool loop = false, string real_file = null)
         {
+            Stop();
             
             FileName = real_file ?? Path.GetFileName(file);
 

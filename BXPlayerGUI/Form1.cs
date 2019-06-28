@@ -576,8 +576,10 @@ namespace BXPlayerGUI
             {
                 if (File.Exists(file))
                 {
-                    statustitle.Text = "";
-                    statusfile.Text = "";
+                    SetLabelText(statustitle, "");
+                    SetLabelText(statusfile, "");
+                    SetLabelText(progresslbl, "");
+                    SetLabelText(durationlbl, "");
                     current_file = file;
                     SetVolume(volumeControl.Value);
                     PlayFile(file,loopcb.Checked);
