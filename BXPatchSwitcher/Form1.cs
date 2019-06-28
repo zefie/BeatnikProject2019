@@ -67,12 +67,16 @@ namespace BXPatchSwitcher
                 Debug.WriteLine("Return Session Data: " + outopts);
             }
             string res = InstallPatch(patchidx, rawopts);
-            if (res != "OK")
+            if (res != "OK" && res != "EXIT")
             {
                 if (CheckAdministrator(rawopts))
                 {
-                    InstallPatch(patchidx, rawopts);
+                    res = InstallPatch(patchidx, rawopts);
                 }
+            }
+            if (res == "EXIT")
+            {
+                Application.Exit();
             }
         }
 
@@ -125,13 +129,10 @@ namespace BXPatchSwitcher
                             Arguments = outopts
                         };
                         Process.Start(startInfo);
-                        Application.Exit();
+                        return "EXIT";
                     }
-                    else
-                    {
-                        Init_Form();
-                        return "OK";
-                    }
+                    Init_Form();
+                    return "OK";
                 }
                 else
                 {
@@ -148,7 +149,6 @@ namespace BXPatchSwitcher
                 }
                 return f.Message;
             }
-            return "???";
         }
 
         private string GetHSBFileByIndex(int index)
