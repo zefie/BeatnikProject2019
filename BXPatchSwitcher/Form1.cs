@@ -66,12 +66,12 @@ namespace BXPatchSwitcher
                 Debug.WriteLine("Received Session Data: " + rawopts.Split(' ')[2]);
                 Debug.WriteLine("Return Session Data: " + outopts);
             }
-            string res = InstallPatch(patchidx, rawopts);
+            string res = InstallPatch(patchidx, outopts);
             if (res != "OK" && res != "EXIT")
             {
                 if (CheckAdministrator(rawopts))
                 {
-                    res = InstallPatch(patchidx, rawopts);
+                    res = InstallPatch(patchidx, outopts);
                 }
             }
             if (res == "EXIT")
