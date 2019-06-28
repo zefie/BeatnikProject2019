@@ -98,8 +98,8 @@
             this.bxversionlbl = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
             this.midichpnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
@@ -782,7 +782,7 @@
             // 
             // transposeControl
             // 
-            this.transposeControl.LargeChange = 3;
+            this.transposeControl.LargeChange = 1;
             this.transposeControl.Location = new System.Drawing.Point(6, 85);
             this.transposeControl.Minimum = -10;
             this.transposeControl.Name = "transposeControl";
@@ -912,21 +912,21 @@
             this.status.Size = new System.Drawing.Size(42, 17);
             this.status.Text = "Ready.";
             // 
-            // toolStripSpacer
-            // 
-            this.toolStripSpacer.Name = "toolStripSpacer";
-            this.toolStripSpacer.Size = new System.Drawing.Size(10, 17);
-            this.toolStripSpacer.Text = " ";
-            // 
             // statustitle
             // 
             this.statustitle.AutoSize = false;
             this.statustitle.BackColor = System.Drawing.SystemColors.Control;
             this.statustitle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.statustitle.Name = "statustitle";
-            this.statustitle.Size = new System.Drawing.Size(525, 17);
+            this.statustitle.Size = new System.Drawing.Size(556, 17);
             this.statustitle.Spring = true;
             this.statustitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripSpacer
+            // 
+            this.toolStripSpacer.Name = "toolStripSpacer";
+            this.toolStripSpacer.Size = new System.Drawing.Size(10, 17);
+            this.toolStripSpacer.Text = " ";
             // 
             // statusfile
             // 
