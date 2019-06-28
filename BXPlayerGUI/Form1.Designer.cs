@@ -64,12 +64,6 @@
             this.midichk_1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.openfile = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.status = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
             this.label4 = new System.Windows.Forms.Label();
             this.tempoControl = new System.Windows.Forms.TrackBar();
             this.temporstbtn = new System.Windows.Forms.Button();
@@ -100,9 +94,14 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
             this.miniControlPanel = new System.Windows.Forms.Panel();
+            this.infobut = new System.Windows.Forms.Button();
             this.bxversionlbl = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.status = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
             this.midichpnl.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
             this.bankSwitcherPanel.SuspendLayout();
             this.progressPanel.SuspendLayout();
@@ -112,6 +111,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.mainControlPanel.SuspendLayout();
             this.miniControlPanel.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // midichpnl
@@ -536,53 +536,6 @@
             this.openfile.UseVisualStyleBackColor = true;
             this.openfile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.status,
-            this.toolStripStatusLabel1,
-            this.statustitle,
-            this.toolStripStatusLabel2,
-            this.statusfile});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 208);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(624, 22);
-            this.statusStrip1.SizingGrip = false;
-            this.statusStrip1.TabIndex = 13;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // status
-            // 
-            this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(42, 17);
-            this.status.Text = "Ready.";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(10, 17);
-            this.toolStripStatusLabel1.Text = " ";
-            // 
-            // statustitle
-            // 
-            this.statustitle.AutoSize = false;
-            this.statustitle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.statustitle.Name = "statustitle";
-            this.statustitle.Size = new System.Drawing.Size(547, 17);
-            this.statustitle.Spring = true;
-            this.statustitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(10, 17);
-            this.toolStripStatusLabel2.Text = " ";
-            // 
-            // statusfile
-            // 
-            this.statusfile.Name = "statusfile";
-            this.statusfile.Size = new System.Drawing.Size(0, 17);
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -645,22 +598,22 @@
             // playbut
             // 
             this.playbut.Enabled = false;
+            this.playbut.Image = global::BXPlayerGUI.Properties.Resources.icon_play;
             this.playbut.Location = new System.Drawing.Point(2, 43);
             this.playbut.Name = "playbut";
             this.playbut.Size = new System.Drawing.Size(25, 23);
             this.playbut.TabIndex = 26;
-            this.playbut.Text = "❚❚";
             this.playbut.UseVisualStyleBackColor = true;
             this.playbut.Click += new System.EventHandler(this.Playbut_Click);
             // 
             // stopbut
             // 
             this.stopbut.Enabled = false;
+            this.stopbut.Image = global::BXPlayerGUI.Properties.Resources.icon_stop;
             this.stopbut.Location = new System.Drawing.Point(54, 43);
             this.stopbut.Name = "stopbut";
             this.stopbut.Size = new System.Drawing.Size(23, 23);
             this.stopbut.TabIndex = 27;
-            this.stopbut.Text = "■";
             this.stopbut.UseVisualStyleBackColor = true;
             this.stopbut.Click += new System.EventHandler(this.Stopbut_Click);
             // 
@@ -904,6 +857,7 @@
             // 
             // miniControlPanel
             // 
+            this.miniControlPanel.Controls.Add(this.infobut);
             this.miniControlPanel.Controls.Add(this.loopcb);
             this.miniControlPanel.Controls.Add(this.pictureBox1);
             this.miniControlPanel.Controls.Add(this.bxversionlbl);
@@ -915,6 +869,20 @@
             this.miniControlPanel.Size = new System.Drawing.Size(200, 66);
             this.miniControlPanel.TabIndex = 42;
             // 
+            // infobut
+            // 
+            this.infobut.Enabled = false;
+            this.infobut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.infobut.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.infobut.Image = global::BXPlayerGUI.Properties.Resources.icon_info;
+            this.infobut.Location = new System.Drawing.Point(28, 43);
+            this.infobut.Name = "infobut";
+            this.infobut.Size = new System.Drawing.Size(23, 23);
+            this.infobut.TabIndex = 42;
+            this.infobut.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.infobut.UseVisualStyleBackColor = true;
+            this.infobut.Click += new System.EventHandler(this.Infobut_Click);
+            // 
             // bxversionlbl
             // 
             this.bxversionlbl.Location = new System.Drawing.Point(83, 38);
@@ -923,11 +891,53 @@
             this.bxversionlbl.TabIndex = 41;
             this.bxversionlbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.status,
+            this.statustitle,
+            this.toolStripSpacer,
+            this.statusfile});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 208);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(623, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 13;
+            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.StatusStrip1_ItemClicked);
+            // 
+            // status
+            // 
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(42, 17);
+            this.status.Text = "Ready.";
+            // 
+            // toolStripSpacer
+            // 
+            this.toolStripSpacer.Name = "toolStripSpacer";
+            this.toolStripSpacer.Size = new System.Drawing.Size(10, 17);
+            this.toolStripSpacer.Text = " ";
+            // 
+            // statustitle
+            // 
+            this.statustitle.AutoSize = false;
+            this.statustitle.BackColor = System.Drawing.SystemColors.Control;
+            this.statustitle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statustitle.Name = "statustitle";
+            this.statustitle.Size = new System.Drawing.Size(525, 17);
+            this.statustitle.Spring = true;
+            this.statustitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // statusfile
+            // 
+            this.statusfile.Name = "statusfile";
+            this.statusfile.Size = new System.Drawing.Size(0, 17);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 230);
+            this.ClientSize = new System.Drawing.Size(623, 230);
             this.Controls.Add(this.miniControlPanel);
             this.Controls.Add(this.bankSwitcherPanel);
             this.Controls.Add(this.statusStrip1);
@@ -940,8 +950,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.midichpnl.ResumeLayout(false);
             this.midichpnl.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).EndInit();
             this.bankSwitcherPanel.ResumeLayout(false);
             this.bankSwitcherPanel.PerformLayout();
@@ -955,6 +963,8 @@
             this.mainControlPanel.PerformLayout();
             this.miniControlPanel.ResumeLayout(false);
             this.miniControlPanel.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -997,16 +1007,10 @@
         private System.Windows.Forms.CheckBox midichk_1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button openfile;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel statusfile;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TrackBar tempoControl;
         private System.Windows.Forms.Button temporstbtn;
-        private System.Windows.Forms.ToolStripStatusLabel statustitle;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.CheckBox loopcb;
-        private System.Windows.Forms.ToolStripStatusLabel status;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Button midichrstbtn;
         private System.Windows.Forms.Button playbut;
         private System.Windows.Forms.Button stopbut;
@@ -1034,6 +1038,12 @@
         private System.Windows.Forms.Panel mainControlPanel;
         private System.Windows.Forms.Panel miniControlPanel;
         private System.Windows.Forms.Label bxversionlbl;
+        private System.Windows.Forms.Button infobut;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel statusfile;
+        private System.Windows.Forms.ToolStripStatusLabel statustitle;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripSpacer;
+        private System.Windows.Forms.ToolStripStatusLabel status;
     }
 }
 

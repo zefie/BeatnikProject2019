@@ -10,7 +10,10 @@ using BXPlayer;
 using BXPlayerEvents;
 using System.ComponentModel;
 using System.Text;
-using System.Collections.Generic;
+using System.Reflection;
+using System.Drawing;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
 
 namespace BXPlayerGUI
 {
@@ -36,7 +39,7 @@ namespace BXPlayerGUI
         public Form1()
         {
             InitializeComponent();
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetExecutingAssembly();
             version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
             Text += " v" + version;
             Debug.WriteLine(Text + " initializing");
@@ -48,7 +51,7 @@ namespace BXPlayerGUI
             {
                 debug = true,
                 debug_meta = true
-            };
+            };            
         }
 
         private void VolumeControl_Scroll(object sender, EventArgs e)
@@ -125,6 +128,7 @@ namespace BXPlayerGUI
                         ProcessStartupOptions(args[1]);
                     }
                 }
+                //statusStrip1.Items.Add()
             }
             else
             {
@@ -252,14 +256,14 @@ namespace BXPlayerGUI
                 {
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
-                    SetButtonText(playbut, "▶");
+                    SetButtonImage(playbut, Properties.Resources.icon_play);
                     SetLabelText(status, "Paused.");
                 }
                 if (e.State == PlayState.Playing)
                 {
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
-                    SetButtonText(playbut, "❚❚");
+                    SetButtonImage(playbut, Properties.Resources.icon_pause);
                     SetLabelText(status, "Playing.");
                 }
             }
@@ -268,7 +272,7 @@ namespace BXPlayerGUI
                 SetControlVisiblity(mainControlPanel, false);
                 SetButtonEnabled(playbut, true);
                 SetButtonEnabled(stopbut, false);
-                SetButtonText(playbut, "▶");
+                SetButtonImage(playbut, Properties.Resources.icon_play);
                 SetLabelText(status, "Ready.");
             }
         }
@@ -285,6 +289,7 @@ namespace BXPlayerGUI
             SetLabelText(statusfile, Path.GetFileName(e.File));
             SetLabelText(tempovallbl, e.Tempo + "BPM");
             SetControlVisiblity(mainControlPanel, true);
+            SetButtonEnabled(infobut, (Path.GetExtension(e.File).ToLower() == ".rmf"));
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
@@ -318,6 +323,23 @@ namespace BXPlayerGUI
             else
             {
                 b.Text = text;
+            }
+        }
+
+        private void SetButtonImage(Button b, Image image)
+        {
+            if (b.InvokeRequired)
+            {
+                b.Invoke(new MethodInvoker(delegate
+                {
+                    b.Image.Dispose();
+                    b.Image = image;
+                }));
+            }
+            else
+            {
+                b.Image.Dispose();
+                b.Image = image;
             }
         }
 
@@ -590,6 +612,7 @@ namespace BXPlayerGUI
         {
             current_file = file;
             SetLabelText(statustitle, "");
+            SetButtonEnabled(infobut, false);
             if (Path.GetExtension(file).ToLower() == ".kar")
             {
                 // hack to send .kar as midi without modifying local filesystem
@@ -695,6 +718,16 @@ namespace BXPlayerGUI
             short midich = (short)Convert.ToInt16(thebox.Name.Split('_')[1]);
             bool muted = !thebox.Checked;
             bx.MuteChannel(midich, muted);
+        }
+
+        private void Infobut_Click(object sender, EventArgs e)
+        {
+            bx.DoMenuItem("Copyright");
+        }
+
+        private void StatusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

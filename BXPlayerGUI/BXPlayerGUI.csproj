@@ -88,6 +88,10 @@
     <Content Include="DialingWebTV.mid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\icon-info.png" />
+    <EmbeddedResource Include="Resources\icon-play.png" />
+    <EmbeddedResource Include="Resources\icon-pause.png" />
+    <EmbeddedResource Include="Resources\icon-stop.png" />
     <Content Include="Splash.mid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
