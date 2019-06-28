@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXPlayer", "BXPlayer\BXPlayer.csproj", "{F1B68A09-2A12-4D11-B0E9-10A5AAB202A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXPlayerGUI", "BXPlayerGUI\BXPlayerGUI.csproj", "{AE6382C8-D038-4A5D-93B0-48D54844E414}"
+	ProjectSection(ProjectDependencies) = postProject
+		{10E5329C-1729-4B5A-B424-86AEDF686371} = {10E5329C-1729-4B5A-B424-86AEDF686371}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXPatchSwitcher", "BXPatchSwitcher\BXPatchSwitcher.csproj", "{10E5329C-1729-4B5A-B424-86AEDF686371}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F1B68A09-2A12-4D11-B0E9-10A5AAB202A7} = {F1B68A09-2A12-4D11-B0E9-10A5AAB202A7}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZefieLib", "ZefieLib\ZefieLib.csproj", "{847B2527-8A12-4433-9BD8-17C7638592E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1B68A09-2A12-4D11-B0E9-10A5AAB202A7}.Debug|x86.ActiveCfg = Debug|x86
+		{F1B68A09-2A12-4D11-B0E9-10A5AAB202A7}.Debug|x86.Build.0 = Debug|x86
+		{F1B68A09-2A12-4D11-B0E9-10A5AAB202A7}.Release|x86.ActiveCfg = Release|x86
+		{F1B68A09-2A12-4D11-B0E9-10A5AAB202A7}.Release|x86.Build.0 = Release|x86
+		{AE6382C8-D038-4A5D-93B0-48D54844E414}.Debug|x86.ActiveCfg = Debug|x86
+		{AE6382C8-D038-4A5D-93B0-48D54844E414}.Debug|x86.Build.0 = Debug|x86
+		{AE6382C8-D038-4A5D-93B0-48D54844E414}.Release|x86.ActiveCfg = Release|x86
+		{AE6382C8-D038-4A5D-93B0-48D54844E414}.Release|x86.Build.0 = Release|x86
+		{10E5329C-1729-4B5A-B424-86AEDF686371}.Debug|x86.ActiveCfg = Debug|x86
+		{10E5329C-1729-4B5A-B424-86AEDF686371}.Debug|x86.Build.0 = Debug|x86
+		{10E5329C-1729-4B5A-B424-86AEDF686371}.Release|x86.ActiveCfg = Release|x86
+		{10E5329C-1729-4B5A-B424-86AEDF686371}.Release|x86.Build.0 = Release|x86
+		{847B2527-8A12-4433-9BD8-17C7638592E4}.Debug|x86.ActiveCfg = Debug|x86
+		{847B2527-8A12-4433-9BD8-17C7638592E4}.Debug|x86.Build.0 = Debug|x86
+		{847B2527-8A12-4433-9BD8-17C7638592E4}.Release|x86.ActiveCfg = Release|x86
+		{847B2527-8A12-4433-9BD8-17C7638592E4}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9AE588D4-9283-4E6E-9A4B-BA02680AE0E7}
+	EndGlobalSection
+EndGlobal

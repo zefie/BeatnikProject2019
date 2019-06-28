@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+    <assemblyIdentity name="beatnikx.ocx" version="1.0.0.0" processorArchitecture="x86" type="win32" />
+	<file name="beatnikx.ocx" asmv2:size="443478">
+		<comClass clsid="{B384F118-18EE-11D1-95C8-00A024330339}" tlbid="{B384F115-18EE-11D1-95C8-00A024330339}" progid="BEATNIKX.BeatnikXCtrl.1" description="BeatnikX Control"></comClass>
+		<typelib tlbid="{B384F115-18EE-11D1-95C8-00A024330339}" resourceid="1" version="1.0" helpdir=""></typelib>
+	</file>
+	<comInterfaceExternalProxyStub name="_DBeatnikX" iid="{B384F116-18EE-11D1-95C8-00A024330339}" tlbid="{B384F115-18EE-11D1-95C8-00A024330339}" proxyStubClsid32="{00020420-0000-0000-C000-000000000046}"></comInterfaceExternalProxyStub>
+	<comInterfaceExternalProxyStub name="_DBeatnikXEvents" iid="{B384F117-18EE-11D1-95C8-00A024330339}" tlbid="{B384F115-18EE-11D1-95C8-00A024330339}" proxyStubClsid32="{00020420-0000-0000-C000-000000000046}"></comInterfaceExternalProxyStub>
+</assembly>
