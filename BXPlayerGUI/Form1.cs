@@ -476,7 +476,6 @@ namespace BXPlayerGUI
             SetControlVisiblity(mainControlPanel, false);
             SetLabelText(durationlbl, "");
             SetLabelText(progresslbl, "");
-            SetLabelText(statusfile, "");
             SetLabelText(statustitle, "");
             SetTrackbarValue(seekbar, 0, 0);
         }
