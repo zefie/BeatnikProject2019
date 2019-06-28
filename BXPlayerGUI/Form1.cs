@@ -195,10 +195,14 @@ namespace BXPlayerGUI
             throw new NotImplementedException();
         }
 
-        private string SerializeData()
+        private string SerializeData(bool full = true)
         {
             string options = Process.GetCurrentProcess().MainModule.FileName + "|" +
-                current_file + "|" +
+                current_file;
+
+            if (full)
+            {
+                options += "|" +
                 bx.Volume.ToString() + "|" +
                 bx.Tempo.ToString() + "|" +
                 bx.Transpose.ToString() + "|" +
@@ -220,6 +224,7 @@ namespace BXPlayerGUI
                 midichk_14.Checked.ToString() + "|" +
                 midichk_15.Checked.ToString() + "|" +
                 midichk_16.Checked.ToString();
+            }
 
             return ZefieLib.Data.Base64Encode(options);
         }
@@ -533,22 +538,28 @@ namespace BXPlayerGUI
         {
             try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe);
+                string serialized_data;
                 if (bx.active)
                 {
-                    string serialized_data = SerializeData();
-                    startInfo.Arguments = serialized_data;
-                    Debug.WriteLine("Sending Session Data: " + serialized_data);
+                    serialized_data = SerializeData();
                 }
+                else
+                {
+                    serialized_data = SerializeData(false);
+                }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe);
+                startInfo.Arguments = serialized_data;
+                Debug.WriteLine("Sending Session Data: " + serialized_data);
                 Process.Start(startInfo);
                 Application.Exit();
             }
             catch (Exception f)
             {
-                DialogResult errormsg = MessageBox.Show("There was an error launching the Patch Switcher\n\n"+f.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                DialogResult errormsg = MessageBox.Show("There was an error launching the Patch Switcher\n\n" + f.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                 if (errormsg == DialogResult.Retry)
                 {
-                    Patchswlnchr_Click(sender,e);
+                    Patchswlnchr_Click(sender, e);
                 }
             }
         }
