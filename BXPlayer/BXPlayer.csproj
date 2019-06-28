@@ -50,7 +50,7 @@
     <Content Include="beatnikx.ocx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="BXBanks\banks.xml">
+    <Content Include="BXBanks\BXBanks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
