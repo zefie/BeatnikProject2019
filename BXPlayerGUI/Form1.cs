@@ -36,8 +36,7 @@ namespace BXPlayerGUI
         {
             InitializeComponent();
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            version = fvi.FileVersion.Split('.')[0] + "." + fvi.FileVersion.Split('.')[1] + "." + fvi.FileVersion.Split('.')[2];
+            version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
             Text += " v" + version;
             Debug.WriteLine(Text + " initializing");
             
@@ -121,7 +120,7 @@ namespace BXPlayerGUI
             Debug.WriteLine("PlayState: "+e.State);
             if (e.State != PlayState.Stopped)
             {
-                SetControlVisiblity(seekpnl, true);
+                SetControlVisiblity(mainControlPanel, true);
                 if (e.State == PlayState.Paused)
                 {
                     SetButtonEnabled(playbut, true);
@@ -139,7 +138,7 @@ namespace BXPlayerGUI
             }
             else
             {
-                SetControlVisiblity(seekpnl, false);
+                SetControlVisiblity(mainControlPanel, false);
                 SetButtonEnabled(playbut, true);
                 SetButtonEnabled(stopbut, false);
                 SetButtonText(playbut, "▶");
@@ -160,7 +159,7 @@ namespace BXPlayerGUI
             SetTrackbarValue(seekbar, 0, e.Duration);
             SetLabelText(statusfile, Path.GetFileName(e.File));
             SetLabelText(tempovallbl, e.Tempo + "BPM");
-            SetControlVisiblity(seekpnl, true);
+            SetControlVisiblity(mainControlPanel, true);
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
@@ -337,7 +336,7 @@ namespace BXPlayerGUI
         private void Stopbut_Click(object sender, EventArgs e)
         {
             bx.Stop();
-            SetControlVisiblity(seekpnl, false);
+            SetControlVisiblity(mainControlPanel, false);
             SetLabelText(durationlbl, "");
             SetLabelText(progresslbl, "");
             SetLabelText(statusfile, "");

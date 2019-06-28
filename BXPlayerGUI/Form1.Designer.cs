@@ -77,11 +77,11 @@
             this.midichrstbtn = new System.Windows.Forms.Button();
             this.playbut = new System.Windows.Forms.Button();
             this.stopbut = new System.Windows.Forms.Button();
-            this.patchespnl = new System.Windows.Forms.Panel();
+            this.bankSwitcherPanel = new System.Windows.Forms.Panel();
             this.bxinsthsb = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.patchswlnchr = new System.Windows.Forms.Button();
-            this.seekpnl = new System.Windows.Forms.Panel();
+            this.progressPanel = new System.Windows.Forms.Panel();
             this.seekpos = new System.Windows.Forms.Label();
             this.seekbarlbl = new System.Windows.Forms.Label();
             this.durationlbl = new System.Windows.Forms.Label();
@@ -98,23 +98,27 @@
             this.transposevalbl = new System.Windows.Forms.Label();
             this.volvallbl = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.mainControlPanel = new System.Windows.Forms.Panel();
+            this.miniControlPanel = new System.Windows.Forms.Panel();
             this.midichpnl.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
-            this.patchespnl.SuspendLayout();
-            this.seekpnl.SuspendLayout();
+            this.bankSwitcherPanel.SuspendLayout();
+            this.progressPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seekbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.mainControlPanel.SuspendLayout();
+            this.miniControlPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // midichpnl
             // 
             this.midichpnl.ColumnCount = 16;
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
-            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
-            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
+            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.977556F));
+            this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.491272F));
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
             this.midichpnl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.25F));
@@ -161,7 +165,7 @@
             this.midichpnl.Controls.Add(this.midichlbl4, 3, 0);
             this.midichpnl.Controls.Add(this.midichk_1, 0, 1);
             this.midichpnl.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.midichpnl.Location = new System.Drawing.Point(16, 26);
+            this.midichpnl.Location = new System.Drawing.Point(6, 19);
             this.midichpnl.Name = "midichpnl";
             this.midichpnl.RowCount = 2;
             this.midichpnl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.47619F));
@@ -330,9 +334,9 @@
             this.midichk_3.AutoSize = true;
             this.midichk_3.Checked = true;
             this.midichk_3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.midichk_3.Location = new System.Drawing.Point(53, 18);
+            this.midichk_3.Location = new System.Drawing.Point(64, 18);
             this.midichk_3.Name = "midichk_3";
-            this.midichk_3.Size = new System.Drawing.Size(15, 14);
+            this.midichk_3.Size = new System.Drawing.Size(8, 14);
             this.midichk_3.TabIndex = 18;
             this.midichk_3.UseVisualStyleBackColor = true;
             this.midichk_3.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
@@ -467,9 +471,9 @@
             // midichlbl3
             // 
             this.midichlbl3.AutoSize = true;
-            this.midichlbl3.Location = new System.Drawing.Point(53, 0);
+            this.midichlbl3.Location = new System.Drawing.Point(64, 0);
             this.midichlbl3.Name = "midichlbl3";
-            this.midichlbl3.Size = new System.Drawing.Size(13, 13);
+            this.midichlbl3.Size = new System.Drawing.Size(8, 13);
             this.midichlbl3.TabIndex = 2;
             this.midichlbl3.Text = "3";
             // 
@@ -515,7 +519,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 10);
+            this.label1.Location = new System.Drawing.Point(3, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 1;
@@ -523,7 +527,7 @@
             // 
             // openfile
             // 
-            this.openfile.Location = new System.Drawing.Point(455, 146);
+            this.openfile.Location = new System.Drawing.Point(2, 2);
             this.openfile.Name = "openfile";
             this.openfile.Size = new System.Drawing.Size(75, 23);
             this.openfile.TabIndex = 2;
@@ -539,9 +543,10 @@
             this.statustitle,
             this.toolStripStatusLabel2,
             this.statusfile});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 210);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 208);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(649, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(624, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 13;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -562,7 +567,7 @@
             this.statustitle.AutoSize = false;
             this.statustitle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.statustitle.Name = "statustitle";
-            this.statustitle.Size = new System.Drawing.Size(572, 17);
+            this.statustitle.Size = new System.Drawing.Size(546, 17);
             this.statustitle.Spring = true;
             this.statustitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -580,7 +585,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(219, 76);
+            this.label4.Location = new System.Drawing.Point(209, 69);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 17;
@@ -589,7 +594,7 @@
             // tempoControl
             // 
             this.tempoControl.LargeChange = 10;
-            this.tempoControl.Location = new System.Drawing.Point(219, 92);
+            this.tempoControl.Location = new System.Drawing.Point(209, 85);
             this.tempoControl.Maximum = 300;
             this.tempoControl.Minimum = 40;
             this.tempoControl.Name = "tempoControl";
@@ -602,7 +607,7 @@
             // temporstbtn
             // 
             this.temporstbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.temporstbtn.Location = new System.Drawing.Point(363, 74);
+            this.temporstbtn.Location = new System.Drawing.Point(353, 67);
             this.temporstbtn.Name = "temporstbtn";
             this.temporstbtn.Size = new System.Drawing.Size(54, 19);
             this.temporstbtn.TabIndex = 18;
@@ -615,7 +620,7 @@
             this.loopcb.AutoSize = true;
             this.loopcb.Checked = true;
             this.loopcb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loopcb.Location = new System.Drawing.Point(536, 150);
+            this.loopcb.Location = new System.Drawing.Point(95, 6);
             this.loopcb.Name = "loopcb";
             this.loopcb.Size = new System.Drawing.Size(97, 17);
             this.loopcb.TabIndex = 21;
@@ -625,9 +630,8 @@
             // 
             // midichrstbtn
             // 
-            this.midichrstbtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.midichrstbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.midichrstbtn.Location = new System.Drawing.Point(349, 4);
+            this.midichrstbtn.Location = new System.Drawing.Point(340, -1);
             this.midichrstbtn.Margin = new System.Windows.Forms.Padding(0);
             this.midichrstbtn.Name = "midichrstbtn";
             this.midichrstbtn.Size = new System.Drawing.Size(68, 19);
@@ -639,7 +643,7 @@
             // playbut
             // 
             this.playbut.Enabled = false;
-            this.playbut.Location = new System.Drawing.Point(455, 178);
+            this.playbut.Location = new System.Drawing.Point(2, 34);
             this.playbut.Name = "playbut";
             this.playbut.Size = new System.Drawing.Size(25, 23);
             this.playbut.TabIndex = 26;
@@ -650,7 +654,7 @@
             // stopbut
             // 
             this.stopbut.Enabled = false;
-            this.stopbut.Location = new System.Drawing.Point(507, 178);
+            this.stopbut.Location = new System.Drawing.Point(54, 34);
             this.stopbut.Name = "stopbut";
             this.stopbut.Size = new System.Drawing.Size(23, 23);
             this.stopbut.TabIndex = 27;
@@ -658,19 +662,20 @@
             this.stopbut.UseVisualStyleBackColor = true;
             this.stopbut.Click += new System.EventHandler(this.Stopbut_Click);
             // 
-            // patchespnl
+            // bankSwitcherPanel
             // 
-            this.patchespnl.Controls.Add(this.bxinsthsb);
-            this.patchespnl.Controls.Add(this.label3);
-            this.patchespnl.Controls.Add(this.patchswlnchr);
-            this.patchespnl.Location = new System.Drawing.Point(448, 4);
-            this.patchespnl.Name = "patchespnl";
-            this.patchespnl.Size = new System.Drawing.Size(200, 60);
-            this.patchespnl.TabIndex = 28;
+            this.bankSwitcherPanel.Controls.Add(this.bxinsthsb);
+            this.bankSwitcherPanel.Controls.Add(this.label3);
+            this.bankSwitcherPanel.Controls.Add(this.patchswlnchr);
+            this.bankSwitcherPanel.Location = new System.Drawing.Point(420, 4);
+            this.bankSwitcherPanel.Name = "bankSwitcherPanel";
+            this.bankSwitcherPanel.Size = new System.Drawing.Size(200, 60);
+            this.bankSwitcherPanel.TabIndex = 28;
             // 
             // bxinsthsb
             // 
             this.bxinsthsb.Location = new System.Drawing.Point(7, 19);
+            this.bxinsthsb.Margin = new System.Windows.Forms.Padding(3, 0, 2, 0);
             this.bxinsthsb.Name = "bxinsthsb";
             this.bxinsthsb.Size = new System.Drawing.Size(189, 13);
             this.bxinsthsb.TabIndex = 15;
@@ -688,7 +693,7 @@
             // 
             // patchswlnchr
             // 
-            this.patchswlnchr.Location = new System.Drawing.Point(77, 35);
+            this.patchswlnchr.Location = new System.Drawing.Point(79, 35);
             this.patchswlnchr.Name = "patchswlnchr";
             this.patchswlnchr.Size = new System.Drawing.Size(119, 23);
             this.patchswlnchr.TabIndex = 13;
@@ -696,19 +701,18 @@
             this.patchswlnchr.UseVisualStyleBackColor = true;
             this.patchswlnchr.Click += new System.EventHandler(this.Patchswlnchr_Click);
             // 
-            // seekpnl
+            // progressPanel
             // 
-            this.seekpnl.Controls.Add(this.seekpos);
-            this.seekpnl.Controls.Add(this.seekbarlbl);
-            this.seekpnl.Controls.Add(this.durationlbl);
-            this.seekpnl.Controls.Add(this.progresslbl);
-            this.seekpnl.Controls.Add(this.seekbar);
-            this.seekpnl.Location = new System.Drawing.Point(16, 132);
-            this.seekpnl.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.seekpnl.Name = "seekpnl";
-            this.seekpnl.Size = new System.Drawing.Size(401, 75);
-            this.seekpnl.TabIndex = 29;
-            this.seekpnl.Visible = false;
+            this.progressPanel.Controls.Add(this.seekpos);
+            this.progressPanel.Controls.Add(this.seekbarlbl);
+            this.progressPanel.Controls.Add(this.durationlbl);
+            this.progressPanel.Controls.Add(this.progresslbl);
+            this.progressPanel.Controls.Add(this.seekbar);
+            this.progressPanel.Location = new System.Drawing.Point(6, 122);
+            this.progressPanel.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.progressPanel.Name = "progressPanel";
+            this.progressPanel.Size = new System.Drawing.Size(401, 75);
+            this.progressPanel.TabIndex = 29;
             // 
             // seekpos
             // 
@@ -759,9 +763,8 @@
             // 
             // midich_muteall_btn
             // 
-            this.midich_muteall_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.midich_muteall_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.midich_muteall_btn.Location = new System.Drawing.Point(295, 4);
+            this.midich_muteall_btn.Location = new System.Drawing.Point(286, -1);
             this.midich_muteall_btn.Margin = new System.Windows.Forms.Padding(0);
             this.midich_muteall_btn.Name = "midich_muteall_btn";
             this.midich_muteall_btn.Size = new System.Drawing.Size(54, 19);
@@ -772,9 +775,8 @@
             // 
             // midich_muteinvert_btn
             // 
-            this.midich_muteinvert_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.midich_muteinvert_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.midich_muteinvert_btn.Location = new System.Drawing.Point(222, 4);
+            this.midich_muteinvert_btn.Location = new System.Drawing.Point(213, -1);
             this.midich_muteinvert_btn.Margin = new System.Windows.Forms.Padding(0);
             this.midich_muteinvert_btn.Name = "midich_muteinvert_btn";
             this.midich_muteinvert_btn.Size = new System.Drawing.Size(73, 19);
@@ -786,7 +788,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(445, 76);
+            this.label2.Location = new System.Drawing.Point(415, 69);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 13);
             this.label2.TabIndex = 33;
@@ -794,10 +796,10 @@
             // 
             // volumeControl
             // 
-            this.volumeControl.Location = new System.Drawing.Point(448, 92);
+            this.volumeControl.Location = new System.Drawing.Point(413, 85);
             this.volumeControl.Maximum = 100;
             this.volumeControl.Name = "volumeControl";
-            this.volumeControl.Size = new System.Drawing.Size(198, 45);
+            this.volumeControl.Size = new System.Drawing.Size(206, 45);
             this.volumeControl.TabIndex = 32;
             this.volumeControl.TickFrequency = 10;
             this.volumeControl.Value = 70;
@@ -806,7 +808,7 @@
             // transposerstbtn
             // 
             this.transposerstbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.transposerstbtn.Location = new System.Drawing.Point(155, 74);
+            this.transposerstbtn.Location = new System.Drawing.Point(145, 67);
             this.transposerstbtn.Name = "transposerstbtn";
             this.transposerstbtn.Size = new System.Drawing.Size(54, 19);
             this.transposerstbtn.TabIndex = 36;
@@ -817,7 +819,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 76);
+            this.label5.Location = new System.Drawing.Point(3, 69);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(57, 13);
             this.label5.TabIndex = 35;
@@ -826,7 +828,7 @@
             // transposeControl
             // 
             this.transposeControl.LargeChange = 3;
-            this.transposeControl.Location = new System.Drawing.Point(16, 92);
+            this.transposeControl.Location = new System.Drawing.Point(6, 85);
             this.transposeControl.Minimum = -10;
             this.transposeControl.Name = "transposeControl";
             this.transposeControl.Size = new System.Drawing.Size(197, 45);
@@ -835,7 +837,7 @@
             // 
             // tempovallbl
             // 
-            this.tempovallbl.Location = new System.Drawing.Point(295, 76);
+            this.tempovallbl.Location = new System.Drawing.Point(285, 69);
             this.tempovallbl.Name = "tempovallbl";
             this.tempovallbl.Size = new System.Drawing.Size(68, 15);
             this.tempovallbl.TabIndex = 37;
@@ -843,7 +845,7 @@
             // 
             // transposevalbl
             // 
-            this.transposevalbl.Location = new System.Drawing.Point(113, 76);
+            this.transposevalbl.Location = new System.Drawing.Point(103, 69);
             this.transposevalbl.Name = "transposevalbl";
             this.transposevalbl.Size = new System.Drawing.Size(42, 15);
             this.transposevalbl.TabIndex = 38;
@@ -852,7 +854,7 @@
             // 
             // volvallbl
             // 
-            this.volvallbl.Location = new System.Drawing.Point(602, 74);
+            this.volvallbl.Location = new System.Drawing.Point(576, 68);
             this.volvallbl.Margin = new System.Windows.Forms.Padding(0);
             this.volvallbl.Name = "volvallbl";
             this.volvallbl.Size = new System.Drawing.Size(42, 15);
@@ -863,42 +865,61 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(539, 163);
+            this.pictureBox1.Location = new System.Drawing.Point(95, 16);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 43);
+            this.pictureBox1.Size = new System.Drawing.Size(100, 41);
             this.pictureBox1.TabIndex = 40;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.PictureBox1_Click);
+            // 
+            // mainControlPanel
+            // 
+            this.mainControlPanel.Controls.Add(this.label1);
+            this.mainControlPanel.Controls.Add(this.progressPanel);
+            this.mainControlPanel.Controls.Add(this.volvallbl);
+            this.mainControlPanel.Controls.Add(this.midichpnl);
+            this.mainControlPanel.Controls.Add(this.transposevalbl);
+            this.mainControlPanel.Controls.Add(this.label2);
+            this.mainControlPanel.Controls.Add(this.tempoControl);
+            this.mainControlPanel.Controls.Add(this.volumeControl);
+            this.mainControlPanel.Controls.Add(this.tempovallbl);
+            this.mainControlPanel.Controls.Add(this.label4);
+            this.mainControlPanel.Controls.Add(this.temporstbtn);
+            this.mainControlPanel.Controls.Add(this.transposerstbtn);
+            this.mainControlPanel.Controls.Add(this.midichrstbtn);
+            this.mainControlPanel.Controls.Add(this.label5);
+            this.mainControlPanel.Controls.Add(this.midich_muteall_btn);
+            this.mainControlPanel.Controls.Add(this.transposeControl);
+            this.mainControlPanel.Controls.Add(this.midich_muteinvert_btn);
+            this.mainControlPanel.Location = new System.Drawing.Point(0, 4);
+            this.mainControlPanel.Name = "mainControlPanel";
+            this.mainControlPanel.Size = new System.Drawing.Size(619, 203);
+            this.mainControlPanel.TabIndex = 41;
+            this.mainControlPanel.Visible = false;
+            // 
+            // miniControlPanel
+            // 
+            this.miniControlPanel.Controls.Add(this.loopcb);
+            this.miniControlPanel.Controls.Add(this.pictureBox1);
+            this.miniControlPanel.Controls.Add(this.openfile);
+            this.miniControlPanel.Controls.Add(this.playbut);
+            this.miniControlPanel.Controls.Add(this.stopbut);
+            this.miniControlPanel.Location = new System.Drawing.Point(423, 141);
+            this.miniControlPanel.Name = "miniControlPanel";
+            this.miniControlPanel.Size = new System.Drawing.Size(200, 66);
+            this.miniControlPanel.TabIndex = 42;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 232);
-            this.Controls.Add(this.volvallbl);
-            this.Controls.Add(this.transposevalbl);
-            this.Controls.Add(this.tempovallbl);
-            this.Controls.Add(this.seekpnl);
-            this.Controls.Add(this.transposerstbtn);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.transposeControl);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.volumeControl);
-            this.Controls.Add(this.midich_muteinvert_btn);
-            this.Controls.Add(this.midich_muteall_btn);
-            this.Controls.Add(this.patchespnl);
-            this.Controls.Add(this.stopbut);
-            this.Controls.Add(this.playbut);
-            this.Controls.Add(this.midichrstbtn);
-            this.Controls.Add(this.loopcb);
-            this.Controls.Add(this.temporstbtn);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.tempoControl);
+            this.ClientSize = new System.Drawing.Size(624, 230);
+            this.Controls.Add(this.miniControlPanel);
+            this.Controls.Add(this.bankSwitcherPanel);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.openfile);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.midichpnl);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.mainControlPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
@@ -909,14 +930,18 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).EndInit();
-            this.patchespnl.ResumeLayout(false);
-            this.patchespnl.PerformLayout();
-            this.seekpnl.ResumeLayout(false);
-            this.seekpnl.PerformLayout();
+            this.bankSwitcherPanel.ResumeLayout(false);
+            this.bankSwitcherPanel.PerformLayout();
+            this.progressPanel.ResumeLayout(false);
+            this.progressPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seekbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.mainControlPanel.ResumeLayout(false);
+            this.mainControlPanel.PerformLayout();
+            this.miniControlPanel.ResumeLayout(false);
+            this.miniControlPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -972,11 +997,11 @@
         private System.Windows.Forms.Button midichrstbtn;
         private System.Windows.Forms.Button playbut;
         private System.Windows.Forms.Button stopbut;
-        private System.Windows.Forms.Panel patchespnl;
+        private System.Windows.Forms.Panel bankSwitcherPanel;
         private System.Windows.Forms.Label bxinsthsb;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button patchswlnchr;
-        private System.Windows.Forms.Panel seekpnl;
+        private System.Windows.Forms.Panel progressPanel;
         private System.Windows.Forms.Label seekbarlbl;
         private System.Windows.Forms.Label durationlbl;
         private System.Windows.Forms.Label progresslbl;
@@ -993,6 +1018,8 @@
         private System.Windows.Forms.Label transposevalbl;
         private System.Windows.Forms.Label volvallbl;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel mainControlPanel;
+        private System.Windows.Forms.Panel miniControlPanel;
     }
 }
 

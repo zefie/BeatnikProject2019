@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Timers;
 using System.IO;
 using BXPlayerEvents;
+using System.Runtime.InteropServices;
 
 namespace BXPlayer
 {
@@ -217,9 +218,11 @@ namespace BXPlayer
             {
                 Stop();
             }
-
+            while (Marshal.ReleaseComObject(bx) > 0) ;
             bx = null;
             active = false;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         public void PlayFile(string file, bool loop = false, string real_file = null)
