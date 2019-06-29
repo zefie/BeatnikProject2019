@@ -253,7 +253,8 @@ namespace BXPatchSwitcher
                                 string patchfile = patches_dir + reader.GetAttribute("src");
                                 string patchname = reader.GetAttribute("name");
                                 string patchsha1_expected = reader.GetAttribute("sha1");
-                                string @default = reader.GetAttribute("default"); if (@default != null)
+                                string @default = reader.GetAttribute("default");
+                                if (@default != null)
                                 {
                                     if (Convert.ToBoolean(@default))
                                     {

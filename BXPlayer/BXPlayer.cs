@@ -18,7 +18,7 @@ namespace BXPlayer
         public event EventHandler<ProgressEvent> ProgressChanged = delegate { };
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
-        private readonly int idletimer = 5;
+        private readonly int idletimer = 2;
         private bool _disposed = false;
         private bool lyrics_delete = false;
         private bool _file_has_lyrics_meta = false;
@@ -55,7 +55,7 @@ namespace BXPlayer
         {
             progressMonitor.Interval = 250;
             progressMonitor.Elapsed += ProgressMonitor_Elapsed;
-            fileChangeHelperTimer.Interval = 500;
+            fileChangeHelperTimer.Interval = 100;
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
         }
 
@@ -347,7 +347,6 @@ namespace BXPlayer
                 {
                     progressMonitor.Stop();
                 }
-
                 Bx_HandlePlayState();
             }
         }

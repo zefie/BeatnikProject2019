@@ -93,6 +93,8 @@
             this.volvallbl = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
+            this.reverblbl = new System.Windows.Forms.Label();
+            this.reverbcb = new System.Windows.Forms.ComboBox();
             this.miniControlPanel = new System.Windows.Forms.Panel();
             this.infobut = new System.Windows.Forms.Button();
             this.bxversionlbl = new System.Windows.Forms.Label();
@@ -101,8 +103,6 @@
             this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
-            this.reverbcb = new System.Windows.Forms.ComboBox();
-            this.reverblbl = new System.Windows.Forms.Label();
             this.midichpnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
             this.bankSwitcherPanel.SuspendLayout();
@@ -703,6 +703,7 @@
             this.progresslbl.Name = "progresslbl";
             this.progresslbl.Size = new System.Drawing.Size(0, 13);
             this.progresslbl.TabIndex = 27;
+            this.progresslbl.Click += new System.EventHandler(this.Progresslbl_Click);
             // 
             // seekbar
             // 
@@ -859,6 +860,33 @@
             this.mainControlPanel.TabIndex = 41;
             this.mainControlPanel.Visible = false;
             // 
+            // reverblbl
+            // 
+            this.reverblbl.AutoSize = true;
+            this.reverblbl.Location = new System.Drawing.Point(425, 118);
+            this.reverblbl.Name = "reverblbl";
+            this.reverblbl.Size = new System.Drawing.Size(72, 13);
+            this.reverblbl.TabIndex = 41;
+            this.reverblbl.Text = "Reverb Type:";
+            // 
+            // reverbcb
+            // 
+            this.reverbcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.reverbcb.FormattingEnabled = true;
+            this.reverbcb.Items.AddRange(new object[] {
+            "No reverb",
+            "Igor\'s Closet",
+            "Igor\'s Garage",
+            "Igor\'s Acoustic Lab",
+            "Igor\'s Cavern",
+            "Igor\'s Dungeon",
+            "Small Reflections"});
+            this.reverbcb.Location = new System.Drawing.Point(499, 114);
+            this.reverbcb.Name = "reverbcb";
+            this.reverbcb.Size = new System.Drawing.Size(118, 21);
+            this.reverbcb.TabIndex = 40;
+            this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
+            // 
             // miniControlPanel
             // 
             this.miniControlPanel.Controls.Add(this.infobut);
@@ -935,33 +963,6 @@
             // 
             this.statusfile.Name = "statusfile";
             this.statusfile.Size = new System.Drawing.Size(0, 17);
-            // 
-            // reverbcb
-            // 
-            this.reverbcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.reverbcb.FormattingEnabled = true;
-            this.reverbcb.Items.AddRange(new object[] {
-            "No reverb",
-            "Igor\'s Closet",
-            "Igor\'s Garage",
-            "Igor\'s Acoustic Lab",
-            "Igor\'s Cavern",
-            "Igor\'s Dungeon",
-            "Small Reflections"});
-            this.reverbcb.Location = new System.Drawing.Point(499, 114);
-            this.reverbcb.Name = "reverbcb";
-            this.reverbcb.Size = new System.Drawing.Size(118, 21);
-            this.reverbcb.TabIndex = 40;
-            this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
-            // 
-            // reverblbl
-            // 
-            this.reverblbl.AutoSize = true;
-            this.reverblbl.Location = new System.Drawing.Point(425, 118);
-            this.reverblbl.Name = "reverblbl";
-            this.reverblbl.Size = new System.Drawing.Size(72, 13);
-            this.reverblbl.TabIndex = 41;
-            this.reverblbl.Text = "Reverb Type:";
             // 
             // Form1
             // 

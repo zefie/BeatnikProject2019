@@ -27,11 +27,13 @@ namespace BXPlayerGUI
         private TcpListener tcp;
         private string current_hash;
         private string current_file;
+        private Stream current_datastream = null;
         private int default_tempo;
         private int http_port = 59999;
         private bool settingReverbCB = false;
         private bool http_ready = false;
         private bool seekbar_held = false;
+        private bool play_splash = false;
 
         public string version;
 
@@ -90,6 +92,15 @@ namespace BXPlayerGUI
                                         string patchhash = reader.GetAttribute("sha1");
                                         if (patchhash == current_hash)
                                         {
+                                            string splash = reader.GetAttribute("splash");
+                                            try
+                                            {
+                                                play_splash = Convert.ToBoolean(splash);
+                                                Debug.WriteLine("splash compatible bank found. play_splash = " + play_splash.ToString());
+                                            }
+                                            catch {
+                                                Debug.WriteLine("splash was not a boolean");
+                                            };
                                             Debug.WriteLine("Detected " + patchname + " as currently installed");
                                             SetLabelText(bxinsthsb, patchname);
                                         }
@@ -139,7 +150,16 @@ namespace BXPlayerGUI
                         ProcessStartupOptions(args[1]);
                     }
                 }
-                //statusStrip1.Items.Add()
+                else
+                {
+                    if (play_splash)
+                    {
+                        current_datastream = new MemoryStream(Properties.Resources.Splash);
+                        SetBXParams();
+                        PlayFile(current_datastream, "Splash", false);
+                        play_splash = false;
+                    }
+                }
             }
             else
             {
@@ -271,7 +291,7 @@ namespace BXPlayerGUI
                 }
                 if (e.State == PlayState.Playing)
                 {
-                    SetBX();
+                    SetBXParams();
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
                     SetButtonImage(playbut, Properties.Resources.icon_pause);
@@ -538,7 +558,7 @@ namespace BXPlayerGUI
             {
                 bx.Play();
                 SetTrackbarValue(seekbar, bx.Position, bx.Duration);
-                SetBX();
+                SetBXParams();
             }
             else
             {
@@ -546,7 +566,7 @@ namespace BXPlayerGUI
             }
         }
 
-        private void SetBX()
+        private void SetBXParams()
         {
             SetLabelText(durationlbl, FormatTime(bx.Duration));
             int value = -1;
@@ -731,8 +751,7 @@ namespace BXPlayerGUI
                             {
                                 Thread.Sleep(100);
                             }
-
-                            bx.PlayFile("http://127.0.0.1:" + http_port.ToString() + "/" + Path.GetFileNameWithoutExtension(current_file) + ".mid", loopcb.Checked, current_file);
+                            bx.PlayFile("http://127.0.0.1:" + http_port.ToString() + "/" + Path.GetFileNameWithoutExtension(current_file) + ".mid", loop, current_file);
                         }
                         catch { }
                         GC.Collect();
@@ -743,7 +762,45 @@ namespace BXPlayerGUI
             }
             else
             {
-                bx.PlayFile(file, loop);
+                bx.PlayFile(file, loopcb.Checked);
+            }
+        }
+
+        private void PlayFile(Stream filedata, string filename, bool loop = false)
+        {
+            current_file = filename;
+            current_datastream = filedata;
+            SetLabelText(statustitle, "");
+            SetButtonEnabled(infobut, false);
+            Debug.WriteLine("trying to load internal memory data (as " + filename + ")");
+            if (tcp == null)
+            {
+                Debug.WriteLine("zefie minihttp starting up");
+                while (!ZefieLib.Networking.IsPortAvailable(http_port, IPAddress.Loopback))
+                {
+                    http_port--;
+                }
+                Debug.WriteLine("zefie minihttp found available port on localhost:" + http_port);
+                StartHTTPServer();
+            }
+            using (BackgroundWorker bxrequest = new BackgroundWorker())
+            {
+                bxrequest.DoWork += new DoWorkEventHandler(
+                delegate (object o1, DoWorkEventArgs arg1)
+                {
+                    try
+                    {
+                        while (!http_ready)
+                        {
+                            Thread.Sleep(100);
+                        }
+                        bx.PlayFile("http://127.0.0.1:" + http_port.ToString() + "/" + Path.GetFileNameWithoutExtension(current_file) + ".mid", loop, current_file);
+                    }
+                    catch { }
+                    GC.Collect();
+                }
+                );
+                bxrequest.RunWorkerAsync();
             }
         }
 
@@ -771,7 +828,17 @@ namespace BXPlayerGUI
                             byte[] readbyte = new byte[4096];
 
                             sock.Receive(readbyte, SocketFlags.None);
-                            FileStream fs = File.OpenRead(current_file);
+                            Stream fs = null;
+                            if (current_datastream != null)
+                            {
+                                Debug.WriteLine("miniHTTP found memory data");
+                                fs = current_datastream;                                
+                            }
+                            else
+                            {
+                                Debug.WriteLine("miniHTTP opening file "+current_file);
+                                fs = File.OpenRead(current_file);
+                            }
 
                             byte[] httpheaders = Encoding.ASCII.GetBytes("HTTP/1.0 200 OK\r\n" +
                                "Date: " + DateTime.UtcNow.ToLocalTime().ToString() + "\r\n" +
@@ -792,6 +859,16 @@ namespace BXPlayerGUI
 
                             // clean up
                             Debug.WriteLine("zefie disconnecting socket");
+                            if (current_datastream != null)
+                            {
+                                Debug.WriteLine("Releasing memory data");
+                                current_datastream.Close();
+                                current_datastream.Dispose();
+                                current_datastream = null;
+                            }
+                            fs.Close();
+                            fs.Dispose();
+                            fs = null;
                             sock.Disconnect(false);
                             Debug.WriteLine("zefie minihttp ready for another request");
                         }
@@ -825,6 +902,11 @@ namespace BXPlayerGUI
             {
                 bx.ReverbType = (((ComboBox)sender).SelectedIndex + 1);
             }
+        }
+
+        private void Progresslbl_Click(object sender, EventArgs e)
+        {
+            bx.Position = 0;
         }
     }
 }
