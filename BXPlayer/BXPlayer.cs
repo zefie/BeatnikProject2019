@@ -423,7 +423,6 @@ namespace BXPlayerEvents
     public class PlayStateEvent : EventArgs
     {
         public PlayState State { get; set; }
-        public PlayState PreviousState { get; set; }
     }
 
     public enum PlayState
