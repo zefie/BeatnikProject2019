@@ -12,8 +12,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Reflection;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Runtime.InteropServices;
 
 namespace BXPlayerGUI
 {
@@ -31,6 +29,7 @@ namespace BXPlayerGUI
         private string current_file;
         private int default_tempo;
         private int http_port = 59999;
+        private bool settingReverbCB = false;
         private bool http_ready = false;
         private bool seekbar_held = false;
 
@@ -116,7 +115,19 @@ namespace BXPlayerGUI
                 bx.PlayStateChanged += Bx_PlayStateChanged;
                 bx.ProgressChanged += Bx_ProgressChanged;
                 bx.BXInit();
-                SetLabelText(bxversionlbl, "v" + bx.Version);
+                string bxvers = bx.BeatnikVersion;
+                SetLabelText(bxversionlbl, "v" + bxvers);
+
+                // 2.0.0+ reverbs
+                if (Convert.ToInt32(bxvers.Substring(0,1)) >= 2)
+                {
+                    reverbcb.Items.Add("Early Reflections");
+                    reverbcb.Items.Add("Basement");
+                    reverbcb.Items.Add("Banquet Hall");
+                    reverbcb.Items.Add("Catacombs ");
+                }
+                settingReverbCB = true;
+                SetComboBoxIndex(reverbcb, 0);
                 if (args.Length > 1)
                 {
                     if (File.Exists(args[1]))
@@ -247,8 +258,7 @@ namespace BXPlayerGUI
 
         private void Bx_PlayStateChanged(object sender, PlayStateEvent e)
         {
-            Debug.WriteLine("playstatechange fired");
-            Debug.WriteLine("PlayState: "+e.State);
+            Debug.WriteLine("playstatechange fired ~ PlayState: "+e.State);
             if (e.State != PlayState.Stopped)
             {
                 SetControlVisiblity(mainControlPanel, true);
@@ -261,11 +271,14 @@ namespace BXPlayerGUI
                 }
                 if (e.State == PlayState.Playing)
                 {
+                    SetBX();
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
                     SetButtonImage(playbut, Properties.Resources.icon_pause);
                     SetLabelText(status, "Playing.");
                 }
+                settingReverbCB = true;
+                SetComboBoxIndex(reverbcb,bx.ReverbType);
             }
             else
             {
@@ -290,6 +303,8 @@ namespace BXPlayerGUI
             SetLabelText(tempovallbl, e.Tempo + "BPM");
             SetControlVisiblity(mainControlPanel, true);
             SetButtonEnabled(infobut, (Path.GetExtension(e.File).ToLower() == ".rmf"));
+            settingReverbCB = true;
+            SetComboBoxIndex(reverbcb,bx.ReverbType);
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
@@ -300,6 +315,18 @@ namespace BXPlayerGUI
         {
             TimeSpan t = seconds ? TimeSpan.FromSeconds(ms) : TimeSpan.FromMilliseconds(ms);
             return string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+        }
+
+        private void SetComboBoxIndex(ComboBox cb, int index)
+        {
+            if (cb.InvokeRequired)
+            {
+                cb.Invoke(new MethodInvoker(delegate { cb.SelectedIndex = index; }));
+            }
+            else
+            {
+                cb.SelectedIndex = index;
+            }
         }
 
         private void SetButtonEnabled(Button b, bool enabled)
@@ -389,6 +416,34 @@ namespace BXPlayerGUI
                 t.Maximum = max;
                 t.Value = value;
             }
+        }
+
+        private int GetTrackbarValue(TrackBar t)
+        {
+            int value = -1;
+            if (t.InvokeRequired)
+            {
+                t.Invoke(new MethodInvoker(delegate { value = t.Value; }));
+            }
+            else
+            {
+                value = t.Value;
+            }
+            return value;
+        }
+
+        private int GetComboBoxIndex(ComboBox t)
+        {
+            int value = -1;
+            if (t.InvokeRequired)
+            {
+                t.Invoke(new MethodInvoker(delegate { value = t.SelectedIndex; }));
+            }
+            else
+            {
+                value = t.SelectedIndex;
+            }
+            return value;
         }
 
         private void SetCheckBoxChecked(CheckBox c, bool @checked)
@@ -482,13 +537,48 @@ namespace BXPlayerGUI
             if (bxstate == PlayState.Stopped)
             {
                 bx.Play();
-                // cheeky cheat
                 SetTrackbarValue(seekbar, bx.Position, bx.Duration);
-                SetLabelText(durationlbl, FormatTime(bx.Duration));
+                SetBX();
             }
             else
             {
                 bx.PlayPause();
+            }
+        }
+
+        private void SetBX()
+        {
+            SetLabelText(durationlbl, FormatTime(bx.Duration));
+            int value = -1;
+            value = GetTrackbarValue(tempoControl);
+            if (value >= 0)
+            {
+                bx.Tempo = value;
+            }
+
+            value = GetTrackbarValue(transposeControl);
+            if (value >= 0)
+            {
+                bx.Transpose = value;
+            }
+            value = GetComboBoxIndex(reverbcb);
+            if (value >= 0)
+            {
+                bx.ReverbType = (value - 1);               
+            }
+            value = GetTrackbarValue(volumeControl);
+            if (value >= 0)
+            {
+                bx.Volume = value;
+            }
+            foreach (Control c in midichpnl.Controls)
+            {
+                if (c is CheckBox cb)
+                {
+                    short midich = (short)Convert.ToInt16(cb.Name.Split('_')[1]);
+                    bool muted = !cb.Checked;
+                    bx.MuteChannel(midich, muted);
+                }
             }
         }
 
@@ -725,9 +815,16 @@ namespace BXPlayerGUI
             bx.DoMenuItem("Copyright");
         }
 
-        private void StatusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void Reverbcb_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (settingReverbCB)
+            {
+                settingReverbCB = false;
+            }
+            else
+            {
+                bx.ReverbType = (((ComboBox)sender).SelectedIndex + 1);
+            }
         }
     }
 }

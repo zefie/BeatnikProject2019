@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Timers;
 using System.IO;
 using BXPlayerEvents;
+using System.Reflection;
 
 namespace BXPlayer
 {
@@ -132,6 +133,10 @@ namespace BXPlayer
 
         private void Bx_OnMetaEvent(string @event, string text)
         {
+            if (PlayState == PlayState.Seeking)
+            {
+                PlayState = PlayState.Playing;
+            }
             if (@event == "Marker")
             {
                 if (text.Length > 1)
@@ -272,6 +277,12 @@ namespace BXPlayer
             set => bx.setTempo(value);
         }
 
+        public int ReverbType
+        {
+            get => bx.getReverbType();
+            set => bx.setReverbType(value);
+        }
+
         public void AboutBox() => bx.AboutBox();
 
         public string GetInfo(string info) => bx.getInfo(info);
@@ -290,19 +301,40 @@ namespace BXPlayer
 
         public int FileSize => bx.getFileSize();
 
-        public string Version => bx.getVersion();
+        public string Version { get
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                return FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+            }
+        }
+
+        public string BeatnikVersion
+        {
+            get
+            {
+                string bxvers = bx.getVersion();
+                if (bxvers.IndexOf(' ') > 0) {
+                    string[] bxver = bxvers.Split(' ');
+                    bxvers = bxver[(bxver.Length - 1)];                    
+                }
+                return bxvers;
+            }
+        }
 
         public int Position
         {
             get => bx.getPosition();
-            set => bx.setPosition(value);
+            set {
+                PlayState = PlayState.Seeking;
+                bx.setPosition(value);
+            }
         }
 
         public PlayState PlayState
         {
             get => _state;
             private set
-            {                
+            {
                 _state = value;
                 if (value == PlayState.Playing)
                 {
@@ -391,6 +423,7 @@ namespace BXPlayerEvents
     public class PlayStateEvent : EventArgs
     {
         public PlayState State { get; set; }
+        public PlayState PreviousState { get; set; }
     }
 
     public enum PlayState
@@ -399,6 +432,7 @@ namespace BXPlayerEvents
         Stopped = 0,
         Playing = 1,
         Paused = 2,
-        Idle = 3
+        Idle = 3,
+        Seeking = 4
     }
 }

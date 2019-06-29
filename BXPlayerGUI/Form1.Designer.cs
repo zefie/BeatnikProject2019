@@ -101,6 +101,8 @@
             this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
+            this.reverbcb = new System.Windows.Forms.ComboBox();
+            this.reverblbl = new System.Windows.Forms.Label();
             this.midichpnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
             this.bankSwitcherPanel.SuspendLayout();
@@ -832,6 +834,8 @@
             // 
             // mainControlPanel
             // 
+            this.mainControlPanel.Controls.Add(this.reverblbl);
+            this.mainControlPanel.Controls.Add(this.reverbcb);
             this.mainControlPanel.Controls.Add(this.label1);
             this.mainControlPanel.Controls.Add(this.progressPanel);
             this.mainControlPanel.Controls.Add(this.volvallbl);
@@ -885,9 +889,9 @@
             // 
             // bxversionlbl
             // 
-            this.bxversionlbl.Location = new System.Drawing.Point(83, 38);
+            this.bxversionlbl.Location = new System.Drawing.Point(83, 52);
             this.bxversionlbl.Name = "bxversionlbl";
-            this.bxversionlbl.Size = new System.Drawing.Size(114, 27);
+            this.bxversionlbl.Size = new System.Drawing.Size(114, 13);
             this.bxversionlbl.TabIndex = 41;
             this.bxversionlbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -904,7 +908,6 @@
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 13;
             this.statusStrip1.Text = "statusStrip1";
-            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.StatusStrip1_ItemClicked);
             // 
             // status
             // 
@@ -932,6 +935,33 @@
             // 
             this.statusfile.Name = "statusfile";
             this.statusfile.Size = new System.Drawing.Size(0, 17);
+            // 
+            // reverbcb
+            // 
+            this.reverbcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.reverbcb.FormattingEnabled = true;
+            this.reverbcb.Items.AddRange(new object[] {
+            "No reverb",
+            "Igor\'s Closet",
+            "Igor\'s Garage",
+            "Igor\'s Acoustic Lab",
+            "Igor\'s Cavern",
+            "Igor\'s Dungeon",
+            "Small Reflections"});
+            this.reverbcb.Location = new System.Drawing.Point(499, 114);
+            this.reverbcb.Name = "reverbcb";
+            this.reverbcb.Size = new System.Drawing.Size(118, 21);
+            this.reverbcb.TabIndex = 40;
+            this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
+            // 
+            // reverblbl
+            // 
+            this.reverblbl.AutoSize = true;
+            this.reverblbl.Location = new System.Drawing.Point(425, 118);
+            this.reverblbl.Name = "reverblbl";
+            this.reverblbl.Size = new System.Drawing.Size(72, 13);
+            this.reverblbl.TabIndex = 41;
+            this.reverblbl.Text = "Reverb Type:";
             // 
             // Form1
             // 
@@ -1044,6 +1074,8 @@
         private System.Windows.Forms.ToolStripStatusLabel statustitle;
         private System.Windows.Forms.ToolStripStatusLabel toolStripSpacer;
         private System.Windows.Forms.ToolStripStatusLabel status;
+        private System.Windows.Forms.ComboBox reverbcb;
+        private System.Windows.Forms.Label reverblbl;
     }
 }
 
