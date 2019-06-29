@@ -22,9 +22,9 @@ As stated in the requirements, Beatnik looks for the patches.hsb file in your Wi
 Therefore we will always need admin at least once. But if we install a junction (kinda like a symlink for those linux folks),
 then we can just point %WINDIR%\patches.hsb to our local folder, thus not needing admin each time you switch a patchset in the future.
 
-However you still need to restart the program due to the Beatnik Library not releasing the patchset.
-Bewcause of this, I have added features to help the program resume where you left off, if you choose "Yes"
-when the patcher asks if you would like to run the player again.
+However, you still need to restart the program due to the Beatnik Library not releasing the patchset.
+Because of this, I have added features to help the program resume where you left off, if you choose "Yes"
+when the patch bank switcher asks if you would like to run the player again.
 
 ## Note regarding Firewalls:
 
