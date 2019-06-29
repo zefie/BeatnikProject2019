@@ -136,7 +136,7 @@ namespace BXPlayer
             {
                 if (text.Length > 1)
                 {
-                    if (text != "loopstart" && text != "loopend")
+                    if (text.ToLower() != "loopstart" && text.ToLower() != "loopend")
                     {
                         Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
                         MetaDataEvent mevt = new MetaDataEvent
