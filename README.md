@@ -9,6 +9,12 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
 - .NET Framework 4.0
 - Admin access (because Beatnik is hardcoded to GetWindowsDirectoryA() + "\patches.hsb")
 
+## Features:
+- Play Beatnik RMF, MIDI, or MIDI Karaoke Files using classic Beatnik Soundbanks
+- Basic MIDI Controls, such as Transpose, Tempo, Volume, Seeking, Channel Mute
+- Ability to switch soundbanks almost seamlessly
+- Rare soundbanks including WebTV Classic and WebTV Plus
+
 ## How to use:
 - Unrar archive
 - Run BXPlayerGUI
