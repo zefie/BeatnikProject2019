@@ -35,10 +35,11 @@ when the patch bank switcher asks if you would like to run the player again.
 ## Note regarding Firewalls:
 
 Opening .kar files runs a internal "HTTP Server" (not standard by any means),
-because Beatnik won't open a .kar even though its just a .mid. The HTTP server is used
+because Beatnik won't open a .kar even though its just a .mid. The miniHTTP is used
 to make Beatnik think its getting a .mid, but we send it a .kar, without having to modify your
-filesystem or create temporary files. Therefore, if you get any prompts regarding a firewall listening
-on a port (should be localhost!), then this is why.
+filesystem or create temporary files. The miniHTTP is also used to send files in which Beatnik
+chokes on the filename, such as files with '''[ ]''' in them. Therefore, if you get any prompts
+regarding a firewall listening on a port (should be localhost!), then this is why.
 
 ## Screenshot
 ![](https://i.imgur.com/KHCo2e5.png)
