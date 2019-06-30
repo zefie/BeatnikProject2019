@@ -736,7 +736,7 @@ namespace BXPlayerGUI
 
         private bool GetBXFilenameWasAltered(string filename, string simulated_filename)
         {
-            return !(simulated_filename == Path.GetFileNameWithoutExtension(filename) + ".mid");
+            return !(simulated_filename == Path.GetFileNameWithoutExtension(filename));
         }
 
         private void PlayFile(string file, bool loop = false)
@@ -745,7 +745,7 @@ namespace BXPlayerGUI
             SetButtonEnabled(infobut, false);
             current_file = file;
             string bxchk = GetBXSafeFilename(file);
-            bool needs_minihttp = GetBXFilenameWasAltered(file, bxchk);
+            bool needs_minihttp = GetBXFilenameWasAltered(file, Path.GetFileNameWithoutExtension(bxchk));
 
             if (Path.GetExtension(file).ToLower() == ".kar" || needs_minihttp)
             {
