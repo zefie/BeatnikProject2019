@@ -80,7 +80,7 @@ namespace BXPatchSwitcher
             }
         }
 
-        private string InstallPatch(int patchidx, string outopts, bool noerror = false)
+        private string InstallPatch(int patchidx, string outopts)
         {
             try
             {

@@ -77,6 +77,7 @@ namespace BXPlayer
                 FileChangeEvent fevt = new FileChangeEvent
                 {
                     File = FileName,
+                    LoadedFile = LoadedFile,
                     Duration = Duration,
                     Tempo = Tempo
                 };
@@ -215,10 +216,10 @@ namespace BXPlayer
             }
 
             FileName = real_file ?? Path.GetFileName(file);
+            LoadedFile = file;
 
             Debug.WriteLine("Loading file: " + file);
             Debug.WriteLine("Loop enabled: " + loop);
-
             bx.play(loop, file);
 
             if (!fileChangeHelperTimer.Enabled)
@@ -346,6 +347,8 @@ namespace BXPlayer
 
         public bool FileHasLyrics { get; private set; } = false;
         public string FileName { get; private set; } = null;
+
+        public string LoadedFile { get; private set; } = null;
         public string Title { get; private set; } = null;
         public bool IsReady => bx.IsReady();
 
@@ -385,7 +388,6 @@ namespace BXPlayer
         public void MuteChannel(short channel, bool muted)
         {
             bx.setChannelMute(channel, muted);
-            Debug.WriteLine("MIDI Channel " + channel + " Muted: " + muted);
         }
     }
 }
@@ -402,7 +404,8 @@ namespace BXPlayerEvents
     {
         public int Duration { get; set; }
         public string File { get; set; }
-        public int Tempo { get; set; }
+        public string LoadedFile { get; set; }
+    public int Tempo { get; set; }
     }
     public class ProgressEvent : EventArgs
     {

@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace BXPlayerGUI
 {
@@ -322,6 +323,12 @@ namespace BXPlayerGUI
             SetLabelText(tempovallbl, e.Tempo + "BPM");
             SetControlVisiblity(mainControlPanel, true);
             SetButtonEnabled(infobut, (Path.GetExtension(e.File).ToLower() == ".rmf"));
+            if (e.LoadedFile.StartsWith("http://"))
+            {
+                long res = DeleteUrlCacheEntry(e.LoadedFile);
+                Debug.WriteLine("Deleted " + res.ToString() + " files from disk cache for " + e.LoadedFile);
+            }
+
             settingReverbCB = true;
         }
 
@@ -360,18 +367,6 @@ namespace BXPlayerGUI
             else
             {
                 b.Enabled = enabled;
-            }
-        }
-
-        private void SetButtonText(Button b, string text)
-        {
-            if (b.InvokeRequired)
-            {
-                b.Invoke(new MethodInvoker(delegate { b.Text = text; }));
-            }
-            else
-            {
-                b.Text = text;
             }
         }
 
@@ -571,8 +566,7 @@ namespace BXPlayerGUI
         private void SetBXParams()
         {
             SetLabelText(durationlbl, FormatTime(bx.Duration));
-            int value = -1;
-            value = GetTrackbarValue(tempoControl);
+            int value = GetTrackbarValue(tempoControl);
             if (value >= 0)
             {
                 bx.Tempo = value;
@@ -681,8 +675,10 @@ namespace BXPlayerGUI
                     serialized_data = SerializeData(false);
                 }
 
-                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe);
-                startInfo.Arguments = serialized_data;
+                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe)
+                {
+                    Arguments = serialized_data
+                };
                 Debug.WriteLine("Sending Session Data: " + serialized_data);
                 Process.Start(startInfo);
                 Application.Exit();
@@ -704,7 +700,7 @@ namespace BXPlayerGUI
 
         private void OpenFile_Click(object sender, EventArgs e)
         {
-            string file = ZefieLib.Prompts.BrowseOpenFile("Open MIDI File", null, "All Supported Files (*.mid;*.kar;*.rmf)|*.mid;*.kar;*.rmf|MIDI Files (*.mid;*.kar)|*.mid;*.kar|Beatnik Files (*.rmf)|*.rmf|All files (*.*)|*.*");
+            string file = ZefieLib.Prompts.BrowseOpenFile("Open MIDI File", null, "All Supported Files (*.mid;*.kar;*.rmf;*.wav;*.aif;*.aiff;*.au)|*.mid;*.kar;*.rmf;*.wav;*.aif;*.aiff;*.au|MIDI Files (*.mid;*.kar)|*.mid;*.kar|Beatnik Files (*.rmf)|*.rmf|WAV Files (*.wav)|*.wav|AIF Files (*.aif;*.aiff)|*.aif;*.aiff|AU Files (*.au)|*.au|All files (*.*)|*.*");
             if (file.Length > 0)
             {
                 if (File.Exists(file))
@@ -722,11 +718,21 @@ namespace BXPlayerGUI
 
         private string GetBXSafeFilename(string file)
         {
+            string fileext = Path.GetExtension(file).ToLower();
+            file = Path.GetFileNameWithoutExtension(file) + fileext;
             // returns new filename and if it was replaced
-            string simulated_filename = Path.GetFileNameWithoutExtension(file) + ".mid";
+            if (fileext == ".kar")
+            {
+                file = Path.GetFileNameWithoutExtension(file) + ".mid";
+            }
             Regex rgx = new Regex("[^a-zA-Z0-9_() -.]");
-            return rgx.Replace(simulated_filename, "");
+            return rgx.Replace(file, "");
         }
+
+        [DllImport("wininet.dll", SetLastError = true)]
+        private static extern long DeleteUrlCacheEntry(string lpszUrlName);
+
+
 
         private bool GetBXFilenameWasAltered(string filename, string simulated_filename)
         {
@@ -738,11 +744,12 @@ namespace BXPlayerGUI
             SetLabelText(statustitle, "");
             SetButtonEnabled(infobut, false);
             current_file = file;
-            string simulated_filename = GetBXSafeFilename(file);
-            bool needs_minihttp = GetBXFilenameWasAltered(file, simulated_filename);
+            string bxchk = GetBXSafeFilename(file);
+            bool needs_minihttp = GetBXFilenameWasAltered(file, bxchk);
 
             if (Path.GetExtension(file).ToLower() == ".kar" || needs_minihttp)
             {
+                string simulated_filename = ZefieLib.Strings.GenerateString(64) + Path.GetExtension(bxchk);
                 // hack to send .kar and other unsupported filenames as midi without modifying local filesystem
                 if (needs_minihttp)
                 {
@@ -752,7 +759,6 @@ namespace BXPlayerGUI
                 Debug.WriteLine("trying to load file via miniHTTP");
 
                 PlayFileViaMiniHTTP(simulated_filename, loop);
-
             }
             else
             {
@@ -803,78 +809,128 @@ namespace BXPlayerGUI
             }
         }
 
+        private string GetMimeType(string filename)
+        {
+            switch (Path.GetExtension(filename).ToLower())
+            {
+                case ".mid":
+                case ".kar":
+                case ".midi":
+                    return "audio/midi";
 
+                case ".rmf":
+                    return "audio/rmf";
+
+                case ".wav":
+                    return "audio/wav";
+
+                case ".aif":
+                case ".aiff":
+                    return "audio/aiff";
+
+                case ".au":
+                    return "audio/basic";
+
+                default:
+                    return "application/octet-stream";
+            }
+        }
 
         private void StartHTTPServer()
         {
-            // This is a cheap hack, and only ever used to send .kar (.mid with lyrics) to Beatnik.
-            // Beatnik ignores .kar extension, so we make it ask for a .mid, and send the .kar.
             using (BackgroundWorker minihttp = new BackgroundWorker())
             {
                 minihttp.DoWork += new DoWorkEventHandler(
                     delegate (object o, DoWorkEventArgs arg)
                     {
-                        try
+                        while (true)
                         {
-                            Socket sock;
-                            if (tcp == null)
+                            try
                             {
-                                tcp = new TcpListener(new System.Net.IPAddress(16777343), http_port);
-                                tcp.Start();
-                                Debug.WriteLine("zefie minihttp listening on port " + http_port);
-                                http_ready = true;
-                            }
-                            sock = tcp.AcceptSocket();
-                            Debug.WriteLine("zefie minihttp responding to request");
-                            byte[] readbyte = new byte[4096];
+                                Socket sock;
+                                if (tcp == null)
+                                {
+                                    tcp = new TcpListener(new System.Net.IPAddress(16777343), http_port);
+                                    tcp.Start();
+                                    Debug.WriteLine("minihttp listening on port " + http_port);
+                                    http_ready = true;
+                                }
+                                Debug.WriteLine("minihttp ready for request");
+                                sock = tcp.AcceptSocket();
 
-                            sock.Receive(readbyte, SocketFlags.None);
-                            Stream fs = null;
-                            if (current_datastream != null)
-                            {
-                                Debug.WriteLine("miniHTTP found memory data");
-                                fs = current_datastream;
-                            }
-                            else
-                            {
-                                Debug.WriteLine("miniHTTP opening file " + current_file);
-                                fs = File.OpenRead(current_file);
-                            }
+                                Debug.WriteLine("minihttp responding to request");
+                                byte[] readbyte = new byte[4096];
 
-                            byte[] httpheaders = Encoding.ASCII.GetBytes("HTTP/1.0 200 OK\r\n" +
-                               "Date: " + DateTime.UtcNow.ToLocalTime().ToString() + "\r\n" +
-                               "Server: Zefie's MiniHTTP Simulator\r\n" +
-                               "MIME-version: 1.0\r\n" +
-                               "Last-Modified: " + DateTime.UtcNow.ToLocalTime().ToString() + "\r\n" +
-                               "Content-Type: audio/midi\r\n" +
-                               "Content-Length: " + fs.Length + "\r\n\r\n");
-                            sock.Send(httpheaders);
-                            readbyte = new byte[4096];
-                            while (fs.Read(readbyte, 0, 4096) > 0)
-                            {
-                                sock.Send(readbyte);
-                            }
+                                sock.Receive(readbyte, SocketFlags.None);
+                                string request = Encoding.UTF8.GetString(readbyte);
+                                //Debug.WriteLine("minihttp client request headers:\n"+request);
+                                string request_file = request.Split('\r')[0].Split('/')[1].Split(' ')[0];
+                                string mimetype = GetMimeType(request_file);
+                                Stream fs = null;
+                                Debug.WriteLine("minihttp client requested \"" + request_file + "\", sending as " + mimetype);
+                                string last_modified = DateTime.UtcNow.ToString("r");
+                                if (current_datastream != null)
+                                {
+                                    Debug.WriteLine("minihttp found memory data");
+                                    fs = current_datastream;
+                                }
+                                else
+                                {
+                                    Debug.WriteLine("minihttp opening file " + current_file);
+                                    fs = File.OpenRead(current_file);
+                                    last_modified = new FileInfo(current_file).LastAccessTimeUtc.ToString("r");
+                                }
 
-                            // give player time to buffer
-                            Thread.Sleep(100);
+                                byte[] httpheaders = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" +
+                                   "Date: " + DateTime.UtcNow.ToString("r") + "\r\n" +
+                                   "Server: Zefie's MiniHTTP Simulator\r\n" +
+                                   "Content-Type: " + mimetype + "\r\n" +
+                                   "Content-Length: " + fs.Length + "\r\n" +
+                                   "Last-Modified: " + last_modified + "\r\n" +
+                                   "Cache-Control: no-cache" + "\r\n" +
+                                   "Expires: -1\r\n" +
+                                   "Connection: close\r\n\r\n");
+                                sock.Send(httpheaders);
+                                //Debug.WriteLine("minihttp server response headers:\n"+Encoding.UTF8.GetString(httpheaders));
+                                readbyte = new byte[4096];
+                                while (fs.Read(readbyte, 0, 4096) > 0)
+                                {
+                                    sock.Send(readbyte);
+                                }
 
-                            // clean up
-                            Debug.WriteLine("zefie disconnecting socket");
-                            if (current_datastream != null)
-                            {
-                                Debug.WriteLine("Releasing memory data");
-                                current_datastream.Close();
-                                current_datastream.Dispose();
-                                current_datastream = null;
+                                // give player time to buffer
+                                Thread.Sleep(100);
+
+                                // clean up
+
+                                if (current_datastream != null)
+                                {
+                                    Debug.WriteLine("minihttp releasing memory data");
+                                    current_datastream.Close();
+                                    current_datastream.Dispose();
+                                    current_datastream = null;
+                                }
+                                fs.Close();
+                                fs.Dispose();
+                                fs = null;
+                                if (sock.Connected)
+                                {
+                                    Debug.WriteLine("minihttp disconnecting socket");
+                                    try { sock.Disconnect(false); }
+                                    catch (SocketException e) { Debug.WriteLine(e.Message); }
+                                }
+                                else
+                                {
+                                    Debug.WriteLine("minihttp client already disconneceted socket");
+                                }
+                                sock.Shutdown(SocketShutdown.Both);
+                                sock.Dispose();
+                                sock = null;
+    
                             }
-                            fs.Close();
-                            fs.Dispose();
-                            fs = null;
-                            sock.Disconnect(false);
-                            Debug.WriteLine("zefie minihttp ready for another request");
+                            catch (Exception e) { Debug.WriteLine(e.Message); }
+                            GC.Collect();
                         }
-                        catch (Exception e) { Debug.WriteLine(e.Message); }
-                        GC.Collect();
                     });
                 minihttp.RunWorkerAsync();
             }
