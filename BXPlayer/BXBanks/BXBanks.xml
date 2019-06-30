@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <banks xmlns="urn:beatnikx-banks">
-  <bank src="minibae-wtv.hsb" name="WebTV Classic (bootrom 105)" sha1="112160e42331bd0b961e0f469ebf4a1fc3aba102" splash="false" />
-  <bank src="minibae-wtv2.hsb" name="WebTV Plus (bootrom 2045)" sha1="2b802d695429ab8691de0bbe1f3d2006e5633874" splash="false" />
-  <bank src="patches-wtv2.hsb" name="WebTV Plus (v2.1.0)" sha1="1780c86aeb5a3e3d85ee02d8f20200a8e3629f4b" />
+  <bank src="minibae-wtv.hsb" name="WebTV Classic (bootrom 105)" sha1="1bcf0aff4ef3bcab16ed7c1437b38734a5c7f1f2" splash="false" />
+  <bank src="patches-wtv2.hsb" name="WebTV Plus (v2.1.0, build-3454)" sha1="1780c86aeb5a3e3d85ee02d8f20200a8e3629f4b" />
   <bank src="patches-wtv.hsb" name="WebTV Plus (wtv-music)" sha1="7fa3168dae8ee9037a3935bb7cd93f26b6ce996e" />
   <bank src="patches-wtv-uncompressed.hsb" name="WebTV Plus (wtv-music, uncomp)" sha1="276bf7f476c17d5c32620e114e9f0ad5758dd80e" />
   <bank src="patches.hsb" name="Beatnik Standard (v2.4.3, dist)" sha1="003232ab5a418f34007c525d66e8220993fe62f8" default="true" />
