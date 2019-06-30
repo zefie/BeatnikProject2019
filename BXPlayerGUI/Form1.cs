@@ -12,6 +12,8 @@ using System.ComponentModel;
 using System.Text;
 using System.Reflection;
 using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace BXPlayerGUI
 {
@@ -156,7 +158,7 @@ namespace BXPlayerGUI
                     {
                         current_datastream = new MemoryStream(Properties.Resources.Splash);
                         SetBXParams();
-                        PlayFile(current_datastream, "Splash", false);
+                        PlayFile(current_datastream, "Splash.mid", false);
                         play_splash = false;
                     }
                 }
@@ -718,47 +720,39 @@ namespace BXPlayerGUI
             }
         }
 
+        private string GetBXSafeFilename(string file)
+        {
+            // returns new filename and if it was replaced
+            string simulated_filename = Path.GetFileNameWithoutExtension(file) + ".mid";
+            Regex rgx = new Regex("[^a-zA-Z0-9 -.]");
+            return rgx.Replace(simulated_filename, "");
+        }
+
+        private bool GetBXFilenameWasAltered(string filename, string simulated_filename)
+        {
+            return !(simulated_filename == Path.GetFileNameWithoutExtension(filename) + ".mid");
+        }
+
         private void PlayFile(string file, bool loop = false)
         {
-            current_file = file;
             SetLabelText(statustitle, "");
             SetButtonEnabled(infobut, false);
-            if (Path.GetExtension(file).ToLower() == ".kar")
-            {
-                // hack to send .kar as midi without modifying local filesystem
-                // .kar is ajust a midi but the beatnik player is a punk.
-                // So we make Beatnik think its loading a .mid from the web, but its us, sending the .kar :)
+            current_file = file;
+            string simulated_filename = GetBXSafeFilename(file);
+            bool needs_minihttp = GetBXFilenameWasAltered(file, simulated_filename);
 
-                Debug.WriteLine("trying to load .kar file");
-                if (tcp == null)
+            if (Path.GetExtension(file).ToLower() == ".kar" || needs_minihttp)
+            {
+                // hack to send .kar and other unsupported filenames as midi without modifying local filesystem
+                if (needs_minihttp)
                 {
-                    Debug.WriteLine("zefie minihttp starting up");
-                    while (!ZefieLib.Networking.IsPortAvailable(http_port, IPAddress.Loopback))
-                    {
-                        http_port--;
-                    }
-                    Debug.WriteLine("zefie minihttp found available port on localhost:" + http_port);
-                    StartHTTPServer();
+                    Debug.WriteLine(file + " name unsupported by Beatnik, miniHTTP required. Simulated Filename: " + simulated_filename);
                 }
-                using (BackgroundWorker bxrequest = new BackgroundWorker())
-                {
-                    bxrequest.DoWork += new DoWorkEventHandler(
-                    delegate (object o1, DoWorkEventArgs arg1)
-                    {
-                        try
-                        {
-                            while (!http_ready)
-                            {
-                                Thread.Sleep(100);
-                            }
-                            bx.PlayFile("http://127.0.0.1:" + http_port.ToString() + "/" + Path.GetFileNameWithoutExtension(current_file) + ".mid", loop, current_file);
-                        }
-                        catch { }
-                        GC.Collect();
-                    }
-                    );
-                    bxrequest.RunWorkerAsync();
-                }
+
+                Debug.WriteLine("trying to load file via miniHTTP");
+
+                PlayFileViaMiniHTTP(simulated_filename, loop);
+                
             }
             else
             {
@@ -772,7 +766,12 @@ namespace BXPlayerGUI
             current_datastream = filedata;
             SetLabelText(statustitle, "");
             SetButtonEnabled(infobut, false);
+            PlayFileViaMiniHTTP(filename, loop);
             Debug.WriteLine("trying to load internal memory data (as " + filename + ")");
+        }
+
+        private void PlayFileViaMiniHTTP(string simulated_filename, bool loop)
+        {
             if (tcp == null)
             {
                 Debug.WriteLine("zefie minihttp starting up");
@@ -794,7 +793,7 @@ namespace BXPlayerGUI
                         {
                             Thread.Sleep(100);
                         }
-                        bx.PlayFile("http://127.0.0.1:" + http_port.ToString() + "/" + Path.GetFileNameWithoutExtension(current_file) + ".mid", loop, current_file);
+                        bx.PlayFile("http://127.0.0.1:" + http_port.ToString() + "/" + simulated_filename, loop, current_file);
                     }
                     catch { }
                     GC.Collect();
@@ -803,6 +802,8 @@ namespace BXPlayerGUI
                 bxrequest.RunWorkerAsync();
             }
         }
+
+
 
         private void StartHTTPServer()
         {
