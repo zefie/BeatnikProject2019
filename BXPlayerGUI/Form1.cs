@@ -217,6 +217,7 @@ namespace BXPlayerGUI
                         SetCheckBoxChecked(midichk_14, Convert.ToBoolean(options[19]));
                         SetCheckBoxChecked(midichk_15, Convert.ToBoolean(options[20]));
                         SetCheckBoxChecked(midichk_16, Convert.ToBoolean(options[21]));
+                        SetComboBoxIndex(reverbcb, Convert.ToInt32(options[22]));
                         GC.Collect();
                     }
                 );
@@ -259,7 +260,8 @@ namespace BXPlayerGUI
                 midichk_13.Checked.ToString() + "|" +
                 midichk_14.Checked.ToString() + "|" +
                 midichk_15.Checked.ToString() + "|" +
-                midichk_16.Checked.ToString();
+                midichk_16.Checked.ToString() + "|" +
+                reverbcb.SelectedIndex;
             }
 
             return ZefieLib.Data.Base64Encode(options);
