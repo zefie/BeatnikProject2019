@@ -55,7 +55,7 @@ namespace BXPlayer
         {
             progressMonitor.Interval = 250;
             progressMonitor.Elapsed += ProgressMonitor_Elapsed;
-            fileChangeHelperTimer.Interval = 100;
+            fileChangeHelperTimer.Interval = 500;
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
         }
 
@@ -74,7 +74,7 @@ namespace BXPlayer
 
         private void FileChangeHelperTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (Duration != 0 && Tempo != 0)
+            if (Duration != 0)
             {
                 FileChangeEvent fevt = new FileChangeEvent
                 {

@@ -300,8 +300,6 @@ namespace BXPlayerGUI
                     SetButtonImage(playbut, Properties.Resources.icon_pause);
                     SetLabelText(status, "Playing.");
                 }
-                settingReverbCB = true;
-                SetComboBoxIndex(reverbcb, bx.ReverbType);
             }
             else
             {
@@ -587,7 +585,7 @@ namespace BXPlayerGUI
             value = GetComboBoxIndex(reverbcb);
             if (value >= 0)
             {
-                bx.ReverbType = (value - 1);
+                bx.ReverbType = (value + 1);
             }
             value = GetTrackbarValue(volumeControl);
             if (value >= 0)
