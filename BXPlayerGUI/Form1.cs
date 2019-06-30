@@ -89,7 +89,7 @@ namespace BXPlayerGUI
                                     {
                                         string patchfile = patches_dir + reader.GetAttribute("src");
                                         string patchname = reader.GetAttribute("name");
-                                        string patchhash = reader.GetAttribute("sha1");
+                                        string patchhash = reader.GetAttribute("sha1").ToLower();
                                         if (patchhash == current_hash)
                                         {
                                             string splash = reader.GetAttribute("splash");

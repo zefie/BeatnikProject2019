@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
@@ -157,7 +158,7 @@ namespace BXPatchSwitcher
             {
                 using (XmlReader reader = XmlReader.Create(bankfile))
                 {
-                    int count = 0;
+                    int count = -1;
                     while (reader.Read())
                     {
                         if (reader.NodeType == XmlNodeType.Element)
@@ -252,13 +253,14 @@ namespace BXPatchSwitcher
                             {
                                 string patchfile = patches_dir + reader.GetAttribute("src");
                                 string patchname = reader.GetAttribute("name");
-                                string patchsha1_expected = reader.GetAttribute("sha1");
+                                string patchsha1_expected = reader.GetAttribute("sha1").ToLower();
                                 string @default = reader.GetAttribute("default");
                                 if (@default != null)
                                 {
                                     if (Convert.ToBoolean(@default))
                                     {
                                         default_index = idx;
+                                        Debug.WriteLine("Detected " + patchname + " as currently perferred default");
                                     }
                                 }
                                 if (File.Exists(patchfile))
@@ -275,9 +277,17 @@ namespace BXPatchSwitcher
                                             if (junctioned) {
                                                 bxinsthsb.Text += " (Junctioned)";
                                             }
-                                            bxpatchcb.SelectedIndex = (bxpatchcb.Items.Count - 1);
+                                            bxpatchcb.SelectedIndex = bxpatchcb.Items.Count - 1;
                                         }
                                     }
+                                    else
+                                    {
+                                        Debug.WriteLine("Found " + patchname + "(SHA1: " + patchsha1 + ", BAD)");
+                                    }
+                                }
+                                else
+                                {
+                                    Debug.WriteLine("Could not find " + patchfile);
                                 }
                                 idx++;
                             }
