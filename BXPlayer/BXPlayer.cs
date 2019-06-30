@@ -26,6 +26,8 @@ namespace BXPlayer
         private readonly int[] last_position = new int[2];
         private readonly Timer progressMonitor = new Timer();
         private readonly Timer fileChangeHelperTimer = new Timer();
+        private readonly Timer seekhelper = new Timer();
+        private readonly int bxdelay = 300;
 
         public void Dispose()
         {
@@ -55,7 +57,7 @@ namespace BXPlayer
         {
             progressMonitor.Interval = 250;
             progressMonitor.Elapsed += ProgressMonitor_Elapsed;
-            fileChangeHelperTimer.Interval = 500;
+            fileChangeHelperTimer.Interval = bxdelay;
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
         }
 
@@ -133,10 +135,6 @@ namespace BXPlayer
 
         private void Bx_OnMetaEvent(string @event, string text)
         {
-            if (PlayState == PlayState.Seeking)
-            {
-                PlayState = PlayState.Playing;
-            }
             if (@event == "Marker")
             {
                 if (text.Length > 1)
@@ -316,7 +314,7 @@ namespace BXPlayer
                 if (bxvers.IndexOf(' ') > 0) {
                     string[] bxver = bxvers.Split(' ');
                     bxvers = bxver[(bxver.Length - 1)];                    
-                }
+                  }
                 return bxvers;
             }
         }
@@ -324,12 +322,29 @@ namespace BXPlayer
         public int Position
         {
             get => bx.getPosition();
-            set {
-                PlayState = PlayState.Seeking;
+            set
+            {
+                this.PlayState = PlayState.Seeking;
                 bx.setPosition(value);
+                if (seekhelper.Enabled)
+                {
+                    seekhelper.Stop();
+                }
+                seekhelper.Interval = bxdelay;
+                seekhelper.Elapsed += SeekHelper_Elapsed;
+                seekhelper.Start();
             }
         }
 
+        private void SeekHelper_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (PlayState == PlayState.Seeking)
+            {
+                PlayState = PlayState.Playing;
+            }
+            ((Timer)sender).Stop();          
+        }
+    
         public PlayState PlayState
         {
             get => _state;
@@ -398,7 +413,6 @@ namespace BXPlayer
             }
         }
     }
-
 }
 
 namespace BXPlayerEvents
