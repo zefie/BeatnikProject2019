@@ -945,7 +945,13 @@ namespace BXPlayerGUI
                 if (s.Length > 0)
                 {
                     if (CheckExtensionSupported(s[0]))
+                    {
                         e.Effect = DragDropEffects.Link;
+                    }
+                    else
+                    {
+                        e.Effect = DragDropEffects.None;
+                    }
                 }
             }
             else
