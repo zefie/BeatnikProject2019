@@ -37,7 +37,7 @@ namespace BXPlayerGUI
         private bool http_ready = false;
         private bool seekbar_held = false;
         private bool play_splash = false;
-        private int default_reverb = 6;
+        private int default_reverb = 0;
 
         public string version;
 
@@ -137,7 +137,6 @@ namespace BXPlayerGUI
                     reverbcb.Items.Add("Basement");
                     reverbcb.Items.Add("Banquet Hall");
                     reverbcb.Items.Add("Catacombs ");
-                    default_reverb = 7;
                 }
                 settingReverbCB = true;
                 SetComboBoxIndex(reverbcb, default_reverb);
