@@ -84,8 +84,22 @@ namespace BXPlayer
                 OnFileChanged(this, fevt);
                 PlayState = PlayState.Playing;
                 fileChangeHelperTimer.Stop();
+                if (Path.GetExtension(LoadedFile).ToLower() == ".rmf")
+                {
+                    Title = GetInfo("title");
+                    if (Title.Length > 0)
+                    {
+                        MetaDataEvent mevt = new MetaDataEvent
+                        {
+                            Title = Title,
+                            RawMeta = new KeyValuePair<string, string>("RMFTITLE", Title)
+                        };
+                        OnMetaDataChanged(this, mevt);
+                    }
+                }
             }
         }
+    
 
         private void ProgressMonitor_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -133,59 +147,59 @@ namespace BXPlayer
         private void Bx_OnMetaEvent(string @event, string text)
         {
             string titleout = null;
-            if (@event == "Marker")
+            if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid")
             {
-                if (text.Length > 1)
+                if (@event == "Marker")
                 {
-                    if (text.ToLower() != "loopstart" && text.ToLower() != "loopend")
+                    if (text.Length > 1)
                     {
-                        Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
-                        titleout = Title;
+                        if (text.ToLower() != "loopstart" && text.ToLower() != "loopend")
+                        {
+                            Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
+                            titleout = Title;
+                        }
+                    }
+                }
+                else if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
+                {
+                    if (!FileHasLyrics)
+                    {
+                        FileHasLyrics = true;
+                        Debug.WriteLine("Detected file has GenericText lyric metadata");
+                    }
+
+                    if (@event == "Lyric" && !_file_has_lyrics_meta)
+                    {
+                        _file_has_lyrics_meta = true;
+                        FileHasLyrics = true;
+                        Debug.WriteLine("Detected file has Lyric metadata, so wont use GenericText");
+                    }
+
+                    if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
+                    {
+                        lyrics_delete = true;
+                        if (text == "\r")
+                        {
+                            return;
+                        }
+
+                        if (text.StartsWith("/") || text.StartsWith("\\"))
+                        {
+                            text = text.Substring(1);
+                        }
+                    }
+
+                    if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
+                    {
+                        if (lyrics_delete)
+                        {
+                            lyrics_delete = false;
+                            Title = "Lyrics: ";
+                        }
+                        Title += text;
                     }
                 }
             }
-            else if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
-            {
-                if (!FileHasLyrics)
-                {
-                    FileHasLyrics = true;
-                    Debug.WriteLine("Detected file has GenericText lyric metadata");
-                }
-
-                if (@event == "Lyric" && !_file_has_lyrics_meta)
-                {
-                    _file_has_lyrics_meta = true;
-                    FileHasLyrics = true;
-                    Debug.WriteLine("Detected file has Lyric metadata, so wont use GenericText");
-                }
-
-                if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
-                {
-                    lyrics_delete = true;
-                    if (text == "\r")
-                    {
-                        return;
-                    }
-
-                    if (text.StartsWith("/") || text.StartsWith("\\"))
-                    {
-                        text = text.Substring(1);
-                    }
-                }
-
-                if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
-                {
-                    if (lyrics_delete)
-                    {
-                        lyrics_delete = false;
-                        Title = "Lyrics: ";
-                    }
-                    Title += text;
-                }
-
-
-            }
-
 
             MetaDataEvent mevt = new MetaDataEvent
             {
