@@ -51,11 +51,7 @@ namespace BXPlayerGUI
             Debug.WriteLine("CWD is " + cwd);
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
-            bx = new BXPlayerClass
-            {
-                debug = true,
-                debug_meta = true
-            };
+            bx = new BXPlayerClass();
         }
 
         private void VolumeControl_Scroll(object sender, EventArgs e)
@@ -331,7 +327,11 @@ namespace BXPlayerGUI
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
         {
-            SetLabelText(statustitle, e.Title);
+            if (e.Title != null)
+            {
+                SetLabelText(statustitle, e.Title);
+            }
+            Debug.WriteLine(e.RawMeta.Key + ": " + e.RawMeta.Value);
         }
         public string FormatTime(int ms, bool seconds = false)
         {

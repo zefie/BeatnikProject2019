@@ -1,10 +1,11 @@
-﻿using System;
-using BEATNIKXLib;
-using System.Diagnostics;
-using System.Timers;
-using System.IO;
+﻿using BEATNIKXLib;
 using BXPlayerEvents;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Timers;
 
 namespace BXPlayer
 {
@@ -12,8 +13,6 @@ namespace BXPlayer
     {
         private BeatnikXClass bx;
         public bool active = false;
-        public bool debug = false;
-        public bool debug_meta = false;
         public event EventHandler<PlayStateEvent> PlayStateChanged = delegate { };
         public event EventHandler<ProgressEvent> ProgressChanged = delegate { };
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
@@ -67,10 +66,7 @@ namespace BXPlayer
             bx.enableMetaEvents(true);
             bx.OnMetaEvent += Bx_OnMetaEvent;
             active = true;
-            if (debug)
-            {
-                Debug.WriteLine("BeatnikX Initalized");
-            }
+            Debug.WriteLine("BeatnikX Initalized");
         }
 
 
@@ -135,6 +131,7 @@ namespace BXPlayer
 
         private void Bx_OnMetaEvent(string @event, string text)
         {
+            string titleout = null;
             if (@event == "Marker")
             {
                 if (text.Length > 1)
@@ -142,11 +139,7 @@ namespace BXPlayer
                     if (text.ToLower() != "loopstart" && text.ToLower() != "loopend")
                     {
                         Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
-                        MetaDataEvent mevt = new MetaDataEvent
-                        {
-                            Title = Title
-                        };
-                        OnMetaDataChanged(this, mevt);
+                        titleout = Title;
                     }
                 }
             }
@@ -155,20 +148,14 @@ namespace BXPlayer
                 if (!FileHasLyrics)
                 {
                     FileHasLyrics = true;
-                    if (debug)
-                    {
-                        Debug.WriteLine("Detected file has GenericText lyric metadata");
-                    }
+                    Debug.WriteLine("Detected file has GenericText lyric metadata");
                 }
 
                 if (@event == "Lyric" && !_file_has_lyrics_meta)
                 {
                     _file_has_lyrics_meta = true;
                     FileHasLyrics = true;
-                    if (debug)
-                    {
-                        Debug.WriteLine("Detected file has Lyric metadata, so wont use GenericText");
-                    }
+                    Debug.WriteLine("Detected file has Lyric metadata, so wont use GenericText");
                 }
 
                 if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
@@ -195,26 +182,17 @@ namespace BXPlayer
                     Title += text;
                 }
 
-                MetaDataEvent mevt = new MetaDataEvent
-                {
-                    Title = Title
-                };
-                OnMetaDataChanged(this, mevt);
 
             }
-            else
+
+
+            MetaDataEvent mevt = new MetaDataEvent
             {
-                if (debug)
-                {
-                    // unknown metadata
-                    Debug.WriteLine(@event + ": '" + text + "'");
-                }
-            }
-            if (debug && debug_meta)
-            {
-                // all metadata
-                Debug.WriteLine(@event + ": '" + text + "'");
-            }
+                Title = titleout,
+                RawMeta = new KeyValuePair<string, string>(@event, text)
+
+            };
+            OnMetaDataChanged(this, mevt);
         }
 
         public void BXShutdown()
@@ -235,14 +213,11 @@ namespace BXPlayer
             {
                 Stop();
             }
-            
+
             FileName = real_file ?? Path.GetFileName(file);
 
-            if (debug)
-            {
-                Debug.WriteLine("Loading file: " + file);
-                Debug.WriteLine("Loop enabled: " + loop);
-            }
+            Debug.WriteLine("Loading file: " + file);
+            Debug.WriteLine("Loop enabled: " + loop);
 
             bx.play(loop, file);
 
@@ -410,10 +385,7 @@ namespace BXPlayer
         public void MuteChannel(short channel, bool muted)
         {
             bx.setChannelMute(channel, muted);
-            if (debug)
-            {
-                Debug.WriteLine("MIDI Channel " + channel + " Muted: " + muted);
-            }
+            Debug.WriteLine("MIDI Channel " + channel + " Muted: " + muted);
         }
     }
 }
@@ -423,6 +395,7 @@ namespace BXPlayerEvents
     public class MetaDataEvent : EventArgs
     {
         public string Title { get; set; }
+        public KeyValuePair<string,string> RawMeta { get; set; }
     }
 
     public class FileChangeEvent : EventArgs
