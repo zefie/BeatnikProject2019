@@ -36,6 +36,7 @@ namespace BXPlayerGUI
         private bool http_ready = false;
         private bool seekbar_held = false;
         private bool play_splash = false;
+        private int default_reverb = 6;
 
         public string version;
 
@@ -139,9 +140,10 @@ namespace BXPlayerGUI
                     reverbcb.Items.Add("Basement");
                     reverbcb.Items.Add("Banquet Hall");
                     reverbcb.Items.Add("Catacombs ");
+                    default_reverb = 7;
                 }
                 settingReverbCB = true;
-                SetComboBoxIndex(reverbcb, 0);
+                SetComboBoxIndex(reverbcb, default_reverb);
                 if (args.Length > 1)
                 {
                     if (File.Exists(args[1]))
@@ -325,7 +327,6 @@ namespace BXPlayerGUI
             SetControlVisiblity(mainControlPanel, true);
             SetButtonEnabled(infobut, (Path.GetExtension(e.File).ToLower() == ".rmf"));
             settingReverbCB = true;
-            SetComboBoxIndex(reverbcb, bx.ReverbType);
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
