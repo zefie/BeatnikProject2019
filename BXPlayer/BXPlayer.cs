@@ -324,7 +324,10 @@ namespace BXPlayer
             get => bx.getPosition();
             set
             {
-                this.PlayState = PlayState.Seeking;
+                if (PlayState != PlayState.Seeking)
+                {
+                    PlayState = PlayState.Seeking;
+                }
                 bx.setPosition(value);
                 if (seekhelper.Enabled)
                 {
