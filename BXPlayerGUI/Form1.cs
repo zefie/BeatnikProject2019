@@ -19,7 +19,7 @@ namespace BXPlayerGUI
 {
     public partial class Form1 : Form
     {
-        private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)+"\\";
+        private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
         private readonly string bxpatch_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
         private readonly string[] args = Environment.GetCommandLineArgs();
         private readonly string _patchswitcher_exe = "BXPatchSwitcher.exe";
@@ -46,7 +46,7 @@ namespace BXPlayerGUI
             version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
             Text += " v" + version;
             Debug.WriteLine(Text + " initializing");
-            
+
             Debug.WriteLine("CWD is " + cwd);
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
@@ -54,7 +54,7 @@ namespace BXPlayerGUI
             {
                 debug = true,
                 debug_meta = true
-            };            
+            };
         }
 
         private void VolumeControl_Scroll(object sender, EventArgs e)
@@ -100,7 +100,8 @@ namespace BXPlayerGUI
                                                 play_splash = Convert.ToBoolean(splash);
                                                 Debug.WriteLine("splash compatible bank found. play_splash = " + play_splash.ToString());
                                             }
-                                            catch {
+                                            catch
+                                            {
                                                 Debug.WriteLine("splash was not a boolean");
                                             };
                                             Debug.WriteLine("Detected " + patchname + " as currently installed");
@@ -132,7 +133,7 @@ namespace BXPlayerGUI
                 SetLabelText(bxversionlbl, "v" + bxvers);
 
                 // 2.0.0+ reverbs
-                if (Convert.ToInt32(bxvers.Substring(0,1)) >= 2)
+                if (Convert.ToInt32(bxvers.Substring(0, 1)) >= 2)
                 {
                     reverbcb.Items.Add("Early Reflections");
                     reverbcb.Items.Add("Basement");
@@ -274,13 +275,13 @@ namespace BXPlayerGUI
 
             if (!seekbar_held)
             {
-                SetTrackbarValue(seekbar,e.Position);
+                SetTrackbarValue(seekbar, e.Position);
             }
         }
 
         private void Bx_PlayStateChanged(object sender, PlayStateEvent e)
         {
-            Debug.WriteLine("playstatechange fired ~ PlayState: "+e.State);
+            Debug.WriteLine("playstatechange fired ~ PlayState: " + e.State);
             if (e.State != PlayState.Stopped)
             {
                 SetControlVisiblity(mainControlPanel, true);
@@ -300,7 +301,7 @@ namespace BXPlayerGUI
                     SetLabelText(status, "Playing.");
                 }
                 settingReverbCB = true;
-                SetComboBoxIndex(reverbcb,bx.ReverbType);
+                SetComboBoxIndex(reverbcb, bx.ReverbType);
             }
             else
             {
@@ -326,7 +327,7 @@ namespace BXPlayerGUI
             SetControlVisiblity(mainControlPanel, true);
             SetButtonEnabled(infobut, (Path.GetExtension(e.File).ToLower() == ".rmf"));
             settingReverbCB = true;
-            SetComboBoxIndex(reverbcb,bx.ReverbType);
+            SetComboBoxIndex(reverbcb, bx.ReverbType);
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
@@ -405,7 +406,7 @@ namespace BXPlayerGUI
         }
         private void SetLabelText(ToolStripStatusLabel l, string text)
         {
-                l.Text = text;
+            l.Text = text;
         }
 
         private void SetTrackbarValue(TrackBar t, int value)
@@ -523,7 +524,7 @@ namespace BXPlayerGUI
         private void SetTempo(int val)
         {
             bx.Tempo = val;
-            SetLabelText(tempovallbl, val.ToString()+"BPM");
+            SetLabelText(tempovallbl, val.ToString() + "BPM");
         }
 
         private void SetVolume(int val)
@@ -586,7 +587,7 @@ namespace BXPlayerGUI
             value = GetComboBoxIndex(reverbcb);
             if (value >= 0)
             {
-                bx.ReverbType = (value - 1);               
+                bx.ReverbType = (value - 1);
             }
             value = GetTrackbarValue(volumeControl);
             if (value >= 0)
@@ -697,7 +698,7 @@ namespace BXPlayerGUI
             }
         }
 
-        private void PictureBox1_Click(object sender, EventArgs e)
+        private void BeatnikLogo_Click(object sender, EventArgs e)
         {
             bx.AboutBox();
         }
@@ -715,7 +716,7 @@ namespace BXPlayerGUI
                     SetLabelText(durationlbl, "");
                     current_file = file;
                     SetVolume(volumeControl.Value);
-                    PlayFile(file,loopcb.Checked);
+                    PlayFile(file, loopcb.Checked);
                 }
             }
         }
@@ -752,7 +753,7 @@ namespace BXPlayerGUI
                 Debug.WriteLine("trying to load file via miniHTTP");
 
                 PlayFileViaMiniHTTP(simulated_filename, loop);
-                
+
             }
             else
             {
@@ -833,11 +834,11 @@ namespace BXPlayerGUI
                             if (current_datastream != null)
                             {
                                 Debug.WriteLine("miniHTTP found memory data");
-                                fs = current_datastream;                                
+                                fs = current_datastream;
                             }
                             else
                             {
-                                Debug.WriteLine("miniHTTP opening file "+current_file);
+                                Debug.WriteLine("miniHTTP opening file " + current_file);
                                 fs = File.OpenRead(current_file);
                             }
 
@@ -908,6 +909,49 @@ namespace BXPlayerGUI
         private void Progresslbl_Click(object sender, EventArgs e)
         {
             bx.Position = 0;
+        }
+
+        private void BXPlayerGUI_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            if (s.Length > 0) {
+                if (CheckExtensionSupported(s[0]))
+                {
+                    PlayFile(s[0], loopcb.Checked);
+                }
+            }
+        }
+
+        private bool CheckExtensionSupported(string filename)
+        {
+            string ext = Path.GetExtension(filename).ToLower();
+            switch (ext)
+            {
+                case ".mid":
+                case ".midi":
+                case ".kar":
+                case ".rmf":
+                return true;
+            }
+            return false;
+        }
+
+        private void BXPlayerGUI_DragEnter(object sender, DragEventArgs e)
+        {
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                if (s.Length > 0)
+                {
+                    if (CheckExtensionSupported(s[0]))
+                        e.Effect = DragDropEffects.Link;
+                }
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
         }
     }
 }

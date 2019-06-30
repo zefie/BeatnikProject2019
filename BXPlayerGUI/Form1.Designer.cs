@@ -91,7 +91,7 @@
             this.tempovallbl = new System.Windows.Forms.Label();
             this.transposevalbl = new System.Windows.Forms.Label();
             this.volvallbl = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.beatnikLogo = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
             this.reverblbl = new System.Windows.Forms.Label();
             this.reverbcb = new System.Windows.Forms.ComboBox();
@@ -110,7 +110,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.seekbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.beatnikLogo)).BeginInit();
             this.mainControlPanel.SuspendLayout();
             this.miniControlPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -628,6 +628,8 @@
             this.bankSwitcherPanel.Name = "bankSwitcherPanel";
             this.bankSwitcherPanel.Size = new System.Drawing.Size(200, 60);
             this.bankSwitcherPanel.TabIndex = 28;
+            this.bankSwitcherPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
+            this.bankSwitcherPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             // 
             // bxinsthsb
             // 
@@ -820,21 +822,24 @@
             this.volvallbl.Text = "70%";
             this.volvallbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // pictureBox1
+            // beatnikLogo
             // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(116, 16);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(79, 36);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 40;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.PictureBox1_Click);
+            this.beatnikLogo.BackColor = System.Drawing.SystemColors.Control;
+            this.beatnikLogo.Image = ((System.Drawing.Image)(resources.GetObject("beatnikLogo.Image")));
+            this.beatnikLogo.Location = new System.Drawing.Point(116, 16);
+            this.beatnikLogo.Margin = new System.Windows.Forms.Padding(0);
+            this.beatnikLogo.Name = "beatnikLogo";
+            this.beatnikLogo.Size = new System.Drawing.Size(79, 36);
+            this.beatnikLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.beatnikLogo.TabIndex = 40;
+            this.beatnikLogo.TabStop = false;
+            this.beatnikLogo.Click += new System.EventHandler(this.BeatnikLogo_Click);
+            this.beatnikLogo.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
+            this.beatnikLogo.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             // 
             // mainControlPanel
             // 
+            this.mainControlPanel.AllowDrop = true;
             this.mainControlPanel.Controls.Add(this.reverblbl);
             this.mainControlPanel.Controls.Add(this.reverbcb);
             this.mainControlPanel.Controls.Add(this.label1);
@@ -859,6 +864,8 @@
             this.mainControlPanel.Size = new System.Drawing.Size(619, 203);
             this.mainControlPanel.TabIndex = 41;
             this.mainControlPanel.Visible = false;
+            this.mainControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
+            this.mainControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             // 
             // reverblbl
             // 
@@ -889,9 +896,10 @@
             // 
             // miniControlPanel
             // 
+            this.miniControlPanel.AllowDrop = true;
             this.miniControlPanel.Controls.Add(this.infobut);
             this.miniControlPanel.Controls.Add(this.loopcb);
-            this.miniControlPanel.Controls.Add(this.pictureBox1);
+            this.miniControlPanel.Controls.Add(this.beatnikLogo);
             this.miniControlPanel.Controls.Add(this.bxversionlbl);
             this.miniControlPanel.Controls.Add(this.openfile);
             this.miniControlPanel.Controls.Add(this.playbut);
@@ -900,6 +908,8 @@
             this.miniControlPanel.Name = "miniControlPanel";
             this.miniControlPanel.Size = new System.Drawing.Size(200, 66);
             this.miniControlPanel.TabIndex = 42;
+            this.miniControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
+            this.miniControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             // 
             // infobut
             // 
@@ -925,6 +935,7 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.AllowDrop = true;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.status,
             this.statustitle,
@@ -936,6 +947,8 @@
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 13;
             this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
+            this.statusStrip1.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             // 
             // status
             // 
@@ -966,6 +979,7 @@
             // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(623, 230);
@@ -979,6 +993,8 @@
             this.Name = "Form1";
             this.Text = "zefie\'s BeatnikX Player";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             this.midichpnl.ResumeLayout(false);
             this.midichpnl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).EndInit();
@@ -989,7 +1005,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.seekbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.beatnikLogo)).EndInit();
             this.mainControlPanel.ResumeLayout(false);
             this.mainControlPanel.PerformLayout();
             this.miniControlPanel.ResumeLayout(false);
@@ -1065,7 +1081,7 @@
         private System.Windows.Forms.Label tempovallbl;
         private System.Windows.Forms.Label transposevalbl;
         private System.Windows.Forms.Label volvallbl;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox beatnikLogo;
         private System.Windows.Forms.Panel mainControlPanel;
         private System.Windows.Forms.Panel miniControlPanel;
         private System.Windows.Forms.Label bxversionlbl;
