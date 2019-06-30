@@ -986,6 +986,10 @@ namespace BXPlayerGUI
                 case ".midi":
                 case ".kar":
                 case ".rmf":
+                case ".wav":
+                case ".aif":
+                case ".aiff":
+                case ".au":
                 return true;
             }
             return false;
