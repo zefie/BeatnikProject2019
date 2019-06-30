@@ -158,7 +158,7 @@ namespace BXPatchSwitcher
             {
                 using (XmlReader reader = XmlReader.Create(bankfile))
                 {
-                    int count = -1;
+                    int count = 0;
                     while (reader.Read())
                     {
                         if (reader.NodeType == XmlNodeType.Element)
