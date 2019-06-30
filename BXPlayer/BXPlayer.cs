@@ -212,7 +212,7 @@ namespace BXPlayer
         {
             if (PlayState == PlayState.Playing || PlayState == PlayState.Playing)
             {
-                Stop();
+                Stop(false);
             }
 
             FileName = real_file ?? Path.GetFileName(file);
@@ -360,9 +360,16 @@ namespace BXPlayer
 
         public void Pause() => bx.pause();
 
-        public void Stop()
+        public void Stop(bool fade = true)
         {
-            bx.stopWithFade(true);
+            if (fade)
+            {
+                bx.stopWithFade(true);
+            }
+            else
+            {
+                bx.stopAll();
+            }
             Title = null;
             _file_has_lyrics_meta = false;
             FileHasLyrics = false;
