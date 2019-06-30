@@ -725,7 +725,7 @@ namespace BXPlayerGUI
         {
             // returns new filename and if it was replaced
             string simulated_filename = Path.GetFileNameWithoutExtension(file) + ".mid";
-            Regex rgx = new Regex("[^a-zA-Z0-9 -.]");
+            Regex rgx = new Regex("[^a-zA-Z0-9_() -.]");
             return rgx.Replace(simulated_filename, "");
         }
 
