@@ -26,7 +26,7 @@ namespace BXPlayer
         private readonly Timer progressMonitor = new Timer();
         private readonly Timer fileChangeHelperTimer = new Timer();
         private readonly Timer seekhelper = new Timer();
-        private readonly int bxdelay = 300;
+        private readonly int bxdelay = 350;
 
         /// <summary>
         /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
