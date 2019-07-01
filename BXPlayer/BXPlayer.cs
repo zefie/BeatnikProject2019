@@ -56,6 +56,11 @@ namespace BXPlayer
             }
 
         }
+
+        /// <summary>
+        /// A .NET Wrapper Class for the BeatnikX OCX COM Object
+        /// </summary>
+        /// 
         public BXPlayerClass()
         {
             progressMonitor.Interval = 250;

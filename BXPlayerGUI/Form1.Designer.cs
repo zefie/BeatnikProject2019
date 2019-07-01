@@ -992,6 +992,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "zefie\'s BeatnikX Player";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
