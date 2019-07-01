@@ -169,6 +169,7 @@ namespace BXPlayerGUI
                     catch (Exception e) {
                         Debug.WriteLine("Failed to process incoming named pipe message: " + e.Message);
                     }
+                    Activate();
                 }
             }
             catch (ObjectDisposedException)

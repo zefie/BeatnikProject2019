@@ -639,7 +639,7 @@
             this.bxinsthsb.Size = new System.Drawing.Size(189, 13);
             this.bxinsthsb.TabIndex = 15;
             this.bxinsthsb.Text = "Unknown";
-            this.bxinsthsb.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.bxinsthsb.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label3
             // 
