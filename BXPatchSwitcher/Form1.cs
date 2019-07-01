@@ -37,14 +37,6 @@ namespace BXPatchSwitcher
             bankfile = patches_dir + "BXBanks.xml";
             bxpatch_preferred_dest = cwd + "\\patches.hsb";
             bxpatch_dest = bxpatch_default_dest;
-            if (File.Exists(bxpatch_preferred_dest) && File.Exists(bxpatch_default_dest))
-            {
-                if (ZefieLib.Cryptography.Hash.SHA1(bxpatch_preferred_dest) == ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest))
-                {
-                    bxpatch_dest = bxpatch_preferred_dest;
-                    junctioned = true;
-                }
-            }
         }
    
         private void BxpatchBtn_Click(object sender, EventArgs e)
@@ -79,6 +71,11 @@ namespace BXPatchSwitcher
             {
                 Application.Exit();
             }
+            else if(res != "OK")
+            {
+                MessageBox.Show(res, "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            } 
+
         }
 
         private string InstallPatch(int patchidx, string outopts)
@@ -217,7 +214,15 @@ namespace BXPatchSwitcher
 
         private void Init_Form()
         {
-            junctionchk.Checked = true;
+            if (File.Exists(bxpatch_preferred_dest) && File.Exists(bxpatch_default_dest))
+            {
+                if (ZefieLib.Cryptography.Hash.SHA1(bxpatch_preferred_dest) == ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest))
+                {
+                    bxpatch_dest = bxpatch_preferred_dest;
+                    junctioned = true;
+                }
+            }
+            junctionchk.Checked = junctioned;
             if (File.Exists(bxpatch_default_dest))
             {
                 try

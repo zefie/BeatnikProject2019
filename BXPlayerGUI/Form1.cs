@@ -66,18 +66,22 @@ namespace BXPlayerGUI
         {
             if (!IsApplicationFirstInstance())
             {
-                var namedPipeXmlPayload = new NamedPipeXmlPayload
-                {
-                    CommandLineArguments = new List<string>(Environment.GetCommandLineArgs())
-                };
+                Debug.WriteLine("Not first instance!");
 
-                // Send the message
-                NamedPipeClientSendOptions(namedPipeXmlPayload);
+                // first index is always executable
+                if (Environment.GetCommandLineArgs().Length > 1) {
+                    Debug.WriteLine("Sending CLI arguments to other instance...");
+                    NamedPipeClientSendOptions(new NamedPipeXmlPayload
+                    {
+                        CommandLineArguments = new List<string>(Environment.GetCommandLineArgs())
+                    });
+                }
 
                 // Stop loading form and quit
                 Close();
                 return;
             }
+
             InitializeComponent();
             Assembly assembly = Assembly.GetExecutingAssembly();
             version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
@@ -103,7 +107,7 @@ namespace BXPlayerGUI
             var accessRule = new PipeAccessRule(sidNetworkService, PipeAccessRights.ReadWrite, AccessControlType.Deny);
             pipeSecurity.AddAccessRule(accessRule);
 
-            // Alow Everyone to read/write
+            // Allow Everyone to read/write
             accessRule = new PipeAccessRule(sidWorld, PipeAccessRights.ReadWrite, AccessControlType.Allow);
             pipeSecurity.AddAccessRule(accessRule);
 
@@ -149,14 +153,21 @@ namespace BXPlayerGUI
                     _namedPipeXmlPayload = (NamedPipeXmlPayload)xmlSerializer.Deserialize(_namedPipeServerStream);
 
                     // _namedPipeXmlPayload contains the data sent from the other instance
-                    // As an example output it to the textbox
-                    // In more complicated cases would need to do some processing here and possibly pass to UI thread
-                    if (_namedPipeXmlPayload.CommandLineArguments.Count > 1)
+                    try
                     {
-                        if (File.Exists(_namedPipeXmlPayload.CommandLineArguments[1]))
+                        if (_namedPipeXmlPayload.CommandLineArguments.Count > 1)
                         {
-                            PlayFile(_namedPipeXmlPayload.CommandLineArguments[1], GetCheckBoxChecked(loopcb));
+                            if (File.Exists(_namedPipeXmlPayload.CommandLineArguments[1]))
+                            {
+                                PlayFile(_namedPipeXmlPayload.CommandLineArguments[1], GetCheckBoxChecked(loopcb));
+                            } else
+                            {
+                                ProcessStartupOptions(_namedPipeXmlPayload.CommandLineArguments[1]);
+                            }
                         }
+                    }
+                    catch (Exception e) {
+                        Debug.WriteLine("Failed to process incoming named pipe message: " + e.Message);
                     }
                 }
             }
