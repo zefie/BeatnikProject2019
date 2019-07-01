@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System.Collections.Generic;
 using System.Text;
+using System.Security.AccessControl;
 
 namespace BXPatchSwitcher
 {
@@ -100,7 +101,6 @@ namespace BXPatchSwitcher
                     File.Copy(source_file, bxpatch_preferred_dest);
                     ZefieLib.Path.CreateSymbolicLink(bxpatch_default_dest, bxpatch_preferred_dest, ZefieLib.Path.SymbolicLink.File);
                     bxpatch_dest = bxpatch_preferred_dest;
-                    junctioned = true;
                 }
                 else
                 {
@@ -117,6 +117,15 @@ namespace BXPatchSwitcher
                     File.Copy(source_file, bxpatch_dest);
                 }
                 File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
+                FileSecurity fSecurity = File.GetAccessControl(bxpatch_dest);
+
+                // Add the FileSystemAccessRule to the security settings.
+                fSecurity.AddAccessRule(new FileSystemAccessRule(WindowsIdentity.GetCurrent().User, FileSystemRights.FullControl, AccessControlType.Allow));
+
+                // Set the new access settings.
+                File.SetAccessControl(bxpatch_dest, fSecurity);
+                junctioned = true;
+
                 if (return_exe != null)
                 {
                     DialogResult result = MessageBox.Show("Successfully installed patchset!\n\nWould you like to run the BeatnikX Player now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
