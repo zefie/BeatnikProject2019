@@ -26,7 +26,8 @@ namespace BXPlayer
         private readonly Timer progressMonitor = new Timer();
         private readonly Timer fileChangeHelperTimer = new Timer();
         private readonly Timer seekhelper = new Timer();
-        private readonly int bxdelay = 350;
+        private readonly int bxdelay = 400;
+        private string Lyric = "";
 
         /// <summary>
         /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
@@ -166,22 +167,13 @@ namespace BXPlayer
 
         private void Bx_OnMetaEvent(string @event, string text)
         {
-            string titleout = null;
+            string titleout = Title;
             if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid")
             {
-                if (@event == "Marker")
+
+                if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
                 {
-                    if (text.Length > 1)
-                    {
-                        if (text.ToLower() != "loopstart" && text.ToLower() != "loopend")
-                        {
-                            Title = FileHasLyrics ? lyrics_delete ? "(" + text + ") " : "(" + text + ") " + Title : text;
-                            titleout = Title;
-                        }
-                    }
-                }
-                else if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
-                {
+
                     if (!FileHasLyrics)
                     {
                         FileHasLyrics = true;
@@ -205,25 +197,20 @@ namespace BXPlayer
 
                         if (text.StartsWith("/") || text.StartsWith("\\"))
                         {
-                            text = text.Substring(1);
+                            Lyric = text.Substring(1);
                         }
                     }
-
-                    if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
+                    else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
                     {
-                        if (lyrics_delete)
-                        {
-                            lyrics_delete = false;
-                            Title = "Lyrics: ";
-                        }
-                        Title += text;
+                        lyrics_delete = false;
+                        Lyric += text;
                     }
                 }
             }
-
             MetaDataEvent mevt = new MetaDataEvent
             {
-                Title = titleout,
+                Title = Title,
+                Lyric = Lyric,
                 RawMeta = new KeyValuePair<string, string>(@event, text)
 
             };
@@ -560,6 +547,7 @@ namespace BXPlayerEvents
     public class MetaDataEvent : EventArgs
     {
         public string Title { get; set; }
+        public string Lyric { get; set; }
         public KeyValuePair<string,string> RawMeta { get; set; }
     }
 

@@ -495,9 +495,25 @@ namespace BXPlayerGUI
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
         {
-            if (e.Title != null)
+            if (bx.FileHasLyrics) {
+                if (e.Lyric != null)
+                {
+                    if (e.Title != null)
+                    {
+                        SetLabelText(statustitle, "(" + e.Title + ") Lyrics: " + e.Lyric);
+                    }
+                    else
+                    {
+                        SetLabelText(statustitle, "Lyrics: " + e.Lyric);
+                    }
+                }
+            }
+            else
             {
-                SetLabelText(statustitle, e.Title);
+                    if (e.Title != null)
+                    {
+                        SetLabelText(statustitle, e.Title);
+                    }
             }
             Debug.WriteLine(e.RawMeta.Key + ": " + e.RawMeta.Value);
         }
