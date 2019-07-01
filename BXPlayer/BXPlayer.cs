@@ -19,7 +19,6 @@ namespace BXPlayer
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
         private readonly int idletimer = 2;
         private bool _disposed = false;
-        private bool lyrics_delete = false;
         private bool _file_has_lyrics_meta = false;
         private PlayState _state = PlayState.Unknown;
         private readonly int[] last_position = new int[2];
@@ -168,7 +167,7 @@ namespace BXPlayer
         private void Bx_OnMetaEvent(string @event, string text)
         {
             string titleout = Title;
-            if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid")
+            if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid") // Beatnik will always need to see a .kar as .mid
             {
 
                 if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
@@ -189,7 +188,6 @@ namespace BXPlayer
 
                     if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
                     {
-                        lyrics_delete = true;
                         if (text == "\r")
                         {
                             return;
@@ -202,7 +200,6 @@ namespace BXPlayer
                     }
                     else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
                     {
-                        lyrics_delete = false;
                         Lyric += text;
                     }
                 }
@@ -355,7 +352,7 @@ namespace BXPlayer
         /// <summary>
         /// Gets the BXPlayer Library Version
         /// </summary>
-        /// <returns>This library's version, as a string</returns>
+        /// <returns>This library's version, as a string (x.x.x.x)</returns>
         /// 
         public string Version { get
             {
@@ -367,7 +364,7 @@ namespace BXPlayer
         /// <summary>
         /// Gets the BeatnikX OCX Player Version
         /// </summary>
-        /// <returns>The Beatnik library's version, as a string</returns>
+        /// <returns>The Beatnik library's version, as a string (x.x.x.x)</returns>
         /// 
         public string BeatnikVersion
         {
