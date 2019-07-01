@@ -29,7 +29,7 @@ namespace BXPatchSwitcher
         {
             InitializeComponent();
 #if DEBUG
-            cwd = "E:\\zefie\\Documents\\Visual Studio 2019\\Projects\\BeatnikProject2019\\BXPlayerGUI\\bin\\x86\\Debug\\";
+            cwd = "E:\\zefie\\Documents\\Visual Studio 2019\\Projects\\BeatnikProject2019\\BXPlayerGUI\\bin\\x86\\Release\\";
 #else
             cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";            
 #endif
