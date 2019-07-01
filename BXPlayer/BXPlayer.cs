@@ -28,6 +28,10 @@ namespace BXPlayer
         private readonly Timer seekhelper = new Timer();
         private readonly int bxdelay = 300;
 
+        /// <summary>
+        /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
+        /// </summary>
+        /// 
         public void Dispose()
         {
             Dispose(true);
@@ -60,6 +64,10 @@ namespace BXPlayer
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
         }
 
+        /// <summary>
+        /// Initializes the player
+        /// </summary>
+        /// 
         public void BXInit()
         {
             bx = new BeatnikXClass();
@@ -129,10 +137,17 @@ namespace BXPlayer
             OnProgressChanged(this, pevt);
         }
 
+        /// <summary>
+        /// Plays the currently loaded file
+        /// </summary>
+        /// 
         public void Play()
         {
-            bx.playSimple();
-            PlayState = PlayState.Playing;
+            if (LoadedFile != null)
+            {
+                bx.playSimple();
+                PlayState = PlayState.Playing;
+            }
         }
 
         private void Bx_HandlePlayState()
@@ -210,11 +225,15 @@ namespace BXPlayer
             OnMetaDataChanged(this, mevt);
         }
 
+        /// <summary>
+        /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
+        /// </summary>
+        /// 
         public void BXShutdown()
         {
             if (bx != null)
             {
-                Stop();
+                Stop(false);
             }
             bx = null;
             active = false;
@@ -222,6 +241,13 @@ namespace BXPlayer
             GC.WaitForPendingFinalizers();
         }
 
+        /// <summary>
+        /// Plays a file or URL
+        /// </summary>
+        /// <param name="file">Absolute file path or http:// URL</param>
+        /// <param name="loop">Loop when playing</param>
+        /// <param name="real_file">If sending a URL, but the file is local, you can define it here for future use</param>
+        /// 
         public void PlayFile(string file, bool loop = false, string real_file = null)
         {
             if (PlayState == PlayState.Playing || PlayState == PlayState.Playing)
@@ -248,31 +274,61 @@ namespace BXPlayer
             set { bx.setAudioDevicePriority(value); }
         }
 
-
+        /// <summary>
+        /// Gets or sets the player's volume percentage (0-100)
+        /// </summary>
+        /// <returns>The player's current volume percentage</returns>
         public int Volume
         {
             get => bx.GetVolume();
             set => bx.setVolume(value);
         }
+
+        /// <summary>
+        /// Gets or sets the player's loop setting
+        /// </summary>
+        /// <returns>The player's current loop setting</returns>
+        ///
         public bool Loop
         {
             get => bx.getLoop();
             set => bx.setLoop(value);
         }
+
+        /// <summary>
+        /// Gets or sets the player's tempo
+        /// </summary>
+        /// <returns>The player's current tempo</returns>
+        /// 
         public int Tempo
         {
             get => bx.getTempo();
             set => bx.setTempo(value);
         }
 
+        /// <summary>
+        /// Gets or sets the player's reverb type
+        /// </summary>
+        /// <returns>The player's current reverb type</returns>
+        /// 
         public int ReverbType
         {
             get => bx.getReverbType();
             set => bx.setReverbType(value);
         }
 
+        /// <summary>
+        /// Shows the Beatnik Player's About Box
+        /// </summary>
+        /// 
         public void AboutBox() => bx.AboutBox();
 
+        /// <summary>
+        /// Gets info from the Beatnik Player
+        /// </summary>
+        /// <param name="info">One of: "title" "performer" "composer" "copyright" "publisher" "use" "licensee" "term" "expiration" "notes" "index" "genre" "subgenre" "tempo description" "original source"</param>
+        /// <returns>A string containing the information requested, if available</returns>
+        /// 
         public string GetInfo(string info) => bx.getInfo(info);
 
         private void OnFileChanged(object sender, FileChangeEvent e) => FileChanged?.Invoke(this, e);
@@ -283,12 +339,32 @@ namespace BXPlayer
 
         private void OnProgressChanged(object sender, ProgressEvent e) => ProgressChanged?.Invoke(this, e);
 
+        /// <summary>
+        /// Performs a MenuItem action from the Beatnik Player
+        /// </summary>
+        /// <param name="info">One of: "Copyright" "Play" "Pause" "Stop" "PlayURL" "Loud" "Quiet" "Mute" "System" "Song" "Help" "About" "News"</param>
+        /// 
         public void DoMenuItem(string menuItem) => bx.doMenuItem(menuItem);
 
+        /// <summary>
+        /// Gets the currently playing files' duration
+        /// </summary>
+        /// <returns>The player's current duration, in milliseconds</returns>
+        /// 
         public int Duration => bx.getPlayLength();
 
+        /// <summary>
+        /// Gets the currently playing files' size
+        /// </summary>
+        /// <returns>The player's current duration, in bytes</returns>
+        /// 
         public int FileSize => bx.getFileSize();
 
+        /// <summary>
+        /// Gets the BXPlayer Library Version
+        /// </summary>
+        /// <returns>This library's version, as a string</returns>
+        /// 
         public string Version { get
             {
                 Assembly assembly = Assembly.GetExecutingAssembly();
@@ -296,6 +372,11 @@ namespace BXPlayer
             }
         }
 
+        /// <summary>
+        /// Gets the BeatnikX OCX Player Version
+        /// </summary>
+        /// <returns>The Beatnik library's version, as a string</returns>
+        /// 
         public string BeatnikVersion
         {
             get
@@ -309,6 +390,11 @@ namespace BXPlayer
             }
         }
 
+        /// <summary>
+        /// Gets or sets the currently playing files' position (in milliseconds)
+        /// </summary>
+        /// <returns>The player's current position, in milliseconds</returns>
+        /// 
         public int Position
         {
             get => bx.getPosition();
@@ -337,7 +423,11 @@ namespace BXPlayer
             }
             ((Timer)sender).Stop();          
         }
-    
+
+        /// <summary>
+        /// Gets the player's current Play State
+        /// </summary>
+        /// 
         public PlayState PlayState
         {
             get => _state;
@@ -359,21 +449,59 @@ namespace BXPlayer
             }
         }
 
+        /// <summary>
+        /// Gets whether or not the current file has karaoke lyrics
+        /// </summary>
+        /// 
         public bool FileHasLyrics { get; private set; } = false;
+
+        /// <summary>
+        /// Gets the filename of the currently loaded file. If real_file was defined in PlayFile, this is set as that.
+        /// </summary>
+        /// 
         public string FileName { get; private set; } = null;
 
+        /// <summary>
+        /// Gets the filename of the currently loaded file, as seen by Beatnik.
+        /// </summary>
+        /// 
+
         public string LoadedFile { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the title of the currently loaded file, if available
+        /// </summary>
+        /// 
+
         public string Title { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the player's ready status.
+        /// </summary>
+        ///
         public bool IsReady => bx.IsReady();
 
+        /// <summary>
+        /// Gets or sets the player's global transpose
+        /// </summary>
+        ///
         public int Transpose
         {
             get => bx.getTranspose();
             set => bx.setTranspose(Convert.ToInt16(value));
         }
 
+        /// <summary>
+        /// Pauses the player
+        /// </summary>
+        ///
         public void Pause() => bx.pause();
 
+        /// <summary>
+        /// Stops the player
+        /// </summary>
+        /// <param name="fade">Normal stop with fade (true), or hard stop (false)</param> 
+        ///
         public void Stop(bool fade = true)
         {
             if (fade)
@@ -390,6 +518,10 @@ namespace BXPlayer
             PlayState = PlayState.Stopped;
         }
 
+        /// <summary>
+        /// Toggle's the player's play/pause state
+        /// </summary>
+        ///
         public void PlayPause()
         {
             switch (_state)
@@ -405,7 +537,12 @@ namespace BXPlayer
             }
         }
 
-
+        /// <summary>
+        /// Sets the mute on/off for a MIDI Channel
+        /// </summary>
+        /// <param name="channel">MIDI Channel</param> 
+        /// <param name="muted">Mute (true), or Unmute (false)</param> 
+        ///
         public void MuteChannel(short channel, bool muted)
         {
             bx.setChannelMute(channel, muted);
