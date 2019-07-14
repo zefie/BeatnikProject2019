@@ -40,7 +40,7 @@ namespace BXPlayerGUI
         private string current_hash;
         private string current_file;
         private Stream current_datastream = null;
-        private int default_tempo;
+        private int tempo_default;
         private int http_port = 59999;
         private bool settingReverbCB = false;
         private bool http_ready = false;
@@ -472,14 +472,12 @@ namespace BXPlayerGUI
         private void Bx_FileChanged(object sender, FileChangeEvent e)
         {
             Debug.WriteLine("filechanged fired");
-            default_tempo = e.Tempo;
-            SetTrackbarValue(tempoControl, e.Tempo);
+            SetDefaultTempo(e.Tempo);
             SetTrackbarValue(transposeControl, 0);
             SetLabelText(transposevalbl, "0");
             SetLabelText(durationlbl, FormatTime(e.Duration));
             SetProgressbarValue(seekbar, 0, e.Duration);
             SetLabelText(statusfile, Path.GetFileName(e.File));
-            SetLabelText(tempovallbl, e.Tempo + "BPM");
             SetControlVisiblity(mainControlPanel, true);
             SetButtonEnabled(infobut, (Path.GetExtension(e.File).ToLower() == ".rmf"));
             if (e.LoadedFile.StartsWith("http://"))
@@ -520,6 +518,18 @@ namespace BXPlayerGUI
         {
             TimeSpan t = seconds ? TimeSpan.FromSeconds(ms) : TimeSpan.FromMilliseconds(ms);
             return string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+        }
+
+        private void SetDefaultTempo(int tempo)
+        {
+            tempo_default = tempo;
+            int maxtempo = GetTrackbarMax(tempoControl);
+            if (tempo_default > maxtempo)
+            {
+                tempo_default = maxtempo;
+            }
+            SetTrackbarValue(tempoControl, tempo_default);
+            SetLabelText(tempovallbl, tempo_default.ToString() + "BPM");
         }
 
         private void SetComboBoxIndex(ComboBox cb, int index)
@@ -657,6 +667,20 @@ namespace BXPlayerGUI
             return value;
         }
 
+        private int GetTrackbarMax(TrackBar t)
+        {
+            int value = -1;
+            if (t.InvokeRequired)
+            {
+                t.Invoke(new MethodInvoker(delegate { value = t.Maximum; }));
+            }
+            else
+            {
+                value = t.Maximum;
+            }
+            return value;
+        }
+
         private int GetComboBoxIndex(ComboBox t)
         {
             int value = -1;
@@ -723,10 +747,10 @@ namespace BXPlayerGUI
 
         private void Temporstbtn_Click(object sender, EventArgs e)
         {
-            if (default_tempo >= 40)
+            if (tempo_default >= 40)
             {
-                SetTrackbarValue(tempoControl, default_tempo);
-                SetTempo(default_tempo);
+                SetTrackbarValue(tempoControl, tempo_default);
+                SetTempo(GetTrackbarValue(tempoControl));
             }
         }
 
