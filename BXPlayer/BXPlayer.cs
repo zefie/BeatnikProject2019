@@ -169,10 +169,19 @@ namespace BXPlayer
             string titleout = Title;
             if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid") // Beatnik will always need to see a .kar as .mid
             {
+                // WebTV Classic style titles
+                if (@event == "Marker" && Title == null)
+                {                    
+                    Title = text;
+                }
 
+                // TODO: Karaoke GenericText @T title
+                // TODO: Other title formats
+
+                // Lyric Support
                 if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
                 {
-
+                    
                     if (!FileHasLyrics)
                     {
                         FileHasLyrics = true;
