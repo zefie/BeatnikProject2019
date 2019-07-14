@@ -17,10 +17,12 @@ namespace BXPlayer
         public event EventHandler<ProgressEvent> ProgressChanged = delegate { };
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
+        public bool KaraokeShortTitles = false;
         private readonly int idletimer = 2;
         private bool _disposed = false;
         private bool _file_has_lyrics_meta = false;
         private bool _lyrics_delete_next = false;
+        private bool _karaoke_title_detected = false;
         private PlayState _state = PlayState.Unknown;
         private readonly int[] last_position = new int[2];
         private readonly Timer progressMonitor = new Timer();
@@ -176,7 +178,24 @@ namespace BXPlayer
                     Title = text;
                 }
 
-                // TODO: Karaoke GenericText @T title
+                // Karaoke GenericText @T style titles
+                if (@event == "GenericText" && text.StartsWith("@T"))
+                {
+                    if (_karaoke_title_detected)
+                    {
+                        Title = text.Substring(2) + " - " + Title;
+                    }
+
+                    if (Title == null)
+                    {
+                        if (!KaraokeShortTitles)
+                        {
+                            _karaoke_title_detected = true;
+                        }
+                        Title = text.Substring(2);
+                    }
+                }
+
                 // TODO: Other title formats
 
                 // Lyric Support
