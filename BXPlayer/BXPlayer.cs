@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Timers;
+using System.Xml;
 
 namespace BXPlayer
 {
@@ -13,6 +14,7 @@ namespace BXPlayer
     {
         private BeatnikXClass bx;
         public bool active = false;
+        private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
         public event EventHandler<PlayStateEvent> PlayStateChanged = delegate { };
         public event EventHandler<ProgressEvent> ProgressChanged = delegate { };
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
@@ -26,6 +28,7 @@ namespace BXPlayer
         private bool _file_using_marker_title = false;
         private bool _lyrics_delete_next = false;
         private bool _karaoke_title_detected = false;
+        private PlayState _previous_state = PlayState.Unknown;
         private PlayState _state = PlayState.Unknown;
         private readonly int[] last_position = new int[2];
         private readonly Timer progressMonitor = new Timer();
@@ -33,6 +36,7 @@ namespace BXPlayer
         private readonly Timer seekhelper = new Timer();
         private readonly int bxdelay = 400;
         private string Lyric = "";
+        private readonly string CustomReverbFile;
 
         /// <summary>
         /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
@@ -73,6 +77,7 @@ namespace BXPlayer
             progressMonitor.Elapsed += ProgressMonitor_Elapsed;
             fileChangeHelperTimer.Interval = bxdelay;
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
+            CustomReverbFile = cwd + "CustomReverb.xml";
         }
 
         /// <summary>
@@ -84,6 +89,7 @@ namespace BXPlayer
             bx = new BeatnikXClass();
             bx.enableMetaEvents(true);
             bx.OnMetaEvent += Bx_OnMetaEvent;
+            DoMenuItem("Loud");
             active = true;
             Debug.WriteLine("BeatnikX Initalized");
         }
@@ -365,7 +371,52 @@ namespace BXPlayer
         public int ReverbType
         {
             get => bx.getReverbType();
-            set => bx.setReverbType(value);
+            set {
+                // Beatnik defaults
+                short _reverb = 40;
+                short _chorus = 0;
+
+                // Custom reverb definitions
+                try
+                {
+                    int count = 11; // beatnik internal reverb count
+                    using (XmlReader reader = GetCustomReverbXML())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.NodeType == XmlNodeType.Element)
+                            {
+                                if (reader.Name == "reverb")
+                                {
+                                    count++;
+                                    if (value != count)
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        value = Convert.ToInt16(reader.GetAttribute("bxreverb"));
+                                        _reverb = Convert.ToInt16(reader.GetAttribute("reverblevel"));
+                                        _chorus = Convert.ToInt16(reader.GetAttribute("choruslevel"));
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception f)
+                {
+                    Debug.WriteLine(f.Message);
+                }
+
+                // Actually apply it
+                Debug.WriteLine("old: reverb: " + bx.getReverbType() + " reverblvl: " + bx.getController(1, 91) + " choruslvl: " + bx.getController(1, 93));
+                Debug.WriteLine("new: reverb: " + value + " reverblvl: " + _reverb + " choruslvl: " + _chorus);
+                bx.setReverbType(value);
+                bx.setController(0, 91, _reverb);
+                bx.setController(0, 93, _chorus);
+            }
         }
 
         /// <summary>
@@ -393,7 +444,7 @@ namespace BXPlayer
         /// <summary>
         /// Performs a MenuItem action from the Beatnik Player
         /// </summary>
-        /// <param name="info">One of: "Copyright" "Play" "Pause" "Stop" "PlayURL" "Loud" "Quiet" "Mute" "System" "Song" "Help" "About" "News"</param>
+        /// <param name="menuItem">One of: "Copyright" "Play" "Pause" "Stop" "PlayURL" "Loud" "Quiet" "Mute" "System" "Song" "Help" "About" "News"</param>
         /// 
         public void DoMenuItem(string menuItem) => bx.doMenuItem(menuItem);
 
@@ -448,14 +499,19 @@ namespace BXPlayer
         /// 
         public int Position
         {
+            // TODO: Beatnik does not adjust position speed when tempo is adjusted, try to address this in library
             get => bx.getPosition();
             set
             {
                 if (PlayState != PlayState.Seeking)
                 {
+                    _previous_state = PlayState;
                     PlayState = PlayState.Seeking;
                 }
+                int reverb = bx.getReverbType();
+                bx.setReverbType(1);
                 bx.setPosition(value);
+                bx.setReverbType(reverb);
                 if (seekhelper.Enabled)
                 {
                     seekhelper.Stop();
@@ -470,7 +526,8 @@ namespace BXPlayer
         {
             if (PlayState == PlayState.Seeking)
             {
-                PlayState = PlayState.Playing;
+                PlayState = _previous_state;
+                _previous_state = PlayState.Unknown;
             }
             ((Timer)sender).Stop();          
         }
@@ -499,6 +556,18 @@ namespace BXPlayer
                 Bx_HandlePlayState();
             }
         }
+
+        public XmlReader GetCustomReverbXML()
+        {
+            if (File.Exists(CustomReverbFile))
+            {
+                return XmlReader.Create(CustomReverbFile);
+            }
+            else {
+                throw new FileNotFoundException("Could not find custom reverb XML File",CustomReverbFile);
+            }
+        }
+
 
         /// <summary>
         /// Gets whether or not the current file has karaoke lyrics

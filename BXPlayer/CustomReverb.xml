@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<reverbdef xmlns="urn:beatnikx-reverbdef">
+  <reverb name="WebTV (Estimated)" bxreverb="8" reverblevel="10" choruslevel="20" />
+</reverbdef>
+
+<!--
+bxreverb is one of the following:
+1   None (level values ignored)
+2   Closet 
+3   Garage
+4   Acoustic Lab (Beatnik Default)
+5   Cavern
+6   Dungeon
+7   Small Reflections
+8   Early Reflections
+9   Basement
+10  Banquet Hall
+11	Catacombs
+(1-7 do not have variable send, therefore for those, 0-14 = off, 15-127 = on)
+-->

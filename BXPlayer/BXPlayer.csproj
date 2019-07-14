@@ -54,6 +54,9 @@
     <Content Include="BXBanks\BXBanks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="CustomReverb.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="beatnikx.ocx, Version=1.0.0.0, ProcessorArchitecture=x86, Type=win32">

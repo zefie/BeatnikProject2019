@@ -298,10 +298,35 @@ namespace BXPlayerGUI
                     reverbcb.Items.Add("Early Reflections");
                     reverbcb.Items.Add("Basement");
                     reverbcb.Items.Add("Banquet Hall");
-                    reverbcb.Items.Add("Catacombs ");
+                    reverbcb.Items.Add("Catacombs");
+                    try
+                    {
+                        using (XmlReader reader = bx.GetCustomReverbXML())
+                        {
+                            while (reader.Read())
+                            {
+                                if (reader.NodeType == XmlNodeType.Element)
+                                {
+                                    if (reader.Name == "reverb")
+                                    {
+                                        string revname = reader.GetAttribute("name");
+                                        if (revname.Length > 1)
+                                        {
+                                            reverbcb.Items.Add(revname);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception f)
+                    {
+                        Debug.WriteLine(f.Message);
+                    }
                 }
                 settingReverbCB = true;
                 SetComboBoxIndex(reverbcb, default_reverb);
+                settingReverbCB = false;
                 if (args.Length > 1)
                 {
                     if (File.Exists(args[1]))
@@ -485,8 +510,6 @@ namespace BXPlayerGUI
                 long res = DeleteUrlCacheEntry(e.LoadedFile);
                 Debug.WriteLine("Deleted " + res.ToString() + " files from disk cache for " + e.LoadedFile);
             }
-
-            settingReverbCB = true;
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
@@ -788,8 +811,13 @@ namespace BXPlayerGUI
                 int seekval = seekValFromMouseX(e.X);
                 SetProgressbarValue((ProgressBar)sender, seekval);
                 SetLabelText(seekpos, "");
+                PlayState bxps = bx.PlayState;
                 bx.Position = seekbar.Value;
                 SetLabelText(progresslbl, FormatTime(bx.Position));
+                if (bxps != PlayState.Playing)
+                {
+                    bx.Play();
+                }                
             }
         }
 
@@ -1205,19 +1233,19 @@ namespace BXPlayerGUI
 
         private void Reverbcb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (settingReverbCB)
-            {
-                settingReverbCB = false;
-            }
-            else
-            {
+            if (!settingReverbCB) { 
                 bx.ReverbType = (((ComboBox)sender).SelectedIndex + 1);
             }
         }
 
         private void Progresslbl_Click(object sender, EventArgs e)
         {
+            PlayState bxps = bx.PlayState;
             bx.Position = 0;
+            if (bxps != PlayState.Playing)
+            {
+                bx.Play();
+            }
         }
 
         private void BXPlayerGUI_DragDrop(object sender, DragEventArgs e)

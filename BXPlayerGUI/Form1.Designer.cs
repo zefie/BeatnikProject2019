@@ -879,11 +879,11 @@
             this.reverbcb.FormattingEnabled = true;
             this.reverbcb.Items.AddRange(new object[] {
             "No reverb",
-            "Igor\'s Closet",
-            "Igor\'s Garage",
-            "Igor\'s Acoustic Lab",
-            "Igor\'s Cavern",
-            "Igor\'s Dungeon",
+            "Closet",
+            "Garage",
+            "Acoustic Lab *",
+            "Cavern",
+            "Dungeon",
             "Small Reflections"});
             this.reverbcb.Location = new System.Drawing.Point(499, 114);
             this.reverbcb.Name = "reverbcb";
