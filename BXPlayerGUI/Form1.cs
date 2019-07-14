@@ -761,12 +761,8 @@ namespace BXPlayerGUI
         {
             if (e.Button == MouseButtons.Left)
             {
-                //((ProgressBar)sender).Value = 
-                ProgressBar pb = (ProgressBar)sender;
-                double seekperc = ZefieLib.Math.CalcPercent(e.X, pb.Width);
-                int seekval = Convert.ToInt32(ZefieLib.Math.CalcPercentOf(seekperc, pb.Maximum));
-                Debug.WriteLine("Mouse: " + e.X + " seekperc: " + seekperc + " seekval: " + seekval);
-                SetProgressbarValue(pb, seekval);
+                int seekval = seekValFromMouseX(e.X);
+                SetProgressbarValue((ProgressBar)sender, seekval);
                 SetLabelText(seekpos, "");
                 bx.Position = seekbar.Value;
                 SetLabelText(progresslbl, FormatTime(bx.Position));
@@ -776,13 +772,18 @@ namespace BXPlayerGUI
         private void Seekbar_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
-                //((ProgressBar)sender).Value = 
-                ProgressBar pb = (ProgressBar)sender;
-                double seekperc = ZefieLib.Math.CalcPercent(e.X, pb.Width);
-                int seekval = Convert.ToInt32(ZefieLib.Math.CalcPercentOf(seekperc, pb.Maximum));
+            { 
+                int seekval = seekValFromMouseX(e.X);
                 SetLabelText(seekpos, FormatTime(seekval));
             }
+        }
+
+        private int seekValFromMouseX(int mousex)
+        {
+            double seekperc = ZefieLib.Math.CalcPercent(mousex, seekbar.Width);
+            if (seekperc < 0) { seekperc = 0; }
+            if (seekperc > 100) { seekperc = 100; }
+            return Convert.ToInt32(ZefieLib.Math.CalcPercentOf(seekperc, seekbar.Maximum));
         }
 
         private void Playbut_Click(object sender, EventArgs e)
