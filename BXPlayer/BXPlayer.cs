@@ -20,6 +20,7 @@ namespace BXPlayer
         private readonly int idletimer = 2;
         private bool _disposed = false;
         private bool _file_has_lyrics_meta = false;
+        private bool _lyrics_delete_next = false;
         private PlayState _state = PlayState.Unknown;
         private readonly int[] last_position = new int[2];
         private readonly Timer progressMonitor = new Timer();
@@ -209,7 +210,26 @@ namespace BXPlayer
                     }
                     else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
                     {
-                        Lyric += text;
+                        if (text.StartsWith("/") || text.StartsWith("\\"))
+                        {
+                            Lyric = text.Substring(1);
+                        }
+                        else if (text == "")
+                        {
+                            _lyrics_delete_next = true;
+                        }
+                        else
+                        {
+                            if (_lyrics_delete_next)
+                            {
+                                _lyrics_delete_next = false;
+                                Lyric = text;
+                            }
+                            else
+                            {
+                                Lyric += text;
+                            }
+                        }
                     }
                 }
             }
@@ -252,6 +272,12 @@ namespace BXPlayer
             {
                 Stop(false);
             }
+
+            Title = null;
+            Lyric = "";
+            _file_has_lyrics_meta = false;
+            FileHasLyrics = false;
+
 
             FileName = real_file ?? Path.GetFileName(file);
             LoadedFile = file;
