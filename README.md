@@ -42,4 +42,4 @@ chokes on the filename, such as files with ```[]``` in them. Therefore, if you g
 regarding a firewall listening on a port (should be localhost!), then this is why.
 
 ## Screenshot
-![](https://i.imgur.com/KHCo2e5.png)
+![](https://i.imgur.com/FGBGyxj.png)
