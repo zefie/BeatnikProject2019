@@ -17,10 +17,13 @@ namespace BXPlayer
         public event EventHandler<ProgressEvent> ProgressChanged = delegate { };
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
-        public bool KaraokeShortTitles = false;
+        public bool KaraokeShortTitles = true;
+        public bool PreferGenericTextLyrics = true;
         private readonly int idletimer = 2;
         private bool _disposed = false;
         private bool _file_has_lyrics_meta = false;
+        private bool _file_has_generictext_lyrics_meta = false;
+        private bool _file_using_marker_title = false;
         private bool _lyrics_delete_next = false;
         private bool _karaoke_title_detected = false;
         private PlayState _state = PlayState.Unknown;
@@ -172,28 +175,27 @@ namespace BXPlayer
             string titleout = Title;
             if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid") // Beatnik will always need to see a .kar as .mid
             {
-                // WebTV Classic style titles
-                if (@event == "Marker" && Title == null)
-                {                    
-                    Title = text;
-                }
-
                 // Karaoke GenericText @T style titles
                 if (@event == "GenericText" && text.StartsWith("@T"))
                 {
-                    if (_karaoke_title_detected)
+                    if (_karaoke_title_detected && !KaraokeShortTitles)
                     {
                         Title = text.Substring(2) + " - " + Title;
                     }
 
-                    if (Title == null)
+                    if (Title == null || _file_using_marker_title)
                     {
-                        if (!KaraokeShortTitles)
-                        {
-                            _karaoke_title_detected = true;
-                        }
+                        _karaoke_title_detected = true;
+                        _file_using_marker_title = false;
                         Title = text.Substring(2);
                     }
+                }
+
+                // WebTV Classic style titles
+                if (@event == "Marker" && Title == null)
+                {
+                    Title = text;
+                    _file_using_marker_title = true;
                 }
 
                 // TODO: Other title formats
@@ -202,17 +204,18 @@ namespace BXPlayer
                 if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
                 {
                     
-                    if (!FileHasLyrics)
+                    if (!FileHasLyrics && @event == "GenericText")
                     {
                         FileHasLyrics = true;
+                        _file_has_generictext_lyrics_meta = true;
                         Debug.WriteLine("Detected file has GenericText lyric metadata");
                     }
 
-                    if (@event == "Lyric" && !_file_has_lyrics_meta)
+                    if (@event == "Lyric" && !_file_has_lyrics_meta && (!PreferGenericTextLyrics || !_file_has_generictext_lyrics_meta))
                     {
                         _file_has_lyrics_meta = true;
                         FileHasLyrics = true;
-                        Debug.WriteLine("Detected file has Lyric metadata, so wont use GenericText");
+                        Debug.WriteLine("Detected file has Lyric metadata");
                     }
 
                     if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
@@ -229,11 +232,16 @@ namespace BXPlayer
                     }
                     else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
                     {
+                        if (@event == "Lyric" && (PreferGenericTextLyrics && _file_has_generictext_lyrics_meta))
+                        {
+                            return;
+                        }
+
                         if (text.StartsWith("/") || text.StartsWith("\\"))
                         {
                             Lyric = text.Substring(1);
                         }
-                        else if (text == "")
+                        else if (@event == "Lyric" && text == "")
                         {
                             _lyrics_delete_next = true;
                         }
