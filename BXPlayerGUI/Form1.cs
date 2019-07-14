@@ -288,6 +288,7 @@ namespace BXPlayerGUI
                 bx.FileChanged += Bx_FileChanged;
                 bx.PlayStateChanged += Bx_PlayStateChanged;
                 bx.ProgressChanged += Bx_ProgressChanged;
+                bx.KaraokeShortTitles = true;
                 bx.BXInit();
                 string bxvers = bx.BeatnikVersion;
                 SetLabelText(bxversionlbl, "v" + bxvers);
