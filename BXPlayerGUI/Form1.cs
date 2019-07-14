@@ -44,7 +44,6 @@ namespace BXPlayerGUI
         private int http_port = 59999;
         private bool settingReverbCB = false;
         private bool http_ready = false;
-        private bool seekbar_held = false;
         private bool play_splash = false;
         private readonly int default_reverb = 0;
         private NamedPipeServerStream _namedPipeServerStream;
@@ -69,7 +68,8 @@ namespace BXPlayerGUI
                 Debug.WriteLine("Not first instance!");
 
                 // first index is always executable
-                if (Environment.GetCommandLineArgs().Length > 1) {
+                if (Environment.GetCommandLineArgs().Length > 1)
+                {
                     Debug.WriteLine("Sending CLI arguments to other instance...");
                     NamedPipeClientSendOptions(new NamedPipeXmlPayload
                     {
@@ -160,13 +160,15 @@ namespace BXPlayerGUI
                             if (File.Exists(_namedPipeXmlPayload.CommandLineArguments[1]))
                             {
                                 PlayFile(_namedPipeXmlPayload.CommandLineArguments[1], GetCheckBoxChecked(loopcb));
-                            } else
+                            }
+                            else
                             {
                                 ProcessStartupOptions(_namedPipeXmlPayload.CommandLineArguments[1]);
                             }
                         }
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         Debug.WriteLine("Failed to process incoming named pipe message: " + e.Message);
                     }
                     Activate();
@@ -432,11 +434,7 @@ namespace BXPlayerGUI
         {
             //Debug.WriteLine("progresschanged fired (seekbar_held: " + seekbar_held.ToString() + ")");
             SetLabelText(progresslbl, FormatTime(e.Position));
-
-            if (!seekbar_held)
-            {
-                SetTrackbarValue(seekbar, e.Position);
-            }
+            SetProgressbarValue(seekbar, e.Position);
         }
 
         private void Bx_PlayStateChanged(object sender, PlayStateEvent e)
@@ -479,7 +477,7 @@ namespace BXPlayerGUI
             SetTrackbarValue(transposeControl, 0);
             SetLabelText(transposevalbl, "0");
             SetLabelText(durationlbl, FormatTime(e.Duration));
-            SetTrackbarValue(seekbar, 0, e.Duration);
+            SetProgressbarValue(seekbar, 0, e.Duration);
             SetLabelText(statusfile, Path.GetFileName(e.File));
             SetLabelText(tempovallbl, e.Tempo + "BPM");
             SetControlVisiblity(mainControlPanel, true);
@@ -495,7 +493,8 @@ namespace BXPlayerGUI
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
         {
-            if (bx.FileHasLyrics) {
+            if (bx.FileHasLyrics)
+            {
                 if (e.Lyric != null)
                 {
                     if (e.Title != null)
@@ -510,10 +509,10 @@ namespace BXPlayerGUI
             }
             else
             {
-                    if (e.Title != null)
-                    {
-                        SetLabelText(statustitle, e.Title);
-                    }
+                if (e.Title != null)
+                {
+                    SetLabelText(statustitle, e.Title);
+                }
             }
             Debug.WriteLine(e.RawMeta.Key + ": " + e.RawMeta.Value);
         }
@@ -596,6 +595,38 @@ namespace BXPlayerGUI
         }
 
         private void SetTrackbarValue(TrackBar t, int value, int max)
+        {
+            if (t.InvokeRequired)
+            {
+                t.Invoke(new MethodInvoker(delegate
+                {
+                    t.Maximum = max;
+                    t.Value = value;
+                }));
+            }
+            else
+            {
+                t.Maximum = max;
+                t.Value = value;
+            }
+        }
+
+        private void SetProgressbarValue(ProgressBar t, int value)
+        {
+            if (value <= t.Maximum && value >= t.Minimum)
+            {
+                if (t.InvokeRequired)
+                {
+                    t.Invoke(new MethodInvoker(delegate { t.Value = value; }));
+                }
+                else
+                {
+                    t.Value = value;
+                }
+            }
+        }
+
+        private void SetProgressbarValue(ProgressBar t, int value, int max)
         {
             if (t.InvokeRequired)
             {
@@ -728,15 +759,30 @@ namespace BXPlayerGUI
 
         private void Seekbar_MouseUp(object sender, MouseEventArgs e)
         {
-            seekbar_held = false;
-            SetLabelText(seekpos, "");
-            bx.Position = seekbar.Value;
-            SetLabelText(progresslbl, FormatTime(bx.Position));
+            if (e.Button == MouseButtons.Left)
+            {
+                //((ProgressBar)sender).Value = 
+                ProgressBar pb = (ProgressBar)sender;
+                double seekperc = ZefieLib.Math.CalcPercent(e.X, pb.Width);
+                int seekval = Convert.ToInt32(ZefieLib.Math.CalcPercentOf(seekperc, pb.Maximum));
+                Debug.WriteLine("Mouse: " + e.X + " seekperc: " + seekperc + " seekval: " + seekval);
+                SetProgressbarValue(pb, seekval);
+                SetLabelText(seekpos, "");
+                bx.Position = seekbar.Value;
+                SetLabelText(progresslbl, FormatTime(bx.Position));
+            }
         }
 
-        private void Seekbar_MouseDown(object sender, MouseEventArgs e)
+        private void Seekbar_MouseMove(object sender, MouseEventArgs e)
         {
-            seekbar_held = true;
+            if (e.Button == MouseButtons.Left)
+            {
+                //((ProgressBar)sender).Value = 
+                ProgressBar pb = (ProgressBar)sender;
+                double seekperc = ZefieLib.Math.CalcPercent(e.X, pb.Width);
+                int seekval = Convert.ToInt32(ZefieLib.Math.CalcPercentOf(seekperc, pb.Maximum));
+                SetLabelText(seekpos, FormatTime(seekval));
+            }
         }
 
         private void Playbut_Click(object sender, EventArgs e)
@@ -745,7 +791,7 @@ namespace BXPlayerGUI
             if (bxstate == PlayState.Stopped)
             {
                 bx.Play();
-                SetTrackbarValue(seekbar, bx.Position, bx.Duration);
+                SetProgressbarValue(seekbar, bx.Position, bx.Duration);
                 SetBXParams();
             }
             else
@@ -796,15 +842,7 @@ namespace BXPlayerGUI
             SetLabelText(durationlbl, "");
             SetLabelText(progresslbl, "");
             SetLabelText(statustitle, "");
-            SetTrackbarValue(seekbar, 0, 0);
-        }
-
-        private void Seekbar_ValueChanged(object sender, EventArgs e)
-        {
-            if (seekbar_held)
-            {
-                SetLabelText(seekpos, FormatTime(seekbar.Value));
-            }
+            SetProgressbarValue(seekbar, 0, 0);
         }
 
         private void Midich_muteall_btn_Click(object sender, EventArgs e)
@@ -1117,7 +1155,7 @@ namespace BXPlayerGUI
                                 sock.Shutdown(SocketShutdown.Both);
                                 sock.Dispose();
                                 sock = null;
-    
+
                             }
                             catch (Exception e) { Debug.WriteLine(e.Message); }
                             GC.Collect();
@@ -1160,7 +1198,8 @@ namespace BXPlayerGUI
         private void BXPlayerGUI_DragDrop(object sender, DragEventArgs e)
         {
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            if (s.Length > 0) {
+            if (s.Length > 0)
+            {
                 if (CheckExtensionSupported(s[0]))
                 {
                     PlayFile(s[0], loopcb.Checked);
@@ -1181,7 +1220,7 @@ namespace BXPlayerGUI
                 case ".aif":
                 case ".aiff":
                 case ".au":
-                return true;
+                    return true;
             }
             return false;
         }
@@ -1217,7 +1256,9 @@ namespace BXPlayerGUI
                 _mutexApplication.Dispose();
             }
         }
+        
     }
+
     public class NamedPipeXmlPayload
     {
         /// <summary>

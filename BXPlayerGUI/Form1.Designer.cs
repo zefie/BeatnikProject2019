@@ -80,7 +80,7 @@
             this.seekbarlbl = new System.Windows.Forms.Label();
             this.durationlbl = new System.Windows.Forms.Label();
             this.progresslbl = new System.Windows.Forms.Label();
-            this.seekbar = new System.Windows.Forms.TrackBar();
+            this.seekbar = new System.Windows.Forms.ProgressBar();
             this.midich_muteall_btn = new System.Windows.Forms.Button();
             this.midich_muteinvert_btn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -107,7 +107,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
             this.bankSwitcherPanel.SuspendLayout();
             this.progressPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.seekbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.beatnikLogo)).BeginInit();
@@ -709,16 +708,14 @@
             // 
             // seekbar
             // 
-            this.seekbar.LargeChange = 5000;
             this.seekbar.Location = new System.Drawing.Point(0, 22);
             this.seekbar.Maximum = 0;
             this.seekbar.Name = "seekbar";
-            this.seekbar.Size = new System.Drawing.Size(401, 45);
-            this.seekbar.SmallChange = 1000;
+            this.seekbar.Size = new System.Drawing.Size(401, 27);
+            this.seekbar.Step = 1000;
+            this.seekbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.seekbar.TabIndex = 26;
-            this.seekbar.TickFrequency = 10000;
-            this.seekbar.ValueChanged += new System.EventHandler(this.Seekbar_ValueChanged);
-            this.seekbar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseDown);
+            this.seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
             this.seekbar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseUp);
             // 
             // midich_muteall_btn
@@ -1003,7 +1000,6 @@
             this.bankSwitcherPanel.PerformLayout();
             this.progressPanel.ResumeLayout(false);
             this.progressPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.seekbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.beatnikLogo)).EndInit();
@@ -1070,7 +1066,7 @@
         private System.Windows.Forms.Label seekbarlbl;
         private System.Windows.Forms.Label durationlbl;
         private System.Windows.Forms.Label progresslbl;
-        private System.Windows.Forms.TrackBar seekbar;
+        private System.Windows.Forms.ProgressBar seekbar;
         private System.Windows.Forms.Label seekpos;
         private System.Windows.Forms.Button midich_muteall_btn;
         private System.Windows.Forms.Button midich_muteinvert_btn;
