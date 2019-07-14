@@ -550,7 +550,7 @@
             // 
             this.tempoControl.LargeChange = 10;
             this.tempoControl.Location = new System.Drawing.Point(209, 85);
-            this.tempoControl.Maximum = 300;
+            this.tempoControl.Maximum = 500;
             this.tempoControl.Minimum = 40;
             this.tempoControl.Name = "tempoControl";
             this.tempoControl.Size = new System.Drawing.Size(198, 45);
