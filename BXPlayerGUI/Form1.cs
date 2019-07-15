@@ -171,7 +171,7 @@ namespace BXPlayerGUI
                     {
                         Debug.WriteLine("Failed to process incoming named pipe message: " + e.Message);
                     }
-                    Activate();
+                    ActivateForm(this);
                 }
             }
             catch (ObjectDisposedException)
@@ -555,6 +555,18 @@ namespace BXPlayerGUI
             }
             SetTrackbarValue(tempoControl, tempo_default);
             SetLabelText(tempovallbl, tempo_default.ToString() + "BPM");
+        }
+
+        private void ActivateForm(Form f)
+        {
+            if (f.InvokeRequired)
+            {
+                f.Invoke(new MethodInvoker(delegate { f.Activate(); }));
+            }
+            else
+            {
+                f.Activate();
+            }
         }
 
         private void SetComboBoxIndex(ComboBox cb, int index)
