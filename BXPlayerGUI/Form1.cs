@@ -370,8 +370,45 @@ namespace BXPlayerGUI
                 if (e.Chorus != null) SetLabelText(choruslvlvallbl, e.Chorus.ToString());
                 if (e.Type != null)
                 {
-                    SetLabelText(reverblvlvallbl, (e.Reverb != null) ? e.Reverb.ToString() : bx.ReverbLevel.ToString());
-                    SetLabelText(choruslvlvallbl, (e.Chorus != null) ? e.Chorus.ToString() : bx.ChorusLevel.ToString());
+                    if (e.Reverb != null)
+                    {
+                        SetLabelText(reverblvlvallbl, e.Reverb.ToString());
+                    } else
+                    {
+                        SetLabelText(reverblvlvallbl, "...");
+                        BackgroundWorker rbw = new BackgroundWorker();
+                        rbw.DoWork += new DoWorkEventHandler(
+                            delegate (object o, DoWorkEventArgs arg)
+                            {
+                                // fucking terrible I know
+                                Thread.Sleep(1000);
+                                SetLabelText(reverblvlvallbl, bx.ReverbLevel.ToString());
+                                GC.Collect();
+                                rbw.Dispose();
+                            }
+                        );
+                        rbw.RunWorkerAsync();
+                    }
+                    if (e.Chorus != null)
+                    {
+                        SetLabelText(choruslvlvallbl, e.Chorus.ToString());
+                    }
+                    else
+                    {
+                        SetLabelText(choruslvlvallbl, "...");
+                        BackgroundWorker cbw = new BackgroundWorker();
+                        cbw.DoWork += new DoWorkEventHandler(
+                            delegate (object o, DoWorkEventArgs arg)
+                            {
+                                // fucking terrible I know
+                                Thread.Sleep(1000);
+                                SetLabelText(choruslvlvallbl, bx.ChorusLevel.ToString());
+                                GC.Collect();
+                                cbw.Dispose();
+                            }
+                        );
+                        cbw.RunWorkerAsync();
+                    }
                 }
             }
             else
@@ -1292,7 +1329,7 @@ namespace BXPlayerGUI
             if (!settingReverbCB) { 
                 bx.ReverbType = (((ComboBox)sender).SelectedIndex + 1);
             }
-            SetControlEnabled(cbMidiProvidedReverb, (((ComboBox)sender).SelectedIndex > 0));
+            SetControlEnabled(cbMidiProvidedReverb, (((ComboBox)sender).SelectedIndex > 0 && ((ComboBox)sender).SelectedIndex < 11));
         }
 
         private void Progresslbl_Click(object sender, EventArgs e)

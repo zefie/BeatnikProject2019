@@ -36,7 +36,7 @@ namespace BXPlayer
         private readonly Timer progressMonitor = new Timer();
         private readonly Timer fileChangeHelperTimer = new Timer();
         private readonly Timer seekhelper = new Timer();
-        private readonly int bxdelay = 400;
+        private readonly int bxdelay = 600; // BeatnikX has a lot of race conditions we have to wait for...
         private short _midi_default_reverb = -1;
         private short _midi_default_chorus = -1;
         private readonly short _bx_default_reverb = 40;
@@ -108,11 +108,18 @@ namespace BXPlayer
                 short _bx_current_reverb = (short)bx.getController(1, 91);
                 short _bx_current_chorus = (short)bx.getController(1, 93);
 
-                if (_bx_current_chorus == _bx_default_chorus) _midi_default_chorus = -1;
-                else _midi_default_chorus = _bx_current_chorus;
 
-                if (_bx_current_reverb == _bx_default_reverb) _midi_default_reverb = -1;
-                else _midi_default_reverb = _bx_current_reverb;
+                _midi_default_chorus = _bx_current_chorus == _bx_default_chorus ? (short)-1 : _bx_current_chorus;
+                _midi_default_reverb = _bx_current_reverb == _bx_default_reverb ? (short)-1 : _bx_current_reverb;
+
+                if (_bx_current_chorus != _bx_default_chorus && !UseMidiProvidedReverbChorusValues)
+                {
+                    ChorusLevel = _bx_default_chorus;
+                }
+                if (_bx_current_reverb != _bx_default_reverb && !UseMidiProvidedReverbChorusValues)
+                {
+                    ReverbLevel = _bx_default_reverb;
+                }
 
                 FileChangeEvent fevt = new FileChangeEvent
                 {
@@ -402,8 +409,8 @@ namespace BXPlayer
         {
             // Define defaults (beatnik or midi provided)
             short[] reverbdata = GetMidiReverb();
-            ChorusLevel = reverbdata[0];
-            ReverbLevel = reverbdata[1];
+            ReverbLevel = reverbdata[0];
+            ChorusLevel = reverbdata[1];
         }
 
 
@@ -462,11 +469,14 @@ namespace BXPlayer
                     Reverb = null,
                     Chorus = null
                 };
-                if (_reverb > -1 && _chorus > -1)
+                if (_reverb < 0 && _chorus < 0)
                 {
-                    revt.Reverb = _reverb;
-                    revt.Chorus = _chorus;
+                    short[] reverbdata = GetMidiReverb();
+                    _reverb = reverbdata[0];
+                    _chorus = reverbdata[1];
                 }
+                revt.Reverb = _reverb;
+                revt.Chorus = _chorus;
                 OnReverbChanged(this, revt);
             }
         }
