@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.openfile = new System.Windows.Forms.Button();
             this.loopcb = new System.Windows.Forms.CheckBox();
@@ -105,6 +106,9 @@
             this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
+            this.instant_tt = new System.Windows.Forms.ToolTip(this.components);
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.bankSwitcherPanel.SuspendLayout();
             this.progressPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.beatnikLogo)).BeginInit();
@@ -318,6 +322,7 @@
             // 
             // reverbpnl
             // 
+            this.reverbpnl.Controls.Add(this.cbMidiProvidedReverb);
             this.reverbpnl.Controls.Add(this.reverblbl);
             this.reverbpnl.Controls.Add(this.reverbcb);
             this.reverbpnl.Location = new System.Drawing.Point(423, 113);
@@ -330,9 +335,9 @@
             this.reverblbl.AutoSize = true;
             this.reverblbl.Location = new System.Drawing.Point(3, 5);
             this.reverblbl.Name = "reverblbl";
-            this.reverblbl.Size = new System.Drawing.Size(72, 13);
+            this.reverblbl.Size = new System.Drawing.Size(45, 13);
             this.reverblbl.TabIndex = 41;
-            this.reverblbl.Text = "Reverb Type:";
+            this.reverblbl.Text = "Reverb:";
             // 
             // reverbcb
             // 
@@ -346,9 +351,9 @@
             "Cavern",
             "Dungeon",
             "Small Reflections"});
-            this.reverbcb.Location = new System.Drawing.Point(78, 1);
+            this.reverbcb.Location = new System.Drawing.Point(48, 1);
             this.reverbcb.Name = "reverbcb";
-            this.reverbcb.Size = new System.Drawing.Size(118, 21);
+            this.reverbcb.Size = new System.Drawing.Size(125, 21);
             this.reverbcb.TabIndex = 40;
             this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
             // 
@@ -958,7 +963,7 @@
             this.statustitle,
             this.toolStripSpacer,
             this.statusfile});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 208);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 207);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(623, 22);
             this.statusStrip1.SizingGrip = false;
@@ -994,12 +999,29 @@
             this.statusfile.Name = "statusfile";
             this.statusfile.Size = new System.Drawing.Size(0, 17);
             // 
+            // cbMidiProvidedReverb
+            // 
+            this.cbMidiProvidedReverb.AutoSize = true;
+            this.cbMidiProvidedReverb.BackColor = System.Drawing.Color.Transparent;
+            this.cbMidiProvidedReverb.Checked = true;
+            this.cbMidiProvidedReverb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbMidiProvidedReverb.Location = new System.Drawing.Point(178, 6);
+            this.cbMidiProvidedReverb.Name = "cbMidiProvidedReverb";
+            this.cbMidiProvidedReverb.Size = new System.Drawing.Size(15, 14);
+            this.cbMidiProvidedReverb.TabIndex = 43;
+            this.cbMidiProvidedReverb.UseVisualStyleBackColor = false;
+            this.cbMidiProvidedReverb.CheckedChanged += new System.EventHandler(this.CbMidiProvidedReverb_CheckedChanged);
+            // 
+            // tt
+            // 
+            this.tt.AutomaticDelay = 1000;
+            // 
             // Form1
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(623, 230);
+            this.ClientSize = new System.Drawing.Size(623, 229);
             this.Controls.Add(this.miniControlPanel);
             this.Controls.Add(this.bankSwitcherPanel);
             this.Controls.Add(this.statusStrip1);
@@ -1113,8 +1135,11 @@
         private System.Windows.Forms.Button midich_muteinvert_btn;
         private System.Windows.Forms.TrackBar volumeControl;
         private System.Windows.Forms.Label reverblbl;
-        private System.Windows.Forms.ComboBox reverbcb;
         private System.Windows.Forms.Panel reverbpnl;
+        private System.Windows.Forms.CheckBox cbMidiProvidedReverb;
+        private System.Windows.Forms.ComboBox reverbcb;
+        private System.Windows.Forms.ToolTip instant_tt;
+        private System.Windows.Forms.ToolTip tt;
     }
 }
 

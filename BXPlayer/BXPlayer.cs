@@ -28,6 +28,7 @@ namespace BXPlayer
         private bool _file_using_marker_title = false;
         private bool _lyrics_delete_next = false;
         private bool _karaoke_title_detected = false;
+        private bool _use_midi_provided_reverb_and_chorus_values = true;
         private PlayState _previous_state = PlayState.Unknown;
         private PlayState _state = PlayState.Unknown;
         private readonly int[] last_position = new int[2];
@@ -35,6 +36,10 @@ namespace BXPlayer
         private readonly Timer fileChangeHelperTimer = new Timer();
         private readonly Timer seekhelper = new Timer();
         private readonly int bxdelay = 400;
+        private short _midi_default_reverb = -1;
+        private short _midi_default_chorus = -1;
+        private readonly short _bx_default_reverb = 40;
+        private readonly short _bx_default_chorus = 0;
         private string Lyric = "";
         private readonly string CustomReverbFile;
 
@@ -99,6 +104,15 @@ namespace BXPlayer
         {
             if (Duration != 0)
             {
+                short _bx_current_reverb = (short)bx.getController(1, 91);
+                short _bx_current_chorus = (short)bx.getController(1, 93);
+
+                if (_bx_current_chorus == _bx_default_chorus) _midi_default_chorus = -1;
+                else _midi_default_chorus = _bx_current_chorus;
+
+                if (_bx_current_reverb == _bx_default_reverb) _midi_default_reverb = -1;
+                else _midi_default_reverb = _bx_current_reverb;
+
                 FileChangeEvent fevt = new FileChangeEvent
                 {
                     File = FileName,
@@ -108,6 +122,7 @@ namespace BXPlayer
                 };
                 OnFileChanged(this, fevt);
                 PlayState = PlayState.Playing;
+                ReverbType = ReverbType;
                 fileChangeHelperTimer.Stop();
                 if (Path.GetExtension(LoadedFile).ToLower() == ".rmf")
                 {
@@ -382,9 +397,10 @@ namespace BXPlayer
         {
             get => bx.getReverbType();
             set {
-                // Beatnik defaults
-                short _reverb = 40;
-                short _chorus = 0;
+
+                // Define defaults (beatnik or midi provided)
+                short _reverb = (_midi_default_reverb != -1 && UseMidiProvidedReverbChorusValues) ? _midi_default_reverb : _bx_default_reverb;
+                short _chorus = (_midi_default_chorus != -1 && UseMidiProvidedReverbChorusValues) ? _midi_default_chorus : _bx_default_chorus;
 
                 // Custom reverb definitions
                 try
@@ -568,6 +584,16 @@ namespace BXPlayer
             }
         }
 
+        public bool UseMidiProvidedReverbChorusValues
+        {
+            get => _use_midi_provided_reverb_and_chorus_values;
+            set
+            {
+                _use_midi_provided_reverb_and_chorus_values = value;
+                ReverbType = ReverbType; // Force update
+            }        
+        }
+
         public XmlReader GetCustomReverbXML()
         {
             if (File.Exists(CustomReverbFile))
@@ -714,6 +740,7 @@ namespace BXPlayerEvents
     {
         public PlayState State { get; set; }
     }
+
 
     public enum PlayState
     {
