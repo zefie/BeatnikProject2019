@@ -231,9 +231,6 @@ namespace BXPlayerGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            instant_tt.SetToolTip(this.cbMidiProvidedReverb, "Use MIDI-Provided Reverb and Chorus values, if available."+Environment.NewLine+"Ignored with custom reverb profiles.");
-            tt.SetToolTip(this.reverbcb, "Beatnik Reverb Type" + Environment.NewLine + "* means Beatnik Player Default");
-
             bool patchloaded = true;
             if (File.Exists(bxpatch_dest))
             {
@@ -970,6 +967,10 @@ namespace BXPlayerGUI
                     bx.MuteChannel(midich, muted);
                 }
             }
+            for (short i = 0; i <= 16; i++)
+            {
+                bx.SetController(i, 7, 127);
+            }
         }
 
         private void Stopbut_Click(object sender, EventArgs e)
@@ -1410,6 +1411,14 @@ namespace BXPlayerGUI
         private void CbMidiProvidedReverb_CheckedChanged(object sender, EventArgs e)
         {
             bx.UseMidiProvidedReverbChorusValues = ((CheckBox)sender).Checked;
+        }
+
+        private void BxLoudMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked)
+                bx.DoMenuItem("Loud");
+            else
+                bx.DoMenuItem("Quiet");
         }
     }
 

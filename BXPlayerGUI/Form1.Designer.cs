@@ -48,6 +48,7 @@
             this.volvallbl = new System.Windows.Forms.Label();
             this.beatnikLogo = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
+            this.bxloudmode = new System.Windows.Forms.CheckBox();
             this.reverbpnl = new System.Windows.Forms.Panel();
             this.choruslvlvallbl = new System.Windows.Forms.Label();
             this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
@@ -289,7 +290,7 @@
             this.volvallbl.Name = "volvallbl";
             this.volvallbl.Size = new System.Drawing.Size(42, 15);
             this.volvallbl.TabIndex = 39;
-            this.volvallbl.Text = "70%";
+            this.volvallbl.Text = "100%";
             this.volvallbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // beatnikLogo
@@ -310,6 +311,7 @@
             // mainControlPanel
             // 
             this.mainControlPanel.AllowDrop = true;
+            this.mainControlPanel.Controls.Add(this.bxloudmode);
             this.mainControlPanel.Controls.Add(this.reverbpnl);
             this.mainControlPanel.Controls.Add(this.midiControls);
             this.mainControlPanel.Controls.Add(this.progressPanel);
@@ -323,6 +325,21 @@
             this.mainControlPanel.Visible = false;
             this.mainControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.mainControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
+            // 
+            // bxloudmode
+            // 
+            this.bxloudmode.AutoSize = true;
+            this.bxloudmode.BackColor = System.Drawing.Color.Transparent;
+            this.bxloudmode.Checked = true;
+            this.bxloudmode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.bxloudmode.Location = new System.Drawing.Point(463, 68);
+            this.bxloudmode.Name = "bxloudmode";
+            this.bxloudmode.Size = new System.Drawing.Size(80, 17);
+            this.bxloudmode.TabIndex = 48;
+            this.bxloudmode.Text = "Loud Mode";
+            this.tt.SetToolTip(this.bxloudmode, "Enables Beatnik\'s \"Loud\" Mode");
+            this.bxloudmode.UseVisualStyleBackColor = false;
+            this.bxloudmode.CheckedChanged += new System.EventHandler(this.BxLoudMode_CheckedChanged);
             // 
             // reverbpnl
             // 
@@ -356,6 +373,8 @@
             this.cbMidiProvidedReverb.Name = "cbMidiProvidedReverb";
             this.cbMidiProvidedReverb.Size = new System.Drawing.Size(15, 14);
             this.cbMidiProvidedReverb.TabIndex = 43;
+            this.instant_tt.SetToolTip(this.cbMidiProvidedReverb, "Use MIDI-Provided Reverb and Chorus values, if available.\r\nIgnored with custom re" +
+        "verb profiles.");
             this.cbMidiProvidedReverb.UseVisualStyleBackColor = false;
             this.cbMidiProvidedReverb.CheckedChanged += new System.EventHandler(this.CbMidiProvidedReverb_CheckedChanged);
             // 
@@ -410,6 +429,7 @@
             this.choruslvllbl.Size = new System.Drawing.Size(72, 13);
             this.choruslvllbl.TabIndex = 45;
             this.choruslvllbl.Text = "Chorus Level:";
+            this.tt.SetToolTip(this.choruslvllbl, "Beatnik Reverb Type\r\n* means Beatnik Player Default");
             // 
             // midiControls
             // 
@@ -967,7 +987,7 @@
             this.volumeControl.Size = new System.Drawing.Size(206, 45);
             this.volumeControl.TabIndex = 32;
             this.volumeControl.TickFrequency = 10;
-            this.volumeControl.Value = 70;
+            this.volumeControl.Value = 100;
             this.volumeControl.Scroll += new System.EventHandler(this.VolumeControl_Scroll);
             // 
             // miniControlPanel
@@ -1185,6 +1205,7 @@
         private System.Windows.Forms.Label reverblvllbl;
         private System.Windows.Forms.Label reverblvlvallbl;
         private System.Windows.Forms.Label choruslvlvallbl;
+        private System.Windows.Forms.CheckBox bxloudmode;
     }
 }
 
