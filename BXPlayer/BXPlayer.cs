@@ -93,13 +93,17 @@ namespace BXPlayer
         public void BXInit()
         {
             bx = new BeatnikXClass();
+            bx.OnPause += Bx_OnPause;
             bx.enableMetaEvents(true);
             bx.OnMetaEvent += Bx_OnMetaEvent;
-            DoMenuItem("Loud");
             active = true;
             Debug.WriteLine("BeatnikX Initalized");
         }
 
+        private void Bx_OnPause()
+        {
+            throw new NotImplementedException();
+        }
 
         private void FileChangeHelperTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -315,6 +319,16 @@ namespace BXPlayer
             GC.WaitForPendingFinalizers();
         }
 
+        public void SetController(short channel, short controller, short value)
+        {
+            bx.setController(channel, controller, value);
+        }
+
+        public int GetController(short channel, short controller)
+        {
+            return bx.getController(channel, controller);
+        }
+
         /// <summary>
         /// Plays a file or URL
         /// </summary>
@@ -334,6 +348,7 @@ namespace BXPlayer
             _file_has_lyrics_meta = false;
             FileHasLyrics = false;
 
+            SetController(0, 121, 1);
 
             FileName = real_file ?? Path.GetFileName(file);
             LoadedFile = file;
@@ -781,7 +796,11 @@ namespace BXPlayer
         ///
         public void MuteChannel(short channel, bool muted)
         {
-            bx.setChannelMute(channel, muted);
+            if (bx.getChannelMute(channel) != muted)
+            {
+                Debug.WriteLine("MIDI Ch " + channel + " Mute: " + muted);
+                bx.setChannelMute(channel, muted);
+            }
         }
     }
 }
