@@ -223,7 +223,7 @@ namespace BXPlayer
                 // TODO: Other title formats
 
                 // Lyric Support
-                if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)))
+                if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)) && this.PlayState == PlayState.Playing)
                 {
                     
                     if (!FileHasLyrics && @event == "GenericText")
@@ -598,6 +598,7 @@ namespace BXPlayer
                 bx.setReverbType(1);
                 bx.setPosition(value);
                 bx.setReverbType(reverb);
+                Lyric = "";
                 last_position[0] = -1;
                 if (seekhelper.Enabled)
                 {
