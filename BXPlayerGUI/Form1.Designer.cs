@@ -49,8 +49,13 @@
             this.beatnikLogo = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
             this.reverbpnl = new System.Windows.Forms.Panel();
+            this.choruslvlvallbl = new System.Windows.Forms.Label();
+            this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
             this.reverblbl = new System.Windows.Forms.Label();
             this.reverbcb = new System.Windows.Forms.ComboBox();
+            this.reverblvllbl = new System.Windows.Forms.Label();
+            this.reverblvlvallbl = new System.Windows.Forms.Label();
+            this.choruslvllbl = new System.Windows.Forms.Label();
             this.midiControls = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.midichpnl = new System.Windows.Forms.TableLayoutPanel();
@@ -106,7 +111,6 @@
             this.statustitle = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSpacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusfile = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
             this.instant_tt = new System.Windows.Forms.ToolTip(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.bankSwitcherPanel.SuspendLayout();
@@ -139,11 +143,11 @@
             this.loopcb.BackColor = System.Drawing.Color.Transparent;
             this.loopcb.Checked = true;
             this.loopcb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loopcb.Location = new System.Drawing.Point(95, 4);
+            this.loopcb.Location = new System.Drawing.Point(80, 32);
             this.loopcb.Name = "loopcb";
-            this.loopcb.Size = new System.Drawing.Size(97, 17);
+            this.loopcb.Size = new System.Drawing.Size(50, 17);
             this.loopcb.TabIndex = 21;
-            this.loopcb.Text = "Loop Playback";
+            this.loopcb.Text = "Loop";
             this.loopcb.UseVisualStyleBackColor = false;
             this.loopcb.CheckedChanged += new System.EventHandler(this.Loopcb_CheckedChanged);
             // 
@@ -151,7 +155,7 @@
             // 
             this.playbut.Enabled = false;
             this.playbut.Image = global::BXPlayerGUI.Properties.Resources.icon_play;
-            this.playbut.Location = new System.Drawing.Point(2, 43);
+            this.playbut.Location = new System.Drawing.Point(2, 25);
             this.playbut.Name = "playbut";
             this.playbut.Size = new System.Drawing.Size(25, 23);
             this.playbut.TabIndex = 26;
@@ -162,7 +166,7 @@
             // 
             this.stopbut.Enabled = false;
             this.stopbut.Image = global::BXPlayerGUI.Properties.Resources.icon_stop;
-            this.stopbut.Location = new System.Drawing.Point(54, 43);
+            this.stopbut.Location = new System.Drawing.Point(54, 25);
             this.stopbut.Name = "stopbut";
             this.stopbut.Size = new System.Drawing.Size(23, 23);
             this.stopbut.TabIndex = 27;
@@ -292,7 +296,7 @@
             // 
             this.beatnikLogo.BackColor = System.Drawing.SystemColors.Control;
             this.beatnikLogo.Image = ((System.Drawing.Image)(resources.GetObject("beatnikLogo.Image")));
-            this.beatnikLogo.Location = new System.Drawing.Point(116, 16);
+            this.beatnikLogo.Location = new System.Drawing.Point(116, 2);
             this.beatnikLogo.Margin = new System.Windows.Forms.Padding(0);
             this.beatnikLogo.Name = "beatnikLogo";
             this.beatnikLogo.Size = new System.Drawing.Size(79, 36);
@@ -322,13 +326,38 @@
             // 
             // reverbpnl
             // 
+            this.reverbpnl.Controls.Add(this.choruslvlvallbl);
             this.reverbpnl.Controls.Add(this.cbMidiProvidedReverb);
             this.reverbpnl.Controls.Add(this.reverblbl);
             this.reverbpnl.Controls.Add(this.reverbcb);
+            this.reverbpnl.Controls.Add(this.reverblvllbl);
+            this.reverbpnl.Controls.Add(this.reverblvlvallbl);
+            this.reverbpnl.Controls.Add(this.choruslvllbl);
             this.reverbpnl.Location = new System.Drawing.Point(423, 113);
             this.reverbpnl.Name = "reverbpnl";
-            this.reverbpnl.Size = new System.Drawing.Size(200, 22);
+            this.reverbpnl.Size = new System.Drawing.Size(200, 37);
             this.reverbpnl.TabIndex = 43;
+            // 
+            // choruslvlvallbl
+            // 
+            this.choruslvlvallbl.Location = new System.Drawing.Point(171, 23);
+            this.choruslvlvallbl.Name = "choruslvlvallbl";
+            this.choruslvlvallbl.Size = new System.Drawing.Size(28, 16);
+            this.choruslvlvallbl.TabIndex = 47;
+            // 
+            // cbMidiProvidedReverb
+            // 
+            this.cbMidiProvidedReverb.AutoSize = true;
+            this.cbMidiProvidedReverb.BackColor = System.Drawing.Color.Transparent;
+            this.cbMidiProvidedReverb.Checked = true;
+            this.cbMidiProvidedReverb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbMidiProvidedReverb.Enabled = false;
+            this.cbMidiProvidedReverb.Location = new System.Drawing.Point(178, 6);
+            this.cbMidiProvidedReverb.Name = "cbMidiProvidedReverb";
+            this.cbMidiProvidedReverb.Size = new System.Drawing.Size(15, 14);
+            this.cbMidiProvidedReverb.TabIndex = 43;
+            this.cbMidiProvidedReverb.UseVisualStyleBackColor = false;
+            this.cbMidiProvidedReverb.CheckedChanged += new System.EventHandler(this.CbMidiProvidedReverb_CheckedChanged);
             // 
             // reverblbl
             // 
@@ -356,6 +385,31 @@
             this.reverbcb.Size = new System.Drawing.Size(125, 21);
             this.reverbcb.TabIndex = 40;
             this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
+            // 
+            // reverblvllbl
+            // 
+            this.reverblvllbl.AutoSize = true;
+            this.reverblvllbl.Location = new System.Drawing.Point(3, 23);
+            this.reverblvllbl.Name = "reverblvllbl";
+            this.reverblvllbl.Size = new System.Drawing.Size(74, 13);
+            this.reverblvllbl.TabIndex = 44;
+            this.reverblvllbl.Text = "Reverb Level:";
+            // 
+            // reverblvlvallbl
+            // 
+            this.reverblvlvallbl.Location = new System.Drawing.Point(76, 23);
+            this.reverblvlvallbl.Name = "reverblvlvallbl";
+            this.reverblvlvallbl.Size = new System.Drawing.Size(28, 16);
+            this.reverblvlvallbl.TabIndex = 46;
+            // 
+            // choruslvllbl
+            // 
+            this.choruslvllbl.AutoSize = true;
+            this.choruslvllbl.Location = new System.Drawing.Point(102, 23);
+            this.choruslvllbl.Name = "choruslvllbl";
+            this.choruslvllbl.Size = new System.Drawing.Size(72, 13);
+            this.choruslvllbl.TabIndex = 45;
+            this.choruslvllbl.Text = "Chorus Level:";
             // 
             // midiControls
             // 
@@ -919,16 +973,16 @@
             // miniControlPanel
             // 
             this.miniControlPanel.AllowDrop = true;
+            this.miniControlPanel.Controls.Add(this.beatnikLogo);
             this.miniControlPanel.Controls.Add(this.infobut);
             this.miniControlPanel.Controls.Add(this.loopcb);
-            this.miniControlPanel.Controls.Add(this.beatnikLogo);
             this.miniControlPanel.Controls.Add(this.bxversionlbl);
             this.miniControlPanel.Controls.Add(this.openfile);
             this.miniControlPanel.Controls.Add(this.playbut);
             this.miniControlPanel.Controls.Add(this.stopbut);
-            this.miniControlPanel.Location = new System.Drawing.Point(423, 141);
+            this.miniControlPanel.Location = new System.Drawing.Point(423, 155);
             this.miniControlPanel.Name = "miniControlPanel";
-            this.miniControlPanel.Size = new System.Drawing.Size(200, 66);
+            this.miniControlPanel.Size = new System.Drawing.Size(196, 51);
             this.miniControlPanel.TabIndex = 42;
             this.miniControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.miniControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
@@ -939,7 +993,7 @@
             this.infobut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.infobut.ForeColor = System.Drawing.SystemColors.ControlText;
             this.infobut.Image = global::BXPlayerGUI.Properties.Resources.icon_info;
-            this.infobut.Location = new System.Drawing.Point(28, 43);
+            this.infobut.Location = new System.Drawing.Point(28, 25);
             this.infobut.Name = "infobut";
             this.infobut.Size = new System.Drawing.Size(23, 23);
             this.infobut.TabIndex = 42;
@@ -949,7 +1003,7 @@
             // 
             // bxversionlbl
             // 
-            this.bxversionlbl.Location = new System.Drawing.Point(83, 52);
+            this.bxversionlbl.Location = new System.Drawing.Point(83, 38);
             this.bxversionlbl.Name = "bxversionlbl";
             this.bxversionlbl.Size = new System.Drawing.Size(114, 13);
             this.bxversionlbl.TabIndex = 41;
@@ -998,19 +1052,6 @@
             // 
             this.statusfile.Name = "statusfile";
             this.statusfile.Size = new System.Drawing.Size(0, 17);
-            // 
-            // cbMidiProvidedReverb
-            // 
-            this.cbMidiProvidedReverb.AutoSize = true;
-            this.cbMidiProvidedReverb.BackColor = System.Drawing.Color.Transparent;
-            this.cbMidiProvidedReverb.Checked = true;
-            this.cbMidiProvidedReverb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMidiProvidedReverb.Location = new System.Drawing.Point(178, 6);
-            this.cbMidiProvidedReverb.Name = "cbMidiProvidedReverb";
-            this.cbMidiProvidedReverb.Size = new System.Drawing.Size(15, 14);
-            this.cbMidiProvidedReverb.TabIndex = 43;
-            this.cbMidiProvidedReverb.UseVisualStyleBackColor = false;
-            this.cbMidiProvidedReverb.CheckedChanged += new System.EventHandler(this.CbMidiProvidedReverb_CheckedChanged);
             // 
             // tt
             // 
@@ -1140,6 +1181,10 @@
         private System.Windows.Forms.ComboBox reverbcb;
         private System.Windows.Forms.ToolTip instant_tt;
         private System.Windows.Forms.ToolTip tt;
+        private System.Windows.Forms.Label choruslvllbl;
+        private System.Windows.Forms.Label reverblvllbl;
+        private System.Windows.Forms.Label reverblvlvallbl;
+        private System.Windows.Forms.Label choruslvlvallbl;
     }
 }
 

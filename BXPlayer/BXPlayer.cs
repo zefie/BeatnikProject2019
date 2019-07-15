@@ -19,6 +19,7 @@ namespace BXPlayer
         public event EventHandler<ProgressEvent> ProgressChanged = delegate { };
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
+        public event EventHandler<ReverbEvent> ReverbChanged = delegate { };
         public bool KaraokeShortTitles = true;
         public bool PreferGenericTextLyrics = true;
         private readonly int idletimer = 2;
@@ -388,6 +389,24 @@ namespace BXPlayer
             set => bx.setTempo(value);
         }
 
+        private short[] GetMidiReverb()
+        {
+            // Define defaults (beatnik or midi provided)
+            short[] reverbdata = new short[2];
+            reverbdata[0] = (_midi_default_reverb != -1 && UseMidiProvidedReverbChorusValues) ? _midi_default_reverb : _bx_default_reverb;
+            reverbdata[1] = (_midi_default_chorus != -1 && UseMidiProvidedReverbChorusValues) ? _midi_default_chorus : _bx_default_chorus;
+            return reverbdata;
+        }
+
+        private void SetMidiReverb()
+        {
+            // Define defaults (beatnik or midi provided)
+            short[] reverbdata = GetMidiReverb();
+            ChorusLevel = reverbdata[0];
+            ReverbLevel = reverbdata[1];
+        }
+
+
         /// <summary>
         /// Gets or sets the player's reverb type
         /// </summary>
@@ -397,11 +416,8 @@ namespace BXPlayer
         {
             get => bx.getReverbType();
             set {
-
-                // Define defaults (beatnik or midi provided)
-                short _reverb = (_midi_default_reverb != -1 && UseMidiProvidedReverbChorusValues) ? _midi_default_reverb : _bx_default_reverb;
-                short _chorus = (_midi_default_chorus != -1 && UseMidiProvidedReverbChorusValues) ? _midi_default_chorus : _bx_default_chorus;
-
+                short _reverb = -1;
+                short _chorus = -1;
                 // Custom reverb definitions
                 try
                 {
@@ -437,11 +453,53 @@ namespace BXPlayer
                 }
 
                 // Actually apply it
-                Debug.WriteLine("old: reverb: " + bx.getReverbType() + " reverblvl: " + bx.getController(1, 91) + " choruslvl: " + bx.getController(1, 93));
-                Debug.WriteLine("new: reverb: " + value + " reverblvl: " + _reverb + " choruslvl: " + _chorus);
+                Debug.WriteLine("Set ReverbType: " + value + " (Previous: " + ReverbType + ")");
                 bx.setReverbType(value);
-                bx.setController(0, 91, _reverb);
-                bx.setController(0, 93, _chorus);
+
+                ReverbEvent revt = new ReverbEvent
+                {
+                    Type = (short)value,
+                    Reverb = null,
+                    Chorus = null
+                };
+                if (_reverb > -1 && _chorus > -1)
+                {
+                    revt.Reverb = _reverb;
+                    revt.Chorus = _chorus;
+                }
+                OnReverbChanged(this, revt);
+            }
+        }
+
+
+        public short ReverbLevel
+        {
+            get => (short)bx.getController(1, 91);
+            set {
+                Debug.WriteLine("Set ReverbLevel: " + value + " (Previous: " + ReverbLevel + ")");
+                bx.setController(0, 91, value);
+                ReverbEvent revt = new ReverbEvent
+                {
+                    Type = null,
+                    Reverb = value,
+                    Chorus = null
+                };
+                OnReverbChanged(this, revt);
+            }
+        }
+        public short ChorusLevel
+        {
+            get => (short)bx.getController(1, 93);
+            set {
+                Debug.WriteLine("Set ChorusLevel: " + value + " (Previous: " + ChorusLevel + ")");
+                bx.setController(0, 93, value);
+                ReverbEvent revt = new ReverbEvent
+                {
+                    Type = null,
+                    Reverb = null,
+                    Chorus = value
+                };
+                OnReverbChanged(this, revt);
             }
         }
 
@@ -466,6 +524,8 @@ namespace BXPlayer
         private void OnPlayStateChanged(object sender, PlayStateEvent e) => PlayStateChanged?.Invoke(this, e);
 
         private void OnProgressChanged(object sender, ProgressEvent e) => ProgressChanged?.Invoke(this, e);
+
+        private void OnReverbChanged(object sender, ReverbEvent e) => ReverbChanged?.Invoke(this, e);
 
         /// <summary>
         /// Performs a MenuItem action from the Beatnik Player
@@ -590,7 +650,7 @@ namespace BXPlayer
             set
             {
                 _use_midi_provided_reverb_and_chorus_values = value;
-                ReverbType = ReverbType; // Force update
+                SetMidiReverb();
             }        
         }
 
@@ -740,6 +800,14 @@ namespace BXPlayerEvents
     {
         public PlayState State { get; set; }
     }
+
+    public class ReverbEvent : EventArgs
+    {
+        public int? Type { get; set; }
+        public short? Reverb { get; set; }
+        public short? Chorus { get; set; }
+    }
+
 
 
     public enum PlayState

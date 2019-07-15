@@ -291,6 +291,7 @@ namespace BXPlayerGUI
                 bx.FileChanged += Bx_FileChanged;
                 bx.PlayStateChanged += Bx_PlayStateChanged;
                 bx.ProgressChanged += Bx_ProgressChanged;
+                bx.ReverbChanged += Bx_ReverbChanged;
                 bx.BXInit();
                 string bxvers = bx.BeatnikVersion;
                 SetLabelText(bxversionlbl, "v" + bxvers);
@@ -358,6 +359,25 @@ namespace BXPlayerGUI
                 SetLabelText(bxinsthsb, "None");
                 SetControlEnabled(loopcb, false);
                 SetControlEnabled(openfile, false);
+            }
+        }
+
+        private void Bx_ReverbChanged(object sender, ReverbEvent e)
+        {
+            if (GetComboBoxIndex(reverbcb) > 0)
+            {
+                if (e.Reverb != null) SetLabelText(reverblvlvallbl, e.Reverb.ToString());
+                if (e.Chorus != null) SetLabelText(choruslvlvallbl, e.Chorus.ToString());
+                if (e.Type != null)
+                {
+                    SetLabelText(reverblvlvallbl, (e.Reverb != null) ? e.Reverb.ToString() : bx.ReverbLevel.ToString());
+                    SetLabelText(choruslvlvallbl, (e.Chorus != null) ? e.Chorus.ToString() : bx.ChorusLevel.ToString());
+                }
+            }
+            else
+            {
+                SetLabelText(choruslvlvallbl, "0");
+                SetLabelText(reverblvlvallbl, "0");
             }
         }
 
@@ -1272,6 +1292,7 @@ namespace BXPlayerGUI
             if (!settingReverbCB) { 
                 bx.ReverbType = (((ComboBox)sender).SelectedIndex + 1);
             }
+            SetControlEnabled(cbMidiProvidedReverb, (((ComboBox)sender).SelectedIndex > 0));
         }
 
         private void Progresslbl_Click(object sender, EventArgs e)
