@@ -58,7 +58,7 @@ namespace BXPatchSwitcher
                 rawopts += " " + ZefieLib.Data.Base64Encode(String.Join("|", options));
                 outopts = ZefieLib.Data.Base64Encode(String.Join("|", list.ToArray()));
                 Debug.WriteLine("Received Session Data: " + rawopts.Split(' ')[2]);
-                Debug.WriteLine("Return Session Data: " + outopts);
+                Debug.WriteLine("Return Session Data: " + outopts);                
             }
             string res = InstallPatch(patchidx, outopts);
             if (res != "OK" && res != "EXIT")
@@ -101,9 +101,10 @@ namespace BXPatchSwitcher
                     File.Copy(source_file, bxpatch_preferred_dest);
                     ZefieLib.Path.CreateSymbolicLink(bxpatch_default_dest, bxpatch_preferred_dest, ZefieLib.Path.SymbolicLink.File);
                     bxpatch_dest = bxpatch_preferred_dest;
+                    junctioned = true;
                 }
                 else
-                {
+                {                    
                     if (File.Exists(bxpatch_dest))
                     {
                         File.Delete(bxpatch_dest);
@@ -124,7 +125,13 @@ namespace BXPatchSwitcher
 
                 // Set the new access settings.
                 File.SetAccessControl(bxpatch_dest, fSecurity);
-                junctioned = true;
+                if (!junctioned)
+                {
+                    if (File.Exists(bxpatch_preferred_dest))
+                    {
+                        File.Delete(bxpatch_preferred_dest);
+                    }
+                }
 
                 if (return_exe != null)
                 {
