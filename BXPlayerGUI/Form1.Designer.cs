@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.openfile = new System.Windows.Forms.Button();
-            this.loopcb = new System.Windows.Forms.CheckBox();
+            this.bx_loop_cb = new System.Windows.Forms.CheckBox();
             this.playbut = new System.Windows.Forms.Button();
             this.stopbut = new System.Windows.Forms.Button();
             this.bankSwitcherPanel = new System.Windows.Forms.Panel();
@@ -48,7 +48,7 @@
             this.volvallbl = new System.Windows.Forms.Label();
             this.beatnikLogo = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
-            this.bxloudmode = new System.Windows.Forms.CheckBox();
+            this.bx_loud_mode = new System.Windows.Forms.CheckBox();
             this.reverbpnl = new System.Windows.Forms.Panel();
             this.choruslvlvallbl = new System.Windows.Forms.Label();
             this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
@@ -138,19 +138,19 @@
             this.openfile.UseVisualStyleBackColor = true;
             this.openfile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
-            // loopcb
+            // bx_loop_cb
             // 
-            this.loopcb.AutoSize = true;
-            this.loopcb.BackColor = System.Drawing.Color.Transparent;
-            this.loopcb.Checked = true;
-            this.loopcb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loopcb.Location = new System.Drawing.Point(80, 32);
-            this.loopcb.Name = "loopcb";
-            this.loopcb.Size = new System.Drawing.Size(50, 17);
-            this.loopcb.TabIndex = 21;
-            this.loopcb.Text = "Loop";
-            this.loopcb.UseVisualStyleBackColor = false;
-            this.loopcb.CheckedChanged += new System.EventHandler(this.Loopcb_CheckedChanged);
+            this.bx_loop_cb.AutoSize = true;
+            this.bx_loop_cb.BackColor = System.Drawing.Color.Transparent;
+            this.bx_loop_cb.Checked = true;
+            this.bx_loop_cb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.bx_loop_cb.Location = new System.Drawing.Point(80, 32);
+            this.bx_loop_cb.Name = "bx_loop_cb";
+            this.bx_loop_cb.Size = new System.Drawing.Size(50, 17);
+            this.bx_loop_cb.TabIndex = 21;
+            this.bx_loop_cb.Text = "Loop";
+            this.bx_loop_cb.UseVisualStyleBackColor = false;
+            this.bx_loop_cb.CheckedChanged += new System.EventHandler(this.Loopcb_CheckedChanged);
             // 
             // playbut
             // 
@@ -311,7 +311,7 @@
             // mainControlPanel
             // 
             this.mainControlPanel.AllowDrop = true;
-            this.mainControlPanel.Controls.Add(this.bxloudmode);
+            this.mainControlPanel.Controls.Add(this.bx_loud_mode);
             this.mainControlPanel.Controls.Add(this.reverbpnl);
             this.mainControlPanel.Controls.Add(this.midiControls);
             this.mainControlPanel.Controls.Add(this.progressPanel);
@@ -326,20 +326,20 @@
             this.mainControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.mainControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
             // 
-            // bxloudmode
+            // bx_loud_mode
             // 
-            this.bxloudmode.AutoSize = true;
-            this.bxloudmode.BackColor = System.Drawing.Color.Transparent;
-            this.bxloudmode.Checked = true;
-            this.bxloudmode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bxloudmode.Location = new System.Drawing.Point(463, 68);
-            this.bxloudmode.Name = "bxloudmode";
-            this.bxloudmode.Size = new System.Drawing.Size(80, 17);
-            this.bxloudmode.TabIndex = 48;
-            this.bxloudmode.Text = "Loud Mode";
-            this.tt.SetToolTip(this.bxloudmode, "Enables Beatnik\'s \"Loud\" Mode");
-            this.bxloudmode.UseVisualStyleBackColor = false;
-            this.bxloudmode.CheckedChanged += new System.EventHandler(this.BxLoudMode_CheckedChanged);
+            this.bx_loud_mode.AutoSize = true;
+            this.bx_loud_mode.BackColor = System.Drawing.Color.Transparent;
+            this.bx_loud_mode.Checked = true;
+            this.bx_loud_mode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.bx_loud_mode.Location = new System.Drawing.Point(463, 68);
+            this.bx_loud_mode.Name = "bx_loud_mode";
+            this.bx_loud_mode.Size = new System.Drawing.Size(80, 17);
+            this.bx_loud_mode.TabIndex = 48;
+            this.bx_loud_mode.Text = "Loud Mode";
+            this.tt.SetToolTip(this.bx_loud_mode, "Enables Beatnik\'s \"Loud\" Mode");
+            this.bx_loud_mode.UseVisualStyleBackColor = false;
+            this.bx_loud_mode.CheckedChanged += new System.EventHandler(this.BxLoudMode_CheckedChanged);
             // 
             // reverbpnl
             // 
@@ -995,7 +995,7 @@
             this.miniControlPanel.AllowDrop = true;
             this.miniControlPanel.Controls.Add(this.beatnikLogo);
             this.miniControlPanel.Controls.Add(this.infobut);
-            this.miniControlPanel.Controls.Add(this.loopcb);
+            this.miniControlPanel.Controls.Add(this.bx_loop_cb);
             this.miniControlPanel.Controls.Add(this.bxversionlbl);
             this.miniControlPanel.Controls.Add(this.openfile);
             this.miniControlPanel.Controls.Add(this.playbut);
@@ -1092,6 +1092,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "zefie\'s BeatnikX Player";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
@@ -1123,7 +1124,7 @@
 
         #endregion
         private System.Windows.Forms.Button openfile;
-        private System.Windows.Forms.CheckBox loopcb;
+        private System.Windows.Forms.CheckBox bx_loop_cb;
         private System.Windows.Forms.Button playbut;
         private System.Windows.Forms.Button stopbut;
         private System.Windows.Forms.Panel bankSwitcherPanel;
@@ -1205,7 +1206,7 @@
         private System.Windows.Forms.Label reverblvllbl;
         private System.Windows.Forms.Label reverblvlvallbl;
         private System.Windows.Forms.Label choruslvlvallbl;
-        private System.Windows.Forms.CheckBox bxloudmode;
+        private System.Windows.Forms.CheckBox bx_loud_mode;
     }
 }
 

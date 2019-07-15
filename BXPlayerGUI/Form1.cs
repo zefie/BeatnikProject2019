@@ -32,9 +32,11 @@ namespace BXPlayerGUI
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
         private readonly string bxpatch_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
         private readonly string[] args = Environment.GetCommandLineArgs();
-        private readonly string _patchswitcher_exe = "BXPatchSwitcher.exe";
+        private readonly string _patchswitcher_exe;
+        private readonly string _user_config_file;
         private readonly string patches_dir;
         private readonly string bankfile;
+        private List<KeyValuePair<string,string>> _user_config_data = new List<KeyValuePair<string, string>>();
         private readonly BXPlayerClass bx;
         private TcpListener tcp;
         private string current_hash;
@@ -86,9 +88,12 @@ namespace BXPlayerGUI
             Assembly assembly = Assembly.GetExecutingAssembly();
             version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
             Text += " v" + version;
-            Debug.WriteLine(Text + " initializing");
-
+            Debug.WriteLine(Text + " initializing");            
             Debug.WriteLine("CWD is " + cwd);
+            _patchswitcher_exe = cwd + "BXPatchSwitcher.exe";
+            Debug.WriteLine(_patchswitcher_exe);
+            _user_config_file = cwd + "UserPrefs.xml";
+
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
             bx = new BXPlayerClass();
@@ -159,7 +164,7 @@ namespace BXPlayerGUI
                         {
                             if (File.Exists(_namedPipeXmlPayload.CommandLineArguments[1]))
                             {
-                                PlayFile(_namedPipeXmlPayload.CommandLineArguments[1], GetCheckBoxChecked(loopcb));
+                                PlayFile(_namedPipeXmlPayload.CommandLineArguments[1], GetCheckBoxChecked(bx_loop_cb));
                             }
                             else
                             {
@@ -325,14 +330,45 @@ namespace BXPlayerGUI
                         Debug.WriteLine(f.Message);
                     }
                 }
+
                 settingReverbCB = true;
                 SetComboBoxIndex(reverbcb, default_reverb);
                 settingReverbCB = false;
+
+                if (File.Exists(_user_config_file))
+                {
+                    try
+                    {
+                        using (XmlReader reader = XmlReader.Create(_user_config_file))
+                        {
+                            while (reader.Read())
+                            {
+                                if (reader.NodeType == XmlNodeType.Element)
+                                {
+                                    if (reader.Name == "config")
+                                    {
+                                        string cfgname = reader.GetAttribute("name");
+                                        string cfgvalue = reader.GetAttribute("value");
+                                        if (cfgname != null && cfgvalue != null)
+                                        {
+                                            _user_config_data.Add(new KeyValuePair<string, string>(cfgname, cfgvalue));
+                                            SetConfigOption(cfgname, cfgvalue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception f)
+                    {
+                        Debug.WriteLine(f.Message);
+                    }
+                }
                 if (args.Length > 1)
                 {
                     if (File.Exists(args[1]))
                     {
-                        PlayFile(args[1], loopcb.Checked);
+                        PlayFile(args[1], bx_loop_cb.Checked);
                     }
                     else
                     {
@@ -354,8 +390,43 @@ namespace BXPlayerGUI
             {
                 Debug.WriteLine("WARN: No patches installed!");
                 SetLabelText(bxinsthsb, "None");
-                SetControlEnabled(loopcb, false);
+                SetControlEnabled(bx_loop_cb, false);
                 SetControlEnabled(openfile, false);
+            }
+        }
+
+        private void AddXMLConfigEntry(ref XmlWriter xml, string confname, object confval)
+        {
+            xml.WriteStartElement(null, "config", null);
+            xml.WriteAttributeString(null, "name", null, confname);
+            xml.WriteAttributeString(null, "value", null, confval.ToString());
+            xml.WriteEndElement();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.NewLineOnAttributes = false;
+
+                XmlWriter writer = XmlWriter.Create(_user_config_file, settings);
+                writer.WriteStartElement(null, "usercfg", "urn:beatnikx-usercfg");
+
+                AddXMLConfigEntry(ref writer, "volumeLevel", bx.Volume);
+                AddXMLConfigEntry(ref writer, "reverbType", GetComboBoxIndex(reverbcb));
+                AddXMLConfigEntry(ref writer, "allowMidiReverbConfig", bx.UseMidiProvidedReverbChorusValues);
+                AddXMLConfigEntry(ref writer, "useLoudMode", GetCheckBoxChecked(bx_loud_mode));
+                AddXMLConfigEntry(ref writer, "loopPlayback", GetCheckBoxChecked(bx_loop_cb));
+
+                writer.WriteEndElement();
+                writer.Flush();
+                writer.Close();            
+            }
+            catch (Exception f)
+            {
+                Debug.WriteLine(f.Message);
             }
         }
 
@@ -415,6 +486,40 @@ namespace BXPlayerGUI
             }
         }
 
+        private void SetConfigOption(string configvar, string value)
+        {
+            try
+            {
+                switch (configvar)
+                {
+                    case "volumeLevel":                        
+                        SetVolume(Convert.ToInt16(value));
+                        SetTrackbarValue(volumeControl, bx.Volume);
+                        break;
+
+                    case "reverbType":
+                        SetComboBoxIndex(reverbcb, Convert.ToInt16(value));
+                        break;
+
+                    case "allowMidiReverbConfig":
+                        SetCheckBoxChecked(bx_loud_mode, Convert.ToBoolean(value));
+                        break;
+
+                    case "useLoudMode":
+                        SetCheckBoxChecked(cbMidiProvidedReverb, Convert.ToBoolean(value));
+                        break;
+
+                    case "loopPlayback":
+                        SetCheckBoxChecked(bx_loop_cb, Convert.ToBoolean(value));
+                        break;                        
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
         private void ProcessStartupOptions(string serialized_data)
         {
             try
@@ -422,10 +527,10 @@ namespace BXPlayerGUI
                 // session data comes back without the exe in slot 0
 
                 string[] options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(serialized_data)).Split('|');
-                SetCheckBoxChecked(loopcb, Convert.ToBoolean(options[5]));
+                SetCheckBoxChecked(bx_loop_cb, Convert.ToBoolean(options[5]));
                 if (options[0].Length > 0)
                 {
-                    PlayFile(options[0], loopcb.Checked);
+                    PlayFile(options[0], bx_loop_cb.Checked);
                 }
 
                 BackgroundWorker bw = new BackgroundWorker();
@@ -488,7 +593,7 @@ namespace BXPlayerGUI
                 bx.Tempo.ToString() + "|" +
                 bx.Transpose.ToString() + "|" +
                 bx.Position.ToString() + "|" +
-                loopcb.Checked.ToString() + "|" +
+                bx_loop_cb.Checked.ToString() + "|" +
                 midichk_1.Checked.ToString() + "|" +
                 midichk_2.Checked.ToString() + "|" +
                 midichk_3.Checked.ToString() + "|" +
@@ -871,7 +976,7 @@ namespace BXPlayerGUI
         {
             if (bx.PlayState != PlayState.Stopped)
             {
-                bx.Loop = loopcb.Checked;
+                bx.Loop = bx_loop_cb.Checked;
             }
         }
 
@@ -934,9 +1039,23 @@ namespace BXPlayerGUI
             }
         }
 
+        private string GetUserConfigValue(string confval)
+        {
+            foreach (KeyValuePair<string,string> usercfg in _user_config_data.ToArray())
+            {
+                if (usercfg.Key == confval)
+                {
+                    return usercfg.Value;
+                }
+            }
+            return null;
+        }
+
         private void SetBXParams()
         {
             SetLabelText(durationlbl, FormatTime(bx.Duration));
+            string cfgvalue;
+            string cfgname;
             int value = GetTrackbarValue(tempoControl);
             if (value >= 0)
             {
@@ -948,16 +1067,24 @@ namespace BXPlayerGUI
             {
                 bx.Transpose = value;
             }
+
             value = GetComboBoxIndex(reverbcb);
-            if (value >= 0)
-            {
-                bx.ReverbType = (value + 1);
-            }
+            cfgname = "reverbType";
+            cfgvalue = GetUserConfigValue(cfgname);
+            if (value >= 0) bx.ReverbType = (value + 1);
+            else if (cfgvalue != null) SetConfigOption(cfgname, cfgvalue);
+
+
             value = GetTrackbarValue(volumeControl);
-            if (value >= 0)
-            {
-                bx.Volume = value;
-            }
+            cfgname = "volumeLevel";
+            cfgvalue = GetUserConfigValue(cfgname);
+            if (value >= 0) bx.Volume = value;
+            else if (cfgvalue != null) SetConfigOption(cfgname, cfgvalue);
+
+            cfgname = "allowMidiReverbConfig";
+            cfgvalue = GetUserConfigValue(cfgname);
+            if (cfgvalue != null) SetConfigOption(cfgname, cfgvalue);
+
             foreach (Control c in midichpnl.Controls)
             {
                 if (c is CheckBox cb)
@@ -1042,7 +1169,7 @@ namespace BXPlayerGUI
                     serialized_data = SerializeData(false);
                 }
 
-                ProcessStartInfo startInfo = new ProcessStartInfo(cwd + _patchswitcher_exe)
+                ProcessStartInfo startInfo = new ProcessStartInfo(_patchswitcher_exe)
                 {
                     Arguments = serialized_data
                 };
@@ -1085,7 +1212,7 @@ namespace BXPlayerGUI
                     SetLabelText(durationlbl, "");
                     current_file = file;
                     SetVolume(volumeControl.Value);
-                    PlayFile(file, loopcb.Checked);
+                    PlayFile(file, bx_loop_cb.Checked);
                 }
             }
         }
@@ -1136,7 +1263,7 @@ namespace BXPlayerGUI
             }
             else
             {
-                bx.PlayFile(file, loopcb.Checked);
+                bx.PlayFile(file, bx_loop_cb.Checked);
             }
         }
 
@@ -1350,7 +1477,7 @@ namespace BXPlayerGUI
             {
                 if (CheckExtensionSupported(s[0]))
                 {
-                    PlayFile(s[0], loopcb.Checked);
+                    PlayFile(s[0], bx_loop_cb.Checked);
                 }
             }
         }
