@@ -510,6 +510,8 @@ namespace BXPlayerGUI
                 long res = DeleteUrlCacheEntry(e.LoadedFile);
                 Debug.WriteLine("Deleted " + res.ToString() + " files from disk cache for " + e.LoadedFile);
             }
+            SetControlEnabled(midiControls, bx.IsMIDI);
+            SetControlEnabled(reverbpnl, bx.IsMIDI);
         }
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
@@ -809,15 +811,25 @@ namespace BXPlayerGUI
             if (e.Button == MouseButtons.Left)
             {
                 int seekval = seekValFromMouseX(e.X);
-                SetProgressbarValue((ProgressBar)sender, seekval);
-                SetLabelText(seekpos, "");
-                PlayState bxps = bx.PlayState;
-                bx.Position = seekbar.Value;
-                SetLabelText(progresslbl, FormatTime(bx.Position));
-                if (bxps != PlayState.Playing)
+                // bug with non midi files cannot seek past 97391 without wrapping back to 0,
+                // so we just ignore all attemps instead of showing buggy behavior
+                if (bx.IsMIDI || seekval < 97392)
                 {
-                    bx.Play();
-                }                
+                    SetProgressbarValue((ProgressBar)sender, seekval);
+                    SetLabelText(seekpos, "");
+                    PlayState bxps = bx.PlayState;
+                    bx.Position = seekbar.Value;
+                    Debug.WriteLine("seek: " + seekbar.Value + " (" + FormatTime(seekbar.Value) + ")");
+                    Debug.WriteLine("real: " + bx.Position + " (" + FormatTime(bx.Position) + ")");
+                    SetLabelText(progresslbl, FormatTime(bx.Position));
+                    if (bxps != PlayState.Playing)
+                    {
+                        bx.Play();
+                    }
+                } else
+                {
+                    ZefieLib.Prompts.ShowError("Unfortunately, due to a bug in the Beatnik Player, you cannot seek Non-MIDI files past 1:37.");
+                }
             }
         }
 
@@ -982,7 +994,14 @@ namespace BXPlayerGUI
 
         private void OpenFile_Click(object sender, EventArgs e)
         {
-            string file = ZefieLib.Prompts.BrowseOpenFile("Open MIDI File", null, "All Supported Files (*.mid;*.kar;*.rmf;*.wav;*.aif;*.aiff;*.au)|*.mid;*.kar;*.rmf;*.wav;*.aif;*.aiff;*.au|MIDI Files (*.mid;*.kar)|*.mid;*.kar|Beatnik Files (*.rmf)|*.rmf|WAV Files (*.wav)|*.wav|AIF Files (*.aif;*.aiff)|*.aif;*.aiff|AU Files (*.au)|*.au|All files (*.*)|*.*");
+            string file = ZefieLib.Prompts.BrowseOpenFile("Open MIDI File", null,
+                "All Supported Files (*.mid;*.midi;*.smf;*.rmi;*.kar;*.rmf;*.wav;*.aif;*.aiff;*.au)|*.mid;*.kar;*.rmf;*.wav;*.aif;*.aiff;*.au|" +
+                "MIDI Audio (*.mid;*.midi;*.smf;*.rmi;*.kar)|*.mid;*.midi;*.smf;*.rmi;*.kar|" +
+                "Beatnik Rich Media Format (*.rmf)|*.rmf|"+
+                "WAVE Audio (*.wav)|*.wav|"+
+                "Audio Interchange File Format (*.aif;*.aiff)|*.aif;*.aiff|"+
+                "Sun/Next Audio (*.au)|*.au|" +
+                "All files (*.*)|*.*");
             if (file.Length > 0)
             {
                 if (File.Exists(file))
@@ -1098,6 +1117,8 @@ namespace BXPlayerGUI
                 case ".mid":
                 case ".kar":
                 case ".midi":
+                case ".rmi":
+                case ".smf":
                     return "audio/midi";
 
                 case ".rmf":
@@ -1267,6 +1288,9 @@ namespace BXPlayerGUI
             {
                 case ".mid":
                 case ".midi":
+                case ".rmi":
+                case ".smf":
+                case ".sd2":
                 case ".kar":
                 case ".rmf":
                 case ".wav":
@@ -1309,7 +1333,6 @@ namespace BXPlayerGUI
                 _mutexApplication.Dispose();
             }
         }
-        
     }
 
     public class NamedPipeXmlPayload

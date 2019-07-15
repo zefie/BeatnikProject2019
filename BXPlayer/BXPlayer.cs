@@ -341,11 +341,21 @@ namespace BXPlayer
             set => bx.setVolume(value);
         }
 
+        public bool IsMIDI
+        {
+            get
+            {
+                return Tempo != 0;
+            }
+        }
+
+
         /// <summary>
         /// Gets or sets the player's loop setting
         /// </summary>
         /// <returns>The player's current loop setting</returns>
         ///
+
         public bool Loop
         {
             get => bx.getLoop();
@@ -512,6 +522,7 @@ namespace BXPlayer
                 bx.setReverbType(1);
                 bx.setPosition(value);
                 bx.setReverbType(reverb);
+                last_position[0] = -1;
                 if (seekhelper.Enabled)
                 {
                     seekhelper.Stop();
@@ -615,7 +626,15 @@ namespace BXPlayer
         /// Pauses the player
         /// </summary>
         ///
-        public void Pause() => bx.pause();
+        public void Pause()
+        {
+            if (seekhelper.Enabled)
+            {
+                seekhelper.Stop();
+            }
+            last_position[0] = -1;
+            bx.pause();
+        }
 
         /// <summary>
         /// Stops the player
