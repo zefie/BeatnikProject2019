@@ -962,10 +962,7 @@ namespace BXPlayerGUI
 
         private void Loopcb_CheckedChanged(object sender, EventArgs e)
         {
-            if (bx.PlayState != PlayState.Stopped)
-            {
-                bx.Loop = bx_loop_cb.Checked;
-            }
+            bx.Loop = bx_loop_cb.Checked;
         }
 
         private void Seekbar_MouseUp(object sender, MouseEventArgs e)
