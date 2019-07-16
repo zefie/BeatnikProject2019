@@ -1252,16 +1252,6 @@ namespace BXPlayerGUI
             }
         }
 
-        private void PlayFile(Stream filedata, string filename, bool loop = false)
-        {
-            current_file = filename;
-            current_datastream = filedata;
-            SetLabelText(statustitle, "");
-            SetButtonEnabled(infobut, false);
-            PlayFileViaMiniHTTP(filename, loop);
-            Debug.WriteLine("trying to load internal memory data (as " + filename + ")");
-        }
-
         private void PlayFileViaMiniHTTP(string simulated_filename, bool loop)
         {
             if (tcp == null)
