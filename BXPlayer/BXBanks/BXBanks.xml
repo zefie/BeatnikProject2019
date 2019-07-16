@@ -4,10 +4,13 @@
   <bank src="patches-wtv2.hsb" name="WebTV Plus (v2.1.0, build-3454)" sha1="1780c86aeb5a3e3d85ee02d8f20200a8e3629f4b" />
   <bank src="patches-wtv.hsb" name="WebTV Plus (wtv-music)" sha1="7fa3168dae8ee9037a3935bb7cd93f26b6ce996e" />
   <bank src="patches-wtv-uncompressed.hsb" name="WebTV Plus (wtv-music, uncomp)" sha1="276bf7f476c17d5c32620e114e9f0ad5758dd80e" />
-  <bank src="patches.hsb" name="Beatnik Standard (v2.4.3, from player)" sha1="003232ab5a418f34007c525d66e8220993fe62f8" default="true" />
+  <bank src="soundbank-min.gm" name="Beatnik Standard (v2.4.3, from Java)" sha1="003232ab5a418f34007c525d66e8220993fe62f8" default="true" />
   <bank src="patches-editor.hsb" name="Beatnik Standard (v2.4.6, from editor)" sha1="c981e81b19959c981f2f46477abcbfc0df1af5a1" />
   <bank src="patchesp.hsb" name="Beatnik Pro (v3.0.0, uncomp)" sha1="ae4d88373aeca8ee2ff5ced8d6b76bbfeb91c8cc" />
   <bank src="patches111-uncompressed.hsb" name="Beatnik Standard (v1.1.1, ncomp)" sha1="b4521cd38c123c272757c58fe058944a4e29c90c" />
+  <bank src="soundbank-mid.gm" name="Java v1.5 Mid Soundbank" sha1="3e1b1f2374d3f47a5e4b4a1399a735396925700f" default="true" />
+  <bank src="soundbank-deluxe.gm" name="Java v1.5 Deluxe Soundbank" sha1="e8109db5ea8133a6e1d429a8bef4a1a8cb1396e7" default="true" />
+
   <bank src="minibae-nokia-100.hsb" name="Nokia (v1.0.0)" sha1="2a9b4813ff7df35db57da56233f4cbd6ca9a648d" />
   <bank src="minibae-nokia-105.hsb" name="Nokia (v1.0.5)" sha1="b650b8ce69e470ed771b5a5df7aa3a529193d073" />
   <bank src="minibae-nokia-108.hsb" name="Nokia (v1.0.8)" sha1="df1225ef07b615638513f88801aedf8a6a8767b3" />
