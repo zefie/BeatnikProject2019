@@ -57,6 +57,15 @@
     <Content Include="CustomReverb.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="docs\midi-implementation-chart.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="docs\note-names.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="docs\supported-midi-controllers.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="beatnikx.ocx, Version=1.0.0.0, ProcessorArchitecture=x86, Type=win32">
