@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace BXPlayer
 {
-    public class BXPlayerClass : IDisposable
+    public class BXPlayerClass
     {
         public bool active = false;
         public event EventHandler<PlayStateEvent> PlayStateChanged = delegate { };
@@ -21,10 +21,9 @@ namespace BXPlayer
         public bool KaraokeShortTitles = true;
         public bool PreferGenericTextLyrics = true;
 
-        private BeatnikXClass bx;
+        private readonly BeatnikX bx;
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
         private readonly int idletimer = 2;
-        private bool _disposed = false;
         private bool _file_has_lyrics_meta = false;
         private bool _file_has_generictext_lyrics_meta = false;
         private bool _file_using_marker_title = false;
@@ -47,34 +46,7 @@ namespace BXPlayer
         private string Lyric = "";
         private readonly string CustomReverbFile;
 
-        /// <summary>
-        /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
-        /// </summary>
-        /// 
-        public void Dispose()
-        {
-            Dispose(true);
-            // any other managed resource cleanups you can do here
-            GC.SuppressFinalize(this);
-        }
-        ~BXPlayerClass()      // finalizer
-        {
-            Dispose(false);
-        }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (bx != null)
-                {
-                    BXShutdown();
-                }
-                bx = null;
-                _disposed = true;
-            }
-
-        }
         /// <summary>
         /// A .NET Wrapper Class for the BeatnikX OCX COM Object
         /// </summary>
@@ -86,37 +58,14 @@ namespace BXPlayer
             fileChangeHelperTimer.Interval = bxdelay;
             fileChangeHelperTimer.Elapsed += FileChangeHelperTimer_Elapsed;
             CustomReverbFile = cwd + "CustomReverb.xml";
-        }
-
-        /// <summary>
-        /// Initializes the player
-        /// </summary>
-        /// 
-        public void BXInit()
-        {
-            bx = new BeatnikXClass();
+            bx = new BeatnikX();
             bx.OnPause += Bx_OnPause;
             bx.enableMetaEvents(true);
             bx.OnMetaEvent += Bx_OnMetaEvent;
             active = true;
-            Debug.WriteLine("BeatnikX Initalized");
+            Debug.WriteLine("BXPlayer v"+Version+" (BeatnikX v"+BeatnikVersion+") Initalized");
         }
 
-        /// <summary>
-        /// Attempts to cleanly shutdown and dispose of the BeatnikX object (hint, it doesn't yet)
-        /// </summary>
-        /// 
-        public void BXShutdown()
-        {
-            if (bx != null)
-            {
-                Stop(false);
-            }
-            bx = null;
-            active = false;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
 
         /// <summary>
         /// Plays the currently loaded file

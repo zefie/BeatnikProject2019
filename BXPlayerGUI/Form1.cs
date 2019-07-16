@@ -294,7 +294,6 @@ namespace BXPlayerGUI
                 bx.PlayStateChanged += Bx_PlayStateChanged;
                 bx.ProgressChanged += Bx_ProgressChanged;
                 bx.ReverbChanged += Bx_ReverbChanged;
-                bx.BXInit();
                 string bxvers = bx.BeatnikVersion;
                 SetLabelText(bxversionlbl, "v" + bxvers);
 
