@@ -455,11 +455,11 @@ namespace BXPlayerGUI
                         break;
 
                     case "allowMidiReverbConfig":
-                        SetCheckBoxChecked(bx_loud_mode, Convert.ToBoolean(value));
+                        SetCheckBoxChecked(cbMidiProvidedReverb, Convert.ToBoolean(value));
                         break;
 
                     case "useLoudMode":
-                        SetCheckBoxChecked(cbMidiProvidedReverb, Convert.ToBoolean(value));
+                        SetCheckBoxChecked(bx_loud_mode, Convert.ToBoolean(value));
                         break;
 
                     case "loopPlayback":
@@ -1514,10 +1514,7 @@ namespace BXPlayerGUI
 
         private void BxLoudMode_CheckedChanged(object sender, EventArgs e)
         {
-            if (((CheckBox)sender).Checked)
-                bx.DoMenuItem("Loud");
-            else
-                bx.DoMenuItem("Quiet");
+            bx.LoudMode = ((CheckBox)sender).Checked;
         }
     }
 

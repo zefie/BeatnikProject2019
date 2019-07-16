@@ -31,6 +31,8 @@ namespace BXPlayer
         private bool _karaoke_title_detected = false;
         private bool _using_custom_reverb = false;
         private bool _use_midi_provided_reverb_and_chorus_values = true;
+        private bool _bx_loud_mode = true;
+        private bool _bx_prev_loud_mode;
         private PlayState _previous_state = PlayState.Unknown;
         private PlayState _state = PlayState.Unknown;
         private readonly int[] last_position = new int[2];
@@ -66,7 +68,6 @@ namespace BXPlayer
             Debug.WriteLine("BXPlayer v"+Version+" (BeatnikX v"+BeatnikVersion+") Initalized");
         }
 
-
         /// <summary>
         /// Plays the currently loaded file
         /// </summary>
@@ -98,6 +99,8 @@ namespace BXPlayer
             Lyric = "";
             _file_has_lyrics_meta = false;
             FileHasLyrics = false;
+            _bx_prev_loud_mode = LoudMode;
+            _bx_loud_mode = true; // Beatnik is gonna reset it
 
             SetController(0, 121, 1);
 
@@ -266,6 +269,24 @@ namespace BXPlayer
         /// <param name="menuItem">One of: "Copyright" "Play" "Pause" "Stop" "PlayURL" "Loud" "Quiet" "Mute" "System" "Song" "Help" "About" "News"</param>
         /// 
         public void DoMenuItem(string menuItem) => bx.doMenuItem(menuItem);
+
+        public bool LoudMode
+        {
+            get { return _bx_loud_mode; }
+            set
+            {
+                if (!_bx_loud_mode || value)
+                {
+                    DoMenuItem("Loud");
+                    _bx_loud_mode = true;
+                }
+                else
+                {
+                    DoMenuItem("Quiet");
+                    _bx_loud_mode = false;
+                }
+            }
+        }
 
         /// <summary>
         /// Exposes the CustomReverb.xml XmlReader object for use with GUI or otherwise parsing custom reverb values
@@ -630,6 +651,7 @@ namespace BXPlayer
                     Duration = Duration,
                     Tempo = Tempo
                 };
+                LoudMode = _bx_prev_loud_mode;
                 OnFileChanged(this, fevt);
                 PlayState = PlayState.Playing;
                 if (_using_custom_reverb && _custom_reverb != -1) ReverbType = _custom_reverb;
