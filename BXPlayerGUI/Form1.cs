@@ -48,7 +48,6 @@ namespace BXPlayerGUI
         private bool settingTempoCB = false;
         private bool draggingSeekBar = false;
         private bool http_ready = false;
-        private bool play_splash = false;
         private readonly int default_reverb = 0;
         private NamedPipeServerStream _namedPipeServerStream;
         private NamedPipeXmlPayload _namedPipeXmlPayload;
@@ -283,16 +282,6 @@ namespace BXPlayerGUI
                                         string patchhash = reader.GetAttribute("sha1").ToLower();
                                         if (patchhash == current_hash)
                                         {
-                                            string splash = reader.GetAttribute("splash");
-                                            try
-                                            {
-                                                play_splash = Convert.ToBoolean(splash);
-                                                Debug.WriteLine("splash compatible bank found. play_splash = " + play_splash.ToString());
-                                            }
-                                            catch
-                                            {
-                                                Debug.WriteLine("splash was not a boolean");
-                                            };
                                             Debug.WriteLine("Detected " + patchname + " as currently installed");
                                             SetLabelText(bxinsthsb, patchname);
                                         }
@@ -396,16 +385,6 @@ namespace BXPlayerGUI
                     else
                     {
                         ProcessStartupOptions(args[1]);
-                    }
-                }
-                else
-                {
-                    if (play_splash)
-                    {
-                        current_datastream = new MemoryStream(Properties.Resources.Splash);
-                        SetBXParams();
-                        PlayFile(current_datastream, "Splash.mid", false);
-                        play_splash = false;
                     }
                 }
             }
@@ -1042,7 +1021,7 @@ namespace BXPlayerGUI
             {
                 bx.Play();
                 SetProgressbarValue(seekbar, bx.Position, bx.Duration);
-                //SetBXParams();
+                SetBXParams();
             }
             else
             {
