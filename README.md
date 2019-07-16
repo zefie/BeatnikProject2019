@@ -45,4 +45,4 @@ chokes on the filename, such as files with ```[]``` in them. Therefore, if you g
 regarding a firewall listening on a port (should be localhost!), then this is why.
 
 ## Screenshot
-![](https://archive.midnightchannel.net/zefie/media/Images/Miscellaneous/BXPlayerGUI-latest.png)
+![](https://archive.midnightchannel.net/zefie/media/Images/Miscellaneous/BXPlayerGUI_v1.1.7136.34589.png)
