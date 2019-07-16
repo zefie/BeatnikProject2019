@@ -1094,10 +1094,6 @@ namespace BXPlayerGUI
                     bx.MuteChannel(midich, muted);
                 }
             }
-            for (short i = 0; i <= 16; i++)
-            {
-                bx.SetController(i, 7, 127);
-            }
         }
 
         private void Stopbut_Click(object sender, EventArgs e)
