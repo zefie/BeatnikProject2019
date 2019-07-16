@@ -415,8 +415,9 @@ namespace BXPlayer
             {
                 short _reverb = -1;
                 short _chorus = -1;
-                _custom_reverb = -1;
+                _custom_reverb = (value > 11) ? value : -1;
                 _using_custom_reverb = (value > 11);
+
                 // Custom reverb definitions
                 try
                 {
@@ -439,7 +440,6 @@ namespace BXPlayer
                                         value = Convert.ToInt16(reader.GetAttribute("bxreverb"));
                                         _reverb = Convert.ToInt16(reader.GetAttribute("reverblevel"));
                                         _chorus = Convert.ToInt16(reader.GetAttribute("choruslevel"));
-                                        _custom_reverb = count;
                                         break;
                                     }
                                 }
@@ -741,7 +741,6 @@ namespace BXPlayer
 
         private void Bx_OnMetaEvent(string @event, string text)
         {
-            string titleout = Title;
             if (Path.GetExtension(LoadedFile).ToLower().Substring(0, 4) == ".mid") // Beatnik will always need to see a .kar as .mid
             {
                 // Karaoke GenericText @T style titles

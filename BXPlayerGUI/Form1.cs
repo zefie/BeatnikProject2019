@@ -36,7 +36,7 @@ namespace BXPlayerGUI
         private readonly string _user_config_file;
         private readonly string patches_dir;
         private readonly string bankfile;
-        private List<KeyValuePair<string,string>> _user_config_data = new List<KeyValuePair<string, string>>();
+        private readonly List<KeyValuePair<string,string>> _user_config_data = new List<KeyValuePair<string, string>>();
         private readonly BXPlayerClass bx;
         private TcpListener tcp;
         private string current_hash;
@@ -407,9 +407,11 @@ namespace BXPlayerGUI
         {
             try
             {
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                settings.NewLineOnAttributes = false;
+                XmlWriterSettings settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    NewLineOnAttributes = false
+                };
 
                 XmlWriter writer = XmlWriter.Create(_user_config_file, settings);
                 writer.WriteStartElement(null, "usercfg", "urn:beatnikx-usercfg");
@@ -430,59 +432,11 @@ namespace BXPlayerGUI
             }
         }
 
-        private void Bx_ReverbChanged(object sender, ReverbEvent e)
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (GetComboBoxIndex(reverbcb) > 0)
+            if (_mutexApplication != null)
             {
-                if (e.Reverb != null) SetLabelText(reverblvlvallbl, e.Reverb.ToString());
-                if (e.Chorus != null) SetLabelText(choruslvlvallbl, e.Chorus.ToString());
-                if (e.Type != null)
-                {
-                    if (e.Reverb != null)
-                    {
-                        SetLabelText(reverblvlvallbl, e.Reverb.ToString());
-                    } else
-                    {
-                        SetLabelText(reverblvlvallbl, "...");
-                        BackgroundWorker rbw = new BackgroundWorker();
-                        rbw.DoWork += new DoWorkEventHandler(
-                            delegate (object o, DoWorkEventArgs arg)
-                            {
-                                // fucking terrible I know
-                                Thread.Sleep(1000);
-                                SetLabelText(reverblvlvallbl, bx.ReverbLevel.ToString());
-                                GC.Collect();
-                                rbw.Dispose();
-                            }
-                        );
-                        rbw.RunWorkerAsync();
-                    }
-                    if (e.Chorus != null)
-                    {
-                        SetLabelText(choruslvlvallbl, e.Chorus.ToString());
-                    }
-                    else
-                    {
-                        SetLabelText(choruslvlvallbl, "...");
-                        BackgroundWorker cbw = new BackgroundWorker();
-                        cbw.DoWork += new DoWorkEventHandler(
-                            delegate (object o, DoWorkEventArgs arg)
-                            {
-                                // fucking terrible I know
-                                Thread.Sleep(1000);
-                                SetLabelText(choruslvlvallbl, bx.ChorusLevel.ToString());
-                                GC.Collect();
-                                cbw.Dispose();
-                            }
-                        );
-                        cbw.RunWorkerAsync();
-                    }
-                }
-            }
-            else
-            {
-                SetLabelText(choruslvlvallbl, "0");
-                SetLabelText(reverblvlvallbl, "0");
+                _mutexApplication.Dispose();
             }
         }
 
@@ -576,11 +530,6 @@ namespace BXPlayerGUI
             catch { }
         }
 
-        private void Bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private string SerializeData(bool full = true)
         {
             string options = Process.GetCurrentProcess().MainModule.FileName + "|" +
@@ -616,6 +565,62 @@ namespace BXPlayerGUI
             return ZefieLib.Data.Base64Encode(options);
         }
 
+        private void Bx_ReverbChanged(object sender, ReverbEvent e)
+        {
+            if (GetComboBoxIndex(reverbcb) > 0)
+            {
+                if (e.Reverb != null) SetLabelText(reverblvlvallbl, e.Reverb.ToString());
+                if (e.Chorus != null) SetLabelText(choruslvlvallbl, e.Chorus.ToString());
+                if (e.Type != null)
+                {
+                    if (e.Reverb != null)
+                    {
+                        SetLabelText(reverblvlvallbl, e.Reverb.ToString());
+                    }
+                    else
+                    {
+                        SetLabelText(reverblvlvallbl, "...");
+                        BackgroundWorker rbw = new BackgroundWorker();
+                        rbw.DoWork += new DoWorkEventHandler(
+                            delegate (object o, DoWorkEventArgs arg)
+                            {
+                                // fucking terrible I know
+                                Thread.Sleep(1000);
+                                SetLabelText(reverblvlvallbl, bx.ReverbLevel.ToString());
+                                GC.Collect();
+                                rbw.Dispose();
+                            }
+                        );
+                        rbw.RunWorkerAsync();
+                    }
+                    if (e.Chorus != null)
+                    {
+                        SetLabelText(choruslvlvallbl, e.Chorus.ToString());
+                    }
+                    else
+                    {
+                        SetLabelText(choruslvlvallbl, "...");
+                        BackgroundWorker cbw = new BackgroundWorker();
+                        cbw.DoWork += new DoWorkEventHandler(
+                            delegate (object o, DoWorkEventArgs arg)
+                            {
+                                // fucking terrible I know
+                                Thread.Sleep(1000);
+                                SetLabelText(choruslvlvallbl, bx.ChorusLevel.ToString());
+                                GC.Collect();
+                                cbw.Dispose();
+                            }
+                        );
+                        cbw.RunWorkerAsync();
+                    }
+                }
+            }
+            else
+            {
+                SetLabelText(choruslvlvallbl, "0");
+                SetLabelText(reverblvlvallbl, "0");
+            }
+        }
 
         private void Bx_ProgressChanged(object sender, ProgressEvent e)
         {
@@ -701,6 +706,7 @@ namespace BXPlayerGUI
             }
             Debug.WriteLine(e.RawMeta.Key + ": " + e.RawMeta.Value);
         }
+
         public string FormatTime(int ms, bool seconds = false)
         {
             TimeSpan t = seconds ? TimeSpan.FromSeconds(ms) : TimeSpan.FromMilliseconds(ms);
@@ -783,6 +789,7 @@ namespace BXPlayerGUI
                 l.Text = text;
             }
         }
+
         private void SetLabelText(ToolStripStatusLabel l, string text)
         {
             l.Text = text;
@@ -800,23 +807,6 @@ namespace BXPlayerGUI
                 {
                     t.Value = value;
                 }
-            }
-        }
-
-        private void SetTrackbarValue(TrackBar t, int value, int max)
-        {
-            if (t.InvokeRequired)
-            {
-                t.Invoke(new MethodInvoker(delegate
-                {
-                    t.Maximum = max;
-                    t.Value = value;
-                }));
-            }
-            else
-            {
-                t.Maximum = max;
-                t.Value = value;
             }
         }
 
@@ -953,7 +943,6 @@ namespace BXPlayerGUI
             }
         }
 
-
         private void SetTranspose(int val)
         {
             bx.Transpose = val;
@@ -984,7 +973,7 @@ namespace BXPlayerGUI
         {
             if (e.Button == MouseButtons.Left)
             {
-                int seekval = seekValFromMouseX(e.X);
+                int seekval = SeekValFromMouseX(e.X);
                 // bug with non midi files cannot seek past 97391 without wrapping back to 0,
                 // so we just ignore all attemps instead of showing buggy behavior
                 if (bx.IsMIDI || seekval < 97392)
@@ -1011,12 +1000,12 @@ namespace BXPlayerGUI
         {
             if (e.Button == MouseButtons.Left)
             { 
-                int seekval = seekValFromMouseX(e.X);
+                int seekval = SeekValFromMouseX(e.X);
                 SetLabelText(seekpos, FormatTime(seekval));
             }
         }
 
-        private int seekValFromMouseX(int mousex)
+        private int SeekValFromMouseX(int mousex)
         {
             double seekperc = ZefieLib.Math.CalcPercent(mousex, seekbar.Width);
             if (seekperc < 0) { seekperc = 0; }
@@ -1144,7 +1133,6 @@ namespace BXPlayerGUI
             SetTrackbarValue(transposeControl, 0);
             SetTranspose(0);
         }
-
 
         private void Transposetb_Scroll(object sender, EventArgs e)
         {
@@ -1466,18 +1454,6 @@ namespace BXPlayerGUI
             }
         }
 
-        private void BXPlayerGUI_DragDrop(object sender, DragEventArgs e)
-        {
-            string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            if (s.Length > 0)
-            {
-                if (CheckExtensionSupported(s[0]))
-                {
-                    PlayFile(s[0], bx_loop_cb.Checked);
-                }
-            }
-        }
-
         private bool CheckExtensionSupported(string filename)
         {
             string ext = Path.GetExtension(filename).ToLower();
@@ -1497,6 +1473,18 @@ namespace BXPlayerGUI
                     return true;
             }
             return false;
+        }
+
+        private void BXPlayerGUI_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            if (s.Length > 0)
+            {
+                if (CheckExtensionSupported(s[0]))
+                {
+                    PlayFile(s[0], bx_loop_cb.Checked);
+                }
+            }
         }
 
         private void BXPlayerGUI_DragEnter(object sender, DragEventArgs e)
@@ -1520,14 +1508,6 @@ namespace BXPlayerGUI
             else
             {
                 e.Effect = DragDropEffects.None;
-            }
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (_mutexApplication != null)
-            {
-                _mutexApplication.Dispose();
             }
         }
 
