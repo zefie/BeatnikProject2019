@@ -403,6 +403,7 @@
             this.reverbcb.Name = "reverbcb";
             this.reverbcb.Size = new System.Drawing.Size(125, 21);
             this.reverbcb.TabIndex = 40;
+            this.tt.SetToolTip(this.reverbcb, "Beatnik Reverb Type\r\n* means Beatnik Player Default");
             this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
             // 
             // reverblvllbl
