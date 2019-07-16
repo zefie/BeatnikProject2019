@@ -404,21 +404,21 @@ namespace BXPlayer
                 // Actually apply it
                 Debug.WriteLine("Set ReverbType: " + value + " (Previous: " + ReverbType + ")");
                 bx.setReverbType(value);
-                ReverbEvent revt = new ReverbEvent
-                {
-                    Type = (short)value,
-                    Reverb = null,
-                    Chorus = null
-                };
-
                 if (_reverb < 0 && _chorus < 0 && !_using_custom_reverb)
                 {
                     short[] reverbdata = GetMidiReverb();
                     _reverb = reverbdata[0];
                     _chorus = reverbdata[1];
                 }
-                revt.Reverb = _reverb;
-                revt.Chorus = _chorus;
+                ReverbLevel = _reverb;
+                ChorusLevel = _chorus;
+
+                ReverbEvent revt = new ReverbEvent
+                {
+                    Type = (short)value,
+                    Reverb = _reverb,
+                    Chorus = _chorus
+                };
                 OnReverbChanged(this, revt);
             }
         }
