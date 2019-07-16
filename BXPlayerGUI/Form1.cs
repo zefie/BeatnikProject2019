@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Security.Principal;
 using System.Security.AccessControl;
+using System.Drawing.Drawing2D;
 
 namespace BXPlayerGUI
 {
@@ -45,11 +46,13 @@ namespace BXPlayerGUI
         private int http_port = 59999;
         private bool settingReverbCB = false;
         private bool settingTempoCB = false;
+        private bool draggingSeekBar = false;
         private bool http_ready = false;
         private bool play_splash = false;
         private readonly int default_reverb = 0;
         private NamedPipeServerStream _namedPipeServerStream;
         private NamedPipeXmlPayload _namedPipeXmlPayload;
+        private readonly ColorProgressBar seekbar;
         public string version;
 
         private bool IsApplicationFirstInstance()
@@ -85,6 +88,24 @@ namespace BXPlayerGUI
             }
 
             InitializeComponent();
+            seekbar = new ColorProgressBar();
+            progressPanel.Controls.Add(seekbar);
+            seekbar.Location = seekbar_placeholder.Location;
+            seekbar.Size = seekbar_placeholder.Size;
+            progressPanel.Controls.Remove(seekbar_placeholder);
+            seekbar_placeholder.Dispose(); // purpose served
+            seekbar.Maximum = 0;
+            seekbar.Name = "seekbar";
+            seekbar.Step = 1000;
+            seekbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            seekbar.TabIndex = 26;
+            seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
+            seekbar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseUp);
+            seekbar.Colors = new Color[2]
+            {
+                Color.Violet,
+                Color.Purple
+            };
             Assembly assembly = Assembly.GetExecutingAssembly();
             version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
             Text += " v" + version;
@@ -448,25 +469,32 @@ namespace BXPlayerGUI
             {
                 switch (configvar)
                 {
-                    case "volumeLevel":                        
-                        SetVolume(Convert.ToInt16(value));
-                        SetTrackbarValue(volumeControl, bx.Volume);
+                    case "volumeLevel":
+                        if (bx.Volume != Convert.ToInt16(value))
+                        {
+                            SetVolume(Convert.ToInt16(value));
+                            SetTrackbarValue(volumeControl, bx.Volume);
+                        }
                         break;
 
                     case "reverbType":
-                        SetComboBoxIndex(reverbcb, Convert.ToInt16(value));
+                        if (bx.ReverbType != Convert.ToInt16(value))
+                            SetComboBoxIndex(reverbcb, Convert.ToInt16(value));
                         break;
 
                     case "allowMidiReverbConfig":
-                        SetCheckBoxChecked(cbMidiProvidedReverb, Convert.ToBoolean(value));
+                        if (bx.UseMidiProvidedReverbChorusValues != Convert.ToBoolean(value))
+                            SetCheckBoxChecked(cbMidiProvidedReverb, Convert.ToBoolean(value));
                         break;
 
                     case "useLoudMode":
-                        SetCheckBoxChecked(bx_loud_mode, Convert.ToBoolean(value));
+                        if (bx.LoudMode != Convert.ToBoolean(value))
+                            SetCheckBoxChecked(bx_loud_mode, Convert.ToBoolean(value));
                         break;
 
                     case "loopPlayback":
-                        SetCheckBoxChecked(bx_loop_cb, Convert.ToBoolean(value));
+                        if (bx.Loop != Convert.ToBoolean(value))
+                            SetCheckBoxChecked(bx_loop_cb, Convert.ToBoolean(value));
                         break;                        
                 }
             }
@@ -628,7 +656,8 @@ namespace BXPlayerGUI
         {
             //Debug.WriteLine("progresschanged fired (seekbar_held: " + seekbar_held.ToString() + ")");
             SetLabelText(progresslbl, FormatTime(e.Position));
-            SetProgressbarValue(seekbar, e.Position);
+            if (!draggingSeekBar)
+                SetProgressbarValue(seekbar, e.Position);
         }
 
         private void Bx_PlayStateChanged(object sender, PlayStateEvent e)
@@ -646,7 +675,7 @@ namespace BXPlayerGUI
                 }
                 if (e.State == PlayState.Playing)
                 {
-                    SetBXParams();
+                    //SetBXParams();
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
                     SetButtonImage(playbut, Properties.Resources.icon_pause);
@@ -722,7 +751,7 @@ namespace BXPlayerGUI
             return string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
         }
 
-        private void SetDefaultTempo()
+        private void SetDefaultTempo ()
         {
             bx.ResetTempo();
             SetTempoCB(bx.Tempo);
@@ -962,6 +991,7 @@ namespace BXPlayerGUI
         {
             if (e.Button == MouseButtons.Left)
             {
+                draggingSeekBar = false;
                 int seekval = SeekValFromMouseX(e.X);
                 // bug with non midi files cannot seek past 97391 without wrapping back to 0,
                 // so we just ignore all attemps instead of showing buggy behavior
@@ -988,9 +1018,12 @@ namespace BXPlayerGUI
         private void Seekbar_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            { 
+            {
+                if (!draggingSeekBar)
+                    draggingSeekBar = true;
                 int seekval = SeekValFromMouseX(e.X);
                 SetLabelText(seekpos, FormatTime(seekval));
+                SetProgressbarValue(seekbar, seekval);
             }
         }
 
@@ -1009,7 +1042,7 @@ namespace BXPlayerGUI
             {
                 bx.Play();
                 SetProgressbarValue(seekbar, bx.Position, bx.Duration);
-                SetBXParams();
+                //SetBXParams();
             }
             else
             {
@@ -1518,5 +1551,50 @@ namespace BXPlayerGUI
         /// </summary>
         [XmlElement("CommandLineArguments")]
         public List<string> CommandLineArguments { get; set; } = new List<string>();
+    }
+    public class ColorProgressBar : ProgressBar
+    {
+        public Color[] Colors = new Color[2];
+        public LinearGradientMode GradientMode = LinearGradientMode.Vertical;
+        public int inset = 2; // A single inset value to control the sizing of the inner rect.
+
+        public ColorProgressBar()
+        {
+            this.SetStyle(ControlStyles.UserPaint, true);
+            Colors = new Color[2]
+            {
+                BackColor,
+                ForeColor
+            };
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
+            // None... Helps control the flicker.
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {                        
+            using (Image offscreenImage = new Bitmap(this.Width, this.Height))
+            {
+                using (Graphics offscreen = Graphics.FromImage(offscreenImage))
+                {
+                    Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
+
+                    if (ProgressBarRenderer.IsSupported)
+                        ProgressBarRenderer.DrawHorizontalBar(offscreen, rect);
+
+                    rect.Inflate(new Size(-inset, -inset)); // Deflate inner rect.
+                    rect.Width = (int)(rect.Width * ((double)this.Value / this.Maximum));
+                    if (rect.Width == 0) rect.Width = 1; // Can't draw rec with width of 0.
+                    
+                    LinearGradientBrush brush = new LinearGradientBrush(rect, Colors[0], Colors[1], GradientMode);
+                    offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
+
+                    e.Graphics.DrawImage(offscreenImage, 0, 0);
+                    offscreenImage.Dispose();
+                }
+            }
+        }
     }
 }

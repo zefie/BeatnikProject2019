@@ -36,19 +36,18 @@
             this.stopbut = new System.Windows.Forms.Button();
             this.bankSwitcherPanel = new System.Windows.Forms.Panel();
             this.bxinsthsb = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.curinstpblbl = new System.Windows.Forms.Label();
             this.patchswlnchr = new System.Windows.Forms.Button();
             this.progressPanel = new System.Windows.Forms.Panel();
+            this.seekbar_placeholder = new System.Windows.Forms.Label();
             this.seekpos = new System.Windows.Forms.Label();
             this.seekbarlbl = new System.Windows.Forms.Label();
             this.durationlbl = new System.Windows.Forms.Label();
             this.progresslbl = new System.Windows.Forms.Label();
-            this.seekbar = new System.Windows.Forms.ProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
+            this.volumelbl = new System.Windows.Forms.Label();
             this.volvallbl = new System.Windows.Forms.Label();
             this.beatnikLogo = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
-            this.bx_loud_mode = new System.Windows.Forms.CheckBox();
             this.reverbpnl = new System.Windows.Forms.Panel();
             this.choruslvlvallbl = new System.Windows.Forms.Label();
             this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
@@ -58,7 +57,7 @@
             this.reverblvlvallbl = new System.Windows.Forms.Label();
             this.choruslvllbl = new System.Windows.Forms.Label();
             this.midiControls = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.midichlbl = new System.Windows.Forms.Label();
             this.midichpnl = new System.Windows.Forms.TableLayoutPanel();
             this.midichk_16 = new System.Windows.Forms.CheckBox();
             this.midichk_15 = new System.Windows.Forms.CheckBox();
@@ -93,16 +92,17 @@
             this.midichlbl4 = new System.Windows.Forms.Label();
             this.midichk_1 = new System.Windows.Forms.CheckBox();
             this.transposevalbl = new System.Windows.Forms.Label();
-            this.tempoControl = new System.Windows.Forms.TrackBar();
             this.tempovallbl = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.tempolbl = new System.Windows.Forms.Label();
             this.temporstbtn = new System.Windows.Forms.Button();
             this.transposerstbtn = new System.Windows.Forms.Button();
             this.midichrstbtn = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
+            this.transposelbl = new System.Windows.Forms.Label();
             this.midich_muteall_btn = new System.Windows.Forms.Button();
-            this.transposeControl = new System.Windows.Forms.TrackBar();
             this.midich_muteinvert_btn = new System.Windows.Forms.Button();
+            this.transposeControl = new System.Windows.Forms.TrackBar();
+            this.tempoControl = new System.Windows.Forms.TrackBar();
+            this.bx_loud_mode = new System.Windows.Forms.CheckBox();
             this.volumeControl = new System.Windows.Forms.TrackBar();
             this.miniControlPanel = new System.Windows.Forms.Panel();
             this.infobut = new System.Windows.Forms.Button();
@@ -121,8 +121,8 @@
             this.reverbpnl.SuspendLayout();
             this.midiControls.SuspendLayout();
             this.midichpnl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).BeginInit();
             this.miniControlPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -176,12 +176,16 @@
             // 
             // bankSwitcherPanel
             // 
+            this.bankSwitcherPanel.Controls.Add(this.volumelbl);
             this.bankSwitcherPanel.Controls.Add(this.bxinsthsb);
-            this.bankSwitcherPanel.Controls.Add(this.label3);
+            this.bankSwitcherPanel.Controls.Add(this.bx_loud_mode);
+            this.bankSwitcherPanel.Controls.Add(this.curinstpblbl);
+            this.bankSwitcherPanel.Controls.Add(this.volumeControl);
+            this.bankSwitcherPanel.Controls.Add(this.volvallbl);
             this.bankSwitcherPanel.Controls.Add(this.patchswlnchr);
             this.bankSwitcherPanel.Location = new System.Drawing.Point(420, 4);
             this.bankSwitcherPanel.Name = "bankSwitcherPanel";
-            this.bankSwitcherPanel.Size = new System.Drawing.Size(200, 60);
+            this.bankSwitcherPanel.Size = new System.Drawing.Size(200, 115);
             this.bankSwitcherPanel.TabIndex = 28;
             this.bankSwitcherPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.bankSwitcherPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
@@ -196,14 +200,15 @@
             this.bxinsthsb.Text = "Unknown";
             this.bxinsthsb.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label3
+            // curinstpblbl
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(152, 13);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Currently Installed Patch Bank:";
+            this.curinstpblbl.AccessibleDescription = "";
+            this.curinstpblbl.AutoSize = true;
+            this.curinstpblbl.Location = new System.Drawing.Point(4, 3);
+            this.curinstpblbl.Name = "curinstpblbl";
+            this.curinstpblbl.Size = new System.Drawing.Size(152, 13);
+            this.curinstpblbl.TabIndex = 14;
+            this.curinstpblbl.Text = "Currently Installed Patch Bank:";
             // 
             // patchswlnchr
             // 
@@ -217,24 +222,37 @@
             // 
             // progressPanel
             // 
+            this.progressPanel.Controls.Add(this.seekbar_placeholder);
             this.progressPanel.Controls.Add(this.seekpos);
             this.progressPanel.Controls.Add(this.seekbarlbl);
             this.progressPanel.Controls.Add(this.durationlbl);
             this.progressPanel.Controls.Add(this.progresslbl);
-            this.progressPanel.Controls.Add(this.seekbar);
-            this.progressPanel.Location = new System.Drawing.Point(6, 122);
+            this.progressPanel.Location = new System.Drawing.Point(6, 120);
             this.progressPanel.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.progressPanel.Name = "progressPanel";
-            this.progressPanel.Size = new System.Drawing.Size(401, 75);
+            this.progressPanel.Size = new System.Drawing.Size(401, 62);
             this.progressPanel.TabIndex = 29;
+            // 
+            // seekbar_placeholder
+            // 
+            this.seekbar_placeholder.BackColor = System.Drawing.Color.Black;
+            this.seekbar_placeholder.ForeColor = System.Drawing.SystemColors.Control;
+            this.seekbar_placeholder.Location = new System.Drawing.Point(1, 17);
+            this.seekbar_placeholder.Name = "seekbar_placeholder";
+            this.seekbar_placeholder.Size = new System.Drawing.Size(400, 26);
+            this.seekbar_placeholder.TabIndex = 31;
+            this.seekbar_placeholder.Text = "Progressbar Placeholder - Not Visible During Normal Execution\r\nPROGRESS SEEKBAR W" +
+    "ILL DISPLAY HERE WHEN EXECUTED";
+            this.seekbar_placeholder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.seekbar_placeholder.Visible = false;
             // 
             // seekpos
             // 
-            this.seekpos.Location = new System.Drawing.Point(158, 52);
+            this.seekpos.Location = new System.Drawing.Point(169, 43);
             this.seekpos.Name = "seekpos";
-            this.seekpos.Size = new System.Drawing.Size(72, 23);
+            this.seekpos.Size = new System.Drawing.Size(72, 18);
             this.seekpos.TabIndex = 30;
-            this.seekpos.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.seekpos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // seekbarlbl
             // 
@@ -247,45 +265,33 @@
             // 
             // durationlbl
             // 
-            this.durationlbl.Location = new System.Drawing.Point(329, 53);
+            this.durationlbl.Location = new System.Drawing.Point(332, 45);
             this.durationlbl.Name = "durationlbl";
-            this.durationlbl.Size = new System.Drawing.Size(72, 23);
+            this.durationlbl.Size = new System.Drawing.Size(72, 18);
             this.durationlbl.TabIndex = 28;
-            this.durationlbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.durationlbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // progresslbl
             // 
-            this.progresslbl.AutoSize = true;
-            this.progresslbl.Location = new System.Drawing.Point(-3, 53);
+            this.progresslbl.Location = new System.Drawing.Point(-2, 43);
             this.progresslbl.Name = "progresslbl";
-            this.progresslbl.Size = new System.Drawing.Size(0, 13);
+            this.progresslbl.Size = new System.Drawing.Size(72, 18);
             this.progresslbl.TabIndex = 27;
+            this.progresslbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.progresslbl.Click += new System.EventHandler(this.Progresslbl_Click);
             // 
-            // seekbar
+            // volumelbl
             // 
-            this.seekbar.Location = new System.Drawing.Point(0, 22);
-            this.seekbar.Maximum = 0;
-            this.seekbar.Name = "seekbar";
-            this.seekbar.Size = new System.Drawing.Size(401, 27);
-            this.seekbar.Step = 1000;
-            this.seekbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.seekbar.TabIndex = 26;
-            this.seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
-            this.seekbar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseUp);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(415, 69);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
-            this.label2.TabIndex = 33;
-            this.label2.Text = "Volume";
+            this.volumelbl.AutoSize = true;
+            this.volumelbl.Location = new System.Drawing.Point(-1, 68);
+            this.volumelbl.Name = "volumelbl";
+            this.volumelbl.Size = new System.Drawing.Size(42, 13);
+            this.volumelbl.TabIndex = 33;
+            this.volumelbl.Text = "Volume";
             // 
             // volvallbl
             // 
-            this.volvallbl.Location = new System.Drawing.Point(576, 68);
+            this.volvallbl.Location = new System.Drawing.Point(160, 67);
             this.volvallbl.Margin = new System.Windows.Forms.Padding(0);
             this.volvallbl.Name = "volvallbl";
             this.volvallbl.Size = new System.Drawing.Size(42, 15);
@@ -311,35 +317,16 @@
             // mainControlPanel
             // 
             this.mainControlPanel.AllowDrop = true;
-            this.mainControlPanel.Controls.Add(this.bx_loud_mode);
             this.mainControlPanel.Controls.Add(this.reverbpnl);
             this.mainControlPanel.Controls.Add(this.midiControls);
             this.mainControlPanel.Controls.Add(this.progressPanel);
-            this.mainControlPanel.Controls.Add(this.volvallbl);
-            this.mainControlPanel.Controls.Add(this.label2);
-            this.mainControlPanel.Controls.Add(this.volumeControl);
             this.mainControlPanel.Location = new System.Drawing.Point(0, 4);
             this.mainControlPanel.Name = "mainControlPanel";
-            this.mainControlPanel.Size = new System.Drawing.Size(619, 203);
+            this.mainControlPanel.Size = new System.Drawing.Size(619, 219);
             this.mainControlPanel.TabIndex = 41;
             this.mainControlPanel.Visible = false;
             this.mainControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.mainControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
-            // 
-            // bx_loud_mode
-            // 
-            this.bx_loud_mode.AutoSize = true;
-            this.bx_loud_mode.BackColor = System.Drawing.Color.Transparent;
-            this.bx_loud_mode.Checked = true;
-            this.bx_loud_mode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bx_loud_mode.Location = new System.Drawing.Point(463, 68);
-            this.bx_loud_mode.Name = "bx_loud_mode";
-            this.bx_loud_mode.Size = new System.Drawing.Size(80, 17);
-            this.bx_loud_mode.TabIndex = 48;
-            this.bx_loud_mode.Text = "Loud Mode";
-            this.tt.SetToolTip(this.bx_loud_mode, "Enables Beatnik\'s \"Loud\" Mode");
-            this.bx_loud_mode.UseVisualStyleBackColor = false;
-            this.bx_loud_mode.CheckedChanged += new System.EventHandler(this.BxLoudMode_CheckedChanged);
             // 
             // reverbpnl
             // 
@@ -350,7 +337,7 @@
             this.reverbpnl.Controls.Add(this.reverblvllbl);
             this.reverbpnl.Controls.Add(this.reverblvlvallbl);
             this.reverbpnl.Controls.Add(this.choruslvllbl);
-            this.reverbpnl.Location = new System.Drawing.Point(423, 113);
+            this.reverbpnl.Location = new System.Drawing.Point(423, 120);
             this.reverbpnl.Name = "reverbpnl";
             this.reverbpnl.Size = new System.Drawing.Size(200, 37);
             this.reverbpnl.TabIndex = 43;
@@ -434,32 +421,32 @@
             // 
             // midiControls
             // 
-            this.midiControls.Controls.Add(this.label1);
+            this.midiControls.Controls.Add(this.midichlbl);
             this.midiControls.Controls.Add(this.midichpnl);
             this.midiControls.Controls.Add(this.transposevalbl);
-            this.midiControls.Controls.Add(this.tempoControl);
             this.midiControls.Controls.Add(this.tempovallbl);
-            this.midiControls.Controls.Add(this.label4);
+            this.midiControls.Controls.Add(this.tempolbl);
             this.midiControls.Controls.Add(this.temporstbtn);
             this.midiControls.Controls.Add(this.transposerstbtn);
             this.midiControls.Controls.Add(this.midichrstbtn);
-            this.midiControls.Controls.Add(this.label5);
+            this.midiControls.Controls.Add(this.transposelbl);
             this.midiControls.Controls.Add(this.midich_muteall_btn);
-            this.midiControls.Controls.Add(this.transposeControl);
             this.midiControls.Controls.Add(this.midich_muteinvert_btn);
+            this.midiControls.Controls.Add(this.transposeControl);
+            this.midiControls.Controls.Add(this.tempoControl);
             this.midiControls.Location = new System.Drawing.Point(3, -1);
             this.midiControls.Name = "midiControls";
-            this.midiControls.Size = new System.Drawing.Size(411, 117);
+            this.midiControls.Size = new System.Drawing.Size(411, 116);
             this.midiControls.TabIndex = 42;
             // 
-            // label1
+            // midichlbl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 40;
-            this.label1.Text = "MIDI Channels";
+            this.midichlbl.AutoSize = true;
+            this.midichlbl.Location = new System.Drawing.Point(1, 4);
+            this.midichlbl.Name = "midichlbl";
+            this.midichlbl.Size = new System.Drawing.Size(77, 13);
+            this.midichlbl.TabIndex = 40;
+            this.midichlbl.Text = "MIDI Channels";
             // 
             // midichpnl
             // 
@@ -873,19 +860,6 @@
             this.transposevalbl.Text = "0";
             this.transposevalbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // tempoControl
-            // 
-            this.tempoControl.LargeChange = 10;
-            this.tempoControl.Location = new System.Drawing.Point(207, 86);
-            this.tempoControl.Maximum = 499;
-            this.tempoControl.Minimum = 40;
-            this.tempoControl.Name = "tempoControl";
-            this.tempoControl.Size = new System.Drawing.Size(198, 45);
-            this.tempoControl.TabIndex = 41;
-            this.tempoControl.TickFrequency = 10;
-            this.tempoControl.Value = 140;
-            this.tempoControl.Scroll += new System.EventHandler(this.TempoControl_Scroll);
-            // 
             // tempovallbl
             // 
             this.tempovallbl.Location = new System.Drawing.Point(283, 70);
@@ -894,14 +868,14 @@
             this.tempovallbl.TabIndex = 50;
             this.tempovallbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label4
+            // tempolbl
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(207, 70);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(40, 13);
-            this.label4.TabIndex = 42;
-            this.label4.Text = "Tempo";
+            this.tempolbl.AutoSize = true;
+            this.tempolbl.Location = new System.Drawing.Point(207, 70);
+            this.tempolbl.Name = "tempolbl";
+            this.tempolbl.Size = new System.Drawing.Size(40, 13);
+            this.tempolbl.TabIndex = 42;
+            this.tempolbl.Text = "Tempo";
             // 
             // temporstbtn
             // 
@@ -937,14 +911,14 @@
             this.midichrstbtn.UseVisualStyleBackColor = true;
             this.midichrstbtn.Click += new System.EventHandler(this.Midichrstbtn_Click);
             // 
-            // label5
+            // transposelbl
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1, 70);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(57, 13);
-            this.label5.TabIndex = 48;
-            this.label5.Text = "Transpose";
+            this.transposelbl.AutoSize = true;
+            this.transposelbl.Location = new System.Drawing.Point(1, 70);
+            this.transposelbl.Name = "transposelbl";
+            this.transposelbl.Size = new System.Drawing.Size(57, 13);
+            this.transposelbl.TabIndex = 48;
+            this.transposelbl.Text = "Transpose";
             // 
             // midich_muteall_btn
             // 
@@ -958,16 +932,6 @@
             this.midich_muteall_btn.UseVisualStyleBackColor = true;
             this.midich_muteall_btn.Click += new System.EventHandler(this.Midich_muteall_btn_Click);
             // 
-            // transposeControl
-            // 
-            this.transposeControl.LargeChange = 3;
-            this.transposeControl.Location = new System.Drawing.Point(4, 86);
-            this.transposeControl.Minimum = -10;
-            this.transposeControl.Name = "transposeControl";
-            this.transposeControl.Size = new System.Drawing.Size(197, 45);
-            this.transposeControl.TabIndex = 47;
-            this.transposeControl.Scroll += new System.EventHandler(this.Transposetb_Scroll);
-            // 
             // midich_muteinvert_btn
             // 
             this.midich_muteinvert_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -980,9 +944,47 @@
             this.midich_muteinvert_btn.UseVisualStyleBackColor = true;
             this.midich_muteinvert_btn.Click += new System.EventHandler(this.Midich_muteinvert_btn_Click);
             // 
+            // transposeControl
+            // 
+            this.transposeControl.LargeChange = 3;
+            this.transposeControl.Location = new System.Drawing.Point(4, 86);
+            this.transposeControl.Minimum = -10;
+            this.transposeControl.Name = "transposeControl";
+            this.transposeControl.Size = new System.Drawing.Size(197, 45);
+            this.transposeControl.TabIndex = 47;
+            this.transposeControl.Scroll += new System.EventHandler(this.Transposetb_Scroll);
+            // 
+            // tempoControl
+            // 
+            this.tempoControl.LargeChange = 10;
+            this.tempoControl.Location = new System.Drawing.Point(207, 86);
+            this.tempoControl.Maximum = 499;
+            this.tempoControl.Minimum = 40;
+            this.tempoControl.Name = "tempoControl";
+            this.tempoControl.Size = new System.Drawing.Size(198, 45);
+            this.tempoControl.TabIndex = 41;
+            this.tempoControl.TickFrequency = 10;
+            this.tempoControl.Value = 140;
+            this.tempoControl.Scroll += new System.EventHandler(this.TempoControl_Scroll);
+            // 
+            // bx_loud_mode
+            // 
+            this.bx_loud_mode.AutoSize = true;
+            this.bx_loud_mode.BackColor = System.Drawing.Color.Transparent;
+            this.bx_loud_mode.Checked = true;
+            this.bx_loud_mode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.bx_loud_mode.Location = new System.Drawing.Point(47, 67);
+            this.bx_loud_mode.Name = "bx_loud_mode";
+            this.bx_loud_mode.Size = new System.Drawing.Size(80, 17);
+            this.bx_loud_mode.TabIndex = 48;
+            this.bx_loud_mode.Text = "Loud Mode";
+            this.tt.SetToolTip(this.bx_loud_mode, "Enables Beatnik\'s \"Loud\" Mode");
+            this.bx_loud_mode.UseVisualStyleBackColor = false;
+            this.bx_loud_mode.CheckedChanged += new System.EventHandler(this.BxLoudMode_CheckedChanged);
+            // 
             // volumeControl
             // 
-            this.volumeControl.Location = new System.Drawing.Point(413, 85);
+            this.volumeControl.Location = new System.Drawing.Point(-3, 84);
             this.volumeControl.Maximum = 100;
             this.volumeControl.Name = "volumeControl";
             this.volumeControl.Size = new System.Drawing.Size(206, 45);
@@ -1001,7 +1003,7 @@
             this.miniControlPanel.Controls.Add(this.openfile);
             this.miniControlPanel.Controls.Add(this.playbut);
             this.miniControlPanel.Controls.Add(this.stopbut);
-            this.miniControlPanel.Location = new System.Drawing.Point(423, 155);
+            this.miniControlPanel.Location = new System.Drawing.Point(423, 162);
             this.miniControlPanel.Name = "miniControlPanel";
             this.miniControlPanel.Size = new System.Drawing.Size(196, 51);
             this.miniControlPanel.TabIndex = 42;
@@ -1038,7 +1040,7 @@
             this.statustitle,
             this.toolStripSpacer,
             this.statusfile});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 207);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 214);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(623, 22);
             this.statusStrip1.SizingGrip = false;
@@ -1083,7 +1085,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(623, 229);
+            this.ClientSize = new System.Drawing.Size(623, 236);
             this.Controls.Add(this.miniControlPanel);
             this.Controls.Add(this.bankSwitcherPanel);
             this.Controls.Add(this.statusStrip1);
@@ -1104,15 +1106,14 @@
             this.progressPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.beatnikLogo)).EndInit();
             this.mainControlPanel.ResumeLayout(false);
-            this.mainControlPanel.PerformLayout();
             this.reverbpnl.ResumeLayout(false);
             this.reverbpnl.PerformLayout();
             this.midiControls.ResumeLayout(false);
             this.midiControls.PerformLayout();
             this.midichpnl.ResumeLayout(false);
             this.midichpnl.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.transposeControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tempoControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.volumeControl)).EndInit();
             this.miniControlPanel.ResumeLayout(false);
             this.miniControlPanel.PerformLayout();
@@ -1130,15 +1131,14 @@
         private System.Windows.Forms.Button stopbut;
         private System.Windows.Forms.Panel bankSwitcherPanel;
         private System.Windows.Forms.Label bxinsthsb;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label curinstpblbl;
         private System.Windows.Forms.Button patchswlnchr;
         private System.Windows.Forms.Panel progressPanel;
         private System.Windows.Forms.Label seekbarlbl;
         private System.Windows.Forms.Label durationlbl;
         private System.Windows.Forms.Label progresslbl;
-        private System.Windows.Forms.ProgressBar seekbar;
         private System.Windows.Forms.Label seekpos;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label volumelbl;
         private System.Windows.Forms.Label volvallbl;
         private System.Windows.Forms.PictureBox beatnikLogo;
         private System.Windows.Forms.Panel mainControlPanel;
@@ -1151,7 +1151,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripSpacer;
         private System.Windows.Forms.ToolStripStatusLabel status;
         private System.Windows.Forms.Panel midiControls;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label midichlbl;
         private System.Windows.Forms.TableLayoutPanel midichpnl;
         private System.Windows.Forms.CheckBox midichk_16;
         private System.Windows.Forms.CheckBox midichk_15;
@@ -1188,11 +1188,11 @@
         private System.Windows.Forms.Label transposevalbl;
         private System.Windows.Forms.TrackBar tempoControl;
         private System.Windows.Forms.Label tempovallbl;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label tempolbl;
         private System.Windows.Forms.Button temporstbtn;
         private System.Windows.Forms.Button transposerstbtn;
         private System.Windows.Forms.Button midichrstbtn;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label transposelbl;
         private System.Windows.Forms.Button midich_muteall_btn;
         private System.Windows.Forms.TrackBar transposeControl;
         private System.Windows.Forms.Button midich_muteinvert_btn;
@@ -1208,6 +1208,7 @@
         private System.Windows.Forms.Label reverblvlvallbl;
         private System.Windows.Forms.Label choruslvlvallbl;
         private System.Windows.Forms.CheckBox bx_loud_mode;
+        private System.Windows.Forms.Label seekbar_placeholder;
     }
 }
 

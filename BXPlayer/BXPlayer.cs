@@ -23,7 +23,6 @@ namespace BXPlayer
 
         private readonly BeatnikX bx;
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
-        private readonly int idletimer = 2;
         private bool _file_has_lyrics_meta = false;
         private bool _file_has_generictext_lyrics_meta = false;
         private bool _file_using_marker_title = false;
@@ -112,9 +111,9 @@ namespace BXPlayer
             LoadedFile = file;
 
             Debug.WriteLine("Loading file: " + file);
-            Debug.WriteLine("Loop enabled: " + loop);
+            Debug.WriteLine("Loop enabled: " + loop);            
             bx.play(loop, file);
-            bx.pause();
+            bx.stopSimple();
             if (!fileChangeHelperTimer.Enabled)
             {
                 fileChangeHelperTimer.Start();
@@ -649,7 +648,7 @@ namespace BXPlayer
 
         private void FileChangeHelperTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (Duration != 0 && bx.IsPlaying())
+            if (Duration != 0 && bx.IsReady() && (bx.IsPlaying() || bx.IsPaused()))
             {
                 short _bx_current_reverb = (short)bx.getController(1, 91);
                 short _bx_current_chorus = (short)bx.getController(1, 93);
@@ -676,10 +675,11 @@ namespace BXPlayer
                 };
                 _file_user_tempo = Tempo;
                 _file_default_tempo = Tempo;
-                LoudMode = _bx_prev_loud_mode;
                 OnFileChanged(this, fevt);
-                bx.playSimple();
-                PlayState = PlayState.Playing;
+                if (LoudMode != _bx_prev_loud_mode)
+                    LoudMode = _bx_prev_loud_mode;
+
+                Play();
                 if (_using_custom_reverb && _custom_reverb != -1) ReverbType = _custom_reverb;
                 else ReverbType = ReverbType;
                 fileChangeHelperTimer.Stop();
@@ -701,27 +701,15 @@ namespace BXPlayer
 
         private void ProgressMonitor_Elapsed(object sender, ElapsedEventArgs e)
         {
-            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            long epoch = (long)t.TotalSeconds;
-
             ProgressEvent pevt = new ProgressEvent
             {
                 Position = Position,
                 Duration = Duration
             };
-            if (Position == last_position[0])
+
+            if (!bx.IsPaused() && !bx.IsPlaying())
             {
-                if (epoch - last_position[1] >= idletimer)
-                {
-                    last_position[0] = -1;
-                    last_position[1] = (int)epoch;
-                    Stop();
-                }
-            }
-            else
-            {
-                last_position[0] = Position;
-                last_position[1] = (int)epoch;
+                Stop();
             }
             if (_file_user_tempo != -1 && Tempo != _file_user_tempo)
             {
