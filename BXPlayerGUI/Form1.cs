@@ -42,9 +42,9 @@ namespace BXPlayerGUI
         private string current_hash;
         private string current_file;
         private Stream current_datastream = null;
-        private int tempo_default;
         private int http_port = 59999;
         private bool settingReverbCB = false;
+        private bool settingTempoCB = false;
         private bool http_ready = false;
         private bool play_splash = false;
         private readonly int default_reverb = 0;
@@ -230,8 +230,11 @@ namespace BXPlayerGUI
 
         private void TempoControl_Scroll(object sender, EventArgs e)
         {
-            TrackBar tb = (TrackBar)sender;
-            SetTempo(tb.Value);
+            if (!settingTempoCB)
+            {
+                TrackBar tb = (TrackBar)sender;
+                SetTempo(tb.Value);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -663,7 +666,7 @@ namespace BXPlayerGUI
         private void Bx_FileChanged(object sender, FileChangeEvent e)
         {
             Debug.WriteLine("filechanged fired");
-            SetDefaultTempo(e.Tempo);
+            SetDefaultTempo();
             SetTrackbarValue(transposeControl, 0);
             SetLabelText(transposevalbl, "0");
             SetLabelText(durationlbl, FormatTime(e.Duration));
@@ -682,26 +685,33 @@ namespace BXPlayerGUI
 
         private void Bx_MetaDataChanged(object sender, MetaDataEvent e)
         {
-            if (bx.FileHasLyrics)
+            if (e.RawMeta.Key == "TempoChange")
             {
-                if (e.Lyric != null)
-                {
-                    if (e.Title != null)
-                    {
-                        SetLabelText(statustitle, "(" + e.Title + ") Lyrics: " + e.Lyric);
-                    }
-                    else
-                    {
-                        SetLabelText(statustitle, "Lyrics: " + e.Lyric);
-                    }
-                }
+                SetTempoCB(bx.Tempo);
             }
             else
             {
-                if (e.Title != null)
+                if (bx.FileHasLyrics)
                 {
-                    SetLabelText(statustitle, e.Title);
+                    if (e.Lyric != null)
+                    {
+                        if (e.Title != null)
+                        {
+                            SetLabelText(statustitle, "(" + e.Title + ") Lyrics: " + e.Lyric);
+                        }
+                        else
+                        {
+                            SetLabelText(statustitle, "Lyrics: " + e.Lyric);
+                        }
+                    }
                 }
+                else
+                {
+                    if (e.Title != null)
+                    {
+                        SetLabelText(statustitle, e.Title);
+                    }
+                }                
             }
             Debug.WriteLine(e.RawMeta.Key + ": " + e.RawMeta.Value);
         }
@@ -712,18 +722,19 @@ namespace BXPlayerGUI
             return string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
         }
 
-        private void SetDefaultTempo(int tempo)
+        private void SetDefaultTempo()
         {
-            tempo_default = tempo;
-            int maxtempo = GetTrackbarMax(tempoControl);
-            if (tempo_default > maxtempo)
-            {
-                tempo_default = maxtempo;
-            }
-            SetTrackbarValue(tempoControl, tempo_default);
-            SetLabelText(tempovallbl, tempo_default.ToString() + "BPM");
+            bx.ResetTempo();
+            SetTempoCB(bx.Tempo);
         }
 
+        private void SetTempoCB(int tempo)
+        {
+            settingTempoCB = true;
+            SetTrackbarValue(tempoControl, tempo);
+            SetLabelText(tempovallbl, tempo.ToString() + "BPM");
+            settingTempoCB = false;
+        }
         private void ActivateForm(Form f)
         {
             if (f.InvokeRequired)
@@ -855,20 +866,6 @@ namespace BXPlayerGUI
             return value;
         }
 
-        private int GetTrackbarMax(TrackBar t)
-        {
-            int value = -1;
-            if (t.InvokeRequired)
-            {
-                t.Invoke(new MethodInvoker(delegate { value = t.Maximum; }));
-            }
-            else
-            {
-                value = t.Maximum;
-            }
-            return value;
-        }
-
         private int GetComboBoxIndex(ComboBox t)
         {
             int value = -1;
@@ -935,11 +932,7 @@ namespace BXPlayerGUI
 
         private void Temporstbtn_Click(object sender, EventArgs e)
         {
-            if (tempo_default >= 40)
-            {
-                SetTrackbarValue(tempoControl, tempo_default);
-                SetTempo(GetTrackbarValue(tempoControl));
-            }
+            SetDefaultTempo();
         }
 
         private void SetTranspose(int val)

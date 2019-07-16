@@ -29,6 +29,8 @@ namespace BXPlayer
         private bool _file_using_marker_title = false;
         private bool _lyrics_delete_next = false;
         private bool _karaoke_title_detected = false;
+        private int _file_default_tempo = -1;
+        private int _file_user_tempo = -1;
         private bool _using_custom_reverb = false;
         private bool _use_midi_provided_reverb_and_chorus_values = true;
         private bool _bx_loud_mode = true;
@@ -101,6 +103,8 @@ namespace BXPlayer
             FileHasLyrics = false;
             _bx_prev_loud_mode = LoudMode;
             _bx_loud_mode = true; // Beatnik is gonna reset it
+            _file_user_tempo = -1;
+            _file_default_tempo = -1;
 
             SetController(0, 121, 1);
 
@@ -110,7 +114,7 @@ namespace BXPlayer
             Debug.WriteLine("Loading file: " + file);
             Debug.WriteLine("Loop enabled: " + loop);
             bx.play(loop, file);
-
+            bx.pause();
             if (!fileChangeHelperTimer.Enabled)
             {
                 fileChangeHelperTimer.Start();
@@ -270,6 +274,10 @@ namespace BXPlayer
         /// 
         public void DoMenuItem(string menuItem) => bx.doMenuItem(menuItem);
 
+        /// <summary>
+        /// Enables or disables Beatnik's "Loud Mode", which significantly decreases the audio gain when disabled
+        /// Enabled by default
+        /// </summary>
         public bool LoudMode
         {
             get { return _bx_loud_mode; }
@@ -370,7 +378,17 @@ namespace BXPlayer
         public int Tempo
         {
             get => bx.getTempo();
-            set => bx.setTempo(value);
+            set {
+                _file_user_tempo = value;
+                bx.setTempo(value);
+                Debug.WriteLine("Set Tempo: " + value.ToString());
+            }
+        }
+
+        public void ResetTempo()
+        {
+            if (_file_default_tempo != -1)
+                Tempo = _file_default_tempo;
         }
 
         /// <summary>
@@ -626,7 +644,7 @@ namespace BXPlayer
 
         private void FileChangeHelperTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (Duration != 0)
+            if (Duration != 0 && bx.IsPlaying())
             {
                 short _bx_current_reverb = (short)bx.getController(1, 91);
                 short _bx_current_chorus = (short)bx.getController(1, 93);
@@ -651,8 +669,11 @@ namespace BXPlayer
                     Duration = Duration,
                     Tempo = Tempo
                 };
+                _file_user_tempo = Tempo;
+                _file_default_tempo = Tempo;
                 LoudMode = _bx_prev_loud_mode;
                 OnFileChanged(this, fevt);
+                bx.playSimple();
                 PlayState = PlayState.Playing;
                 if (_using_custom_reverb && _custom_reverb != -1) ReverbType = _custom_reverb;
                 else ReverbType = ReverbType;
@@ -697,7 +718,19 @@ namespace BXPlayer
                 last_position[0] = Position;
                 last_position[1] = (int)epoch;
             }
-
+            if (_file_user_tempo != -1 && Tempo != _file_user_tempo)
+            {
+                MetaDataEvent mevt = new MetaDataEvent
+                {
+                    Title = null,
+                    Lyric = null,
+                    Tempo = Tempo,
+                    RawMeta = new KeyValuePair<string, string>("TempoChange", Tempo.ToString())
+                };
+                OnMetaDataChanged(this, mevt);
+                _file_default_tempo = Tempo;
+                _file_user_tempo = Tempo;
+            }
             OnProgressChanged(this, pevt);
         }
 
@@ -803,8 +836,8 @@ namespace BXPlayer
             {
                 Title = Title,
                 Lyric = Lyric,
+                Tempo = Tempo,
                 RawMeta = new KeyValuePair<string, string>(@event, text)
-
             };
             OnMetaDataChanged(this, mevt);
         }
@@ -844,6 +877,7 @@ namespace BXPlayerEvents
     {
         public string Title { get; set; }
         public string Lyric { get; set; }
+        public int Tempo { get; set; }
         public KeyValuePair<string, string> RawMeta { get; set; }
     }
 
