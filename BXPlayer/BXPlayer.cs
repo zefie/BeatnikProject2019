@@ -355,7 +355,7 @@ namespace BXPlayer
         {
             get
             {
-                return Tempo != 0;
+                return Tempo != 0;                
             }
         }
 
@@ -367,7 +367,12 @@ namespace BXPlayer
         public bool Loop
         {
             get => bx.getLoop();
-            set => bx.setLoop(value);
+            set
+            {
+                bx.setLoop(value);
+                if (PlayState == PlayState.Playing)
+                    bx.playLoopBool(value);
+            }
         }
 
         /// <summary>
