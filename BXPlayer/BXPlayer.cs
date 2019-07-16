@@ -40,7 +40,7 @@ namespace BXPlayer
         private readonly Timer progressMonitor = new Timer();
         private readonly Timer fileChangeHelperTimer = new Timer();
         private readonly Timer seekhelper = new Timer();
-        private readonly int bxdelay = 600; // BeatnikX has a lot of race conditions we have to wait for...
+        private readonly int bxdelay = 100;
         private int _custom_reverb;
         private short _midi_default_reverb = -1;
         private short _midi_default_chorus = -1;
