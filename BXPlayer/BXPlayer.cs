@@ -18,7 +18,7 @@ namespace BXPlayer
         public event EventHandler<FileChangeEvent> FileChanged = delegate { };
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
         public event EventHandler<ReverbEvent> ReverbChanged = delegate { };
-        public bool KaraokeShortTitles = true;
+        public bool KaraokeShortTitles = false;
 
         private readonly BeatnikX bx;
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
