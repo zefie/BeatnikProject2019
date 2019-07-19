@@ -1526,24 +1526,39 @@ namespace BXPlayerGUI
         public Color[] Colors = new Color[2];
         public LinearGradientMode GradientMode = LinearGradientMode.Vertical;
         public int inset = 2; // A single inset value to control the sizing of the inner rect.
+        private readonly bool IsWinXP = System.Environment.OSVersion.Version.Major <= 5; // or older
 
         public ColorProgressBar()
         {
-            this.SetStyle(ControlStyles.UserPaint, true);
-            Colors = new Color[2]
+            if (!this.IsWinXP)
             {
+                this.SetStyle(ControlStyles.UserPaint, true);
+                Colors = new Color[2]
+                {
                 BackColor,
                 ForeColor
-            };
+                };
+            }
         }
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
+            if (this.IsWinXP)
+            {
+                base.OnPaintBackground(pevent);
+                return;
+            }
             // None... Helps control the flicker.
         }
 
         protected override void OnPaint(PaintEventArgs e)
-        {                        
+        {
+            if (this.IsWinXP)
+            {
+                base.OnPaint(e);
+                return;
+            }
+
             using (Image offscreenImage = new Bitmap(this.Width, this.Height))
             {
                 using (Graphics offscreen = Graphics.FromImage(offscreenImage))
@@ -1556,7 +1571,7 @@ namespace BXPlayerGUI
                     rect.Inflate(new Size(-inset, -inset)); // Deflate inner rect.
                     rect.Width = (int)(rect.Width * ((double)this.Value / this.Maximum));
                     if (rect.Width == 0) rect.Width = 1; // Can't draw rec with width of 0.
-                    
+
                     LinearGradientBrush brush = new LinearGradientBrush(rect, Colors[0], Colors[1], GradientMode);
                     offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
 
