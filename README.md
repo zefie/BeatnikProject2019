@@ -5,7 +5,8 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
   - Basic functionality should work, but glitches or bugs are expected to occur.
   
 ## Requirements:
-- Windows XP(?) or newer (should work on any windows supporting .NET since the Beatnik OCX worked on 98, Tested on Windows 10 x64)
+- Windows XP or newer (should work on any windows supporting .NET since the Beatnik OCX worked on 98, Tested on Windows 10 x64)
+  - May have minor graphical issues on Windows XP but functions propertly (tested on Pentium 3 with WinXP and 256MB RAM)
 - .NET Framework 4.0
 - Admin access (because Beatnik is hardcoded to GetWindowsDirectoryA() + "\patches.hsb")
 
@@ -13,7 +14,7 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
 - Play Beatnik RMF, MIDI, MIDI Karaoke Files using classic Beatnik Soundbanks
 - Basic MIDI Controls, such as Transpose, Tempo, Volume, Seeking, Channel Mute
 - Ability to switch soundbanks almost seamlessly
-- Rare soundbanks including WebTV Classic and WebTV Plus
+- 13 Soundbanks to choose from, including rare Soundbanks from WebTV (Classic and Plus)
 - User Configuration Support to retain common settings
 - Drag-n-Drop Support
 - File association support (Use "Open With", then check "Always Open With" after browsing to BXPlayerGUI.exe)
@@ -45,4 +46,4 @@ chokes on the filename, such as files with ```[]``` in them. Therefore, if you g
 regarding a firewall listening on a port (should be localhost!), then this is why.
 
 ## Screenshot
-![](https://archive.midnightchannel.net/zefie/media/Images/Miscellaneous/BXPlayerGUI-latest.png)
+![](https://archive.midnightchannel.net/zefie/media/Images/Miscellaneous/BXPlayerGUI_v1.1.7136.34589.png)
