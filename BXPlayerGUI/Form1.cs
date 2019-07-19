@@ -409,6 +409,14 @@ namespace BXPlayerGUI
         {
             try
             {
+                if (bx != null)
+                {
+                    if (bx.PlayState != PlayState.Stopped)
+                    {
+                        bx.Stop(false);
+                    }
+                }
+
                 XmlWriterSettings settings = new XmlWriterSettings
                 {
                     Indent = true,
@@ -1559,7 +1567,7 @@ namespace BXPlayerGUI
                 return;
             }
 
-            using (Image offscreenImage = new Bitmap(this.Width, this.Height))
+                using (Image offscreenImage = new Bitmap(this.Width, this.Height))
             {
                 using (Graphics offscreen = Graphics.FromImage(offscreenImage))
                 {
