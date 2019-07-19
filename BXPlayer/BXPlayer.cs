@@ -19,12 +19,10 @@ namespace BXPlayer
         public event EventHandler<MetaDataEvent> MetaDataChanged = delegate { };
         public event EventHandler<ReverbEvent> ReverbChanged = delegate { };
         public bool KaraokeShortTitles = true;
-        public bool PreferGenericTextLyrics = true;
 
         private readonly BeatnikX bx;
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
         private bool _file_has_lyrics_meta = false;
-        private bool _file_has_generictext_lyrics_meta = false;
         private bool _file_using_marker_title = false;
         private bool _lyrics_delete_next = false;
         private bool _karaoke_title_detected = false;
@@ -772,11 +770,10 @@ namespace BXPlayer
                     if (!FileHasLyrics && @event == "GenericText")
                     {
                         FileHasLyrics = true;
-                        _file_has_generictext_lyrics_meta = true;
                         Debug.WriteLine("Detected file has GenericText lyric metadata");
                     }
 
-                    if (@event == "Lyric" && !_file_has_lyrics_meta && (!PreferGenericTextLyrics || !_file_has_generictext_lyrics_meta))
+                    if (@event == "Lyric" && !_file_has_lyrics_meta)
                     {
                         _file_has_lyrics_meta = true;
                         FileHasLyrics = true;
@@ -785,9 +782,9 @@ namespace BXPlayer
 
                     if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
                     {
-                        if (text == "\r")
+                        if (@event == "Lyric" && text == "\r")
                         {
-                            return;
+                            _lyrics_delete_next = true;
                         }
 
                         if (text.StartsWith("/") || text.StartsWith("\\"))
@@ -797,11 +794,6 @@ namespace BXPlayer
                     }
                     else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
                     {
-                        if (@event == "Lyric" && (PreferGenericTextLyrics && _file_has_generictext_lyrics_meta))
-                        {
-                            return;
-                        }
-
                         if (text.StartsWith("/") || text.StartsWith("\\"))
                         {
                             Lyric = text.Substring(1);

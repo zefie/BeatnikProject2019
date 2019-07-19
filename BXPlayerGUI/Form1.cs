@@ -709,25 +709,23 @@ namespace BXPlayerGUI
             {
                 if (bx.FileHasLyrics)
                 {
-                    if (e.Lyric != null)
+                    string lyriclogged = GetLabelText(lyriclbl);
+                    if (e.Lyric.Length == 0)
                     {
-                        if (e.Title != null)
-                        {
-                            SetLabelText(statustitle, "(" + e.Title + ") Lyrics: " + e.Lyric);
-                        }
-                        else
-                        {
-                            SetLabelText(statustitle, "Lyrics: " + e.Lyric);
-                        }
+                        SetLabelText(lyriclbl2, lyriclogged);
+                        SetLabelText(lyriclbl, "");
+                    }
+                    else
+                    {
+                        if (e.Lyric.Length < lyriclogged.Length)
+                            SetLabelText(lyriclbl2, lyriclogged);
+                        SetLabelText(lyriclbl, e.Lyric);
                     }
                 }
-                else
+                if (e.Title != null)
                 {
-                    if (e.Title != null)
-                    {
-                        SetLabelText(statustitle, e.Title);
-                    }
-                }                
+                    SetLabelText(statustitle, e.Title);
+                }
             }
             Debug.WriteLine(e.RawMeta.Key + ": " + e.RawMeta.Value);
         }
@@ -814,6 +812,20 @@ namespace BXPlayerGUI
             {
                 l.Text = text;
             }
+        }
+
+        private string GetLabelText(Label l)
+        {
+            string value = null;
+            if (l.InvokeRequired)
+            {
+                l.Invoke(new MethodInvoker(delegate { value = l.Text; }));
+            }
+            else
+            {
+                value = l.Text;
+            }
+            return value;
         }
 
         private void SetLabelText(ToolStripStatusLabel l, string text)
@@ -1236,6 +1248,8 @@ namespace BXPlayerGUI
         private void PlayFile(string file, bool loop = false)
         {
             SetLabelText(statustitle, "");
+            SetLabelText(lyriclbl, "");
+            SetLabelText(lyriclbl2, "");
             SetButtonEnabled(infobut, false);
             current_file = file;
             string bxchk = GetBXSafeFilename(file);

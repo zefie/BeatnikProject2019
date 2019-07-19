@@ -50,6 +50,8 @@
             this.progresslbl = new System.Windows.Forms.Label();
             this.beatnikLogo = new System.Windows.Forms.PictureBox();
             this.mainControlPanel = new System.Windows.Forms.Panel();
+            this.lyriclbl = new System.Windows.Forms.Label();
+            this.lyriclbl2 = new System.Windows.Forms.Label();
             this.reverbpnl = new System.Windows.Forms.Panel();
             this.choruslvlvallbl = new System.Windows.Forms.Label();
             this.cbMidiProvidedReverb = new System.Windows.Forms.CheckBox();
@@ -275,7 +277,7 @@
             this.progressPanel.Location = new System.Drawing.Point(6, 120);
             this.progressPanel.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.progressPanel.Name = "progressPanel";
-            this.progressPanel.Size = new System.Drawing.Size(401, 62);
+            this.progressPanel.Size = new System.Drawing.Size(408, 62);
             this.progressPanel.TabIndex = 29;
             // 
             // seekbar_placeholder
@@ -343,6 +345,8 @@
             // mainControlPanel
             // 
             this.mainControlPanel.AllowDrop = true;
+            this.mainControlPanel.Controls.Add(this.lyriclbl);
+            this.mainControlPanel.Controls.Add(this.lyriclbl2);
             this.mainControlPanel.Controls.Add(this.reverbpnl);
             this.mainControlPanel.Controls.Add(this.midiControls);
             this.mainControlPanel.Controls.Add(this.progressPanel);
@@ -353,6 +357,20 @@
             this.mainControlPanel.Visible = false;
             this.mainControlPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragDrop);
             this.mainControlPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.BXPlayerGUI_DragEnter);
+            // 
+            // lyriclbl
+            // 
+            this.lyriclbl.Location = new System.Drawing.Point(3, 194);
+            this.lyriclbl.Name = "lyriclbl";
+            this.lyriclbl.Size = new System.Drawing.Size(410, 13);
+            this.lyriclbl.TabIndex = 45;
+            // 
+            // lyriclbl2
+            // 
+            this.lyriclbl2.Location = new System.Drawing.Point(3, 181);
+            this.lyriclbl2.Name = "lyriclbl2";
+            this.lyriclbl2.Size = new System.Drawing.Size(410, 13);
+            this.lyriclbl2.TabIndex = 44;
             // 
             // reverbpnl
             // 
@@ -1209,6 +1227,8 @@
         private System.Windows.Forms.Label choruslvlvallbl;
         private System.Windows.Forms.CheckBox bx_loud_mode;
         private System.Windows.Forms.Label seekbar_placeholder;
+        private System.Windows.Forms.Label lyriclbl2;
+        private System.Windows.Forms.Label lyriclbl;
     }
 }
 
