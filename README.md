@@ -5,7 +5,8 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
   - Basic functionality should work, but glitches or bugs are expected to occur.
   
 ## Requirements:
-- Windows XP(?) or newer (should work on any windows supporting .NET since the Beatnik OCX worked on 98, Tested on Windows 10 x64)
+- Windows XP or newer (should work on any windows supporting .NET since the Beatnik OCX worked on 98, Tested on Windows 10 x64)
+  - May have minor graphical issues on Windows XP but functions propertly (tested on Pentium 3 with WinXP and 256MB RAM)
 - .NET Framework 4.0
 - Admin access (because Beatnik is hardcoded to GetWindowsDirectoryA() + "\patches.hsb")
 
