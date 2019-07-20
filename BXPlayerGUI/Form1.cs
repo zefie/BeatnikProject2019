@@ -51,6 +51,7 @@ namespace BXPlayerGUI
         private bool http_ready = false;
         private bool _lyric_add_newline = false;
         private string _lyric_raw = "";
+        private string _lyric_log = "";
         private DateTime _lyric_raw_time = new DateTime(0);
         private DateTime _lyric_raw_dialog_last_time = new DateTime(0);
         private readonly int default_reverb = 0;
@@ -731,9 +732,13 @@ namespace BXPlayerGUI
                         }
                     }
                     string lyriclogged = GetLabelText(lyriclbl);
+                    string lb2 = GetLabelText(lyriclbl2);
                     if (e.Lyric.Length == 0)
                     {
                         _lyric_add_newline = true;
+                        if (lb2.Length > 0)
+                            _lyric_log += lb2 + Environment.NewLine;
+
                         SetLabelText(lyriclbl2, lyriclogged);
                         SetLabelText(lyriclbl, "");
                     }
@@ -741,6 +746,8 @@ namespace BXPlayerGUI
                     {
                         if (e.Lyric.Length < lyriclogged.Length)
                         {
+                            if (lb2.Length > 0)
+                                _lyric_log += lb2 + Environment.NewLine;
                             SetLabelText(lyriclbl2, lyriclogged);
                         }
                         SetLabelText(lyriclbl, e.Lyric);
@@ -1074,6 +1081,7 @@ namespace BXPlayerGUI
             _lyric_add_newline = false;
             _lyric_raw_time = new DateTime(1);
             _lyric_raw_dialog_last_time = new DateTime(0);
+            _lyric_log = "";
             _lyric_raw = "";
             SetLabelText(lyriclbl, "");
             SetLabelText(lyriclbl2, "");
@@ -1394,16 +1402,11 @@ namespace BXPlayerGUI
                         ReadOnly = true,
                         Multiline = true
                     };
+                    if (_lyric_log.Length > 0) LyricDialogTextbox.AppendText(_lyric_log);
                     string lyric2 = GetLabelText(lyriclbl2);
-                    if (lyric2.Length > 0)
-                    {
-                        LyricDialogTextbox.Text = lyric2 + System.Environment.NewLine;
-                    }
+                    if (lyric2.Length > 0) LyricDialogTextbox.AppendText(lyric2 + System.Environment.NewLine);
                     lyric2 = GetLabelText(lyriclbl);
-                    if (lyric2.Length > 0)
-                    {
-                        LyricDialogTextbox.AppendText(lyric2);
-                    }
+                    if (lyric2.Length > 0) LyricDialogTextbox.AppendText(lyric2);
                     LyricChecker = new System.Windows.Forms.Timer
                     {
                         Interval = 100,
