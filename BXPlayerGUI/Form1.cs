@@ -51,7 +51,8 @@ namespace BXPlayerGUI
         private bool http_ready = false;
         private bool _lyric_add_newline = false;
         private string _lyric_raw = "";
-        private string _lyric_raw_dialog_last = null;
+        private DateTime _lyric_raw_time = new DateTime(0);
+        private DateTime _lyric_raw_dialog_last_time = new DateTime(0);
         private readonly int default_reverb = 0;
         
         private NamedPipeServerStream _namedPipeServerStream;
@@ -718,6 +719,7 @@ namespace BXPlayerGUI
                 if (bx.FileHasLyrics)
                 {
                     _lyric_raw = e.RawMeta.Value;
+                    _lyric_raw_time = DateTime.Now;
                     string lyriclogged = GetLabelText(lyriclbl);
                     if (e.Lyric.Length == 0)
                     {
@@ -1060,7 +1062,8 @@ namespace BXPlayerGUI
         private void ClearLyricsLabels()
         {
             _lyric_add_newline = false;
-            _lyric_raw_dialog_last = null;
+            _lyric_raw_time = new DateTime(1);
+            _lyric_raw_dialog_last_time = new DateTime(0);
             SetLabelText(lyriclbl, "");
             SetLabelText(lyriclbl2, "");
         }
@@ -1416,7 +1419,7 @@ namespace BXPlayerGUI
             LyricDialogTextbox = null;
             LyricDialog = null;
             LyricChecker = null;
-            _lyric_raw_dialog_last = null;
+            _lyric_raw_dialog_last_time = new DateTime(0);
         }
 
         private void LyricChecker_Tick(object sender, EventArgs e)
@@ -1425,27 +1428,26 @@ namespace BXPlayerGUI
             {
                 if (bx.PlayState == PlayState.Playing || bx.PlayState == PlayState.Paused)
                 {
-                    if (_lyric_raw_dialog_last == null)
+                    if (_lyric_raw_dialog_last_time == new DateTime(0))
                     {
-                        _lyric_raw_dialog_last = _lyric_raw;
+                        _lyric_raw_dialog_last_time = DateTime.Now;
                         return;
                     }
-                    if (_lyric_raw_dialog_last != _lyric_raw)
+                    if (_lyric_raw_dialog_last_time != _lyric_raw_time)
                     {
 
                         string lyrics = _lyric_raw;
                         if (lyrics.StartsWith("/") || lyrics.StartsWith("\\"))
                         {
-                            lyrics = System.Environment.NewLine + lyrics.Substring(1);
+                            lyrics = Environment.NewLine + lyrics.Substring(1);
                         }
 
                         if (lyrics.StartsWith(" /") || lyrics.StartsWith(" \\"))
                         {
-                            lyrics = System.Environment.NewLine + lyrics.Substring(2);
+                            lyrics = Environment.NewLine + lyrics.Substring(2);
                         }
 
-
-                        _lyric_raw_dialog_last = _lyric_raw;
+                        _lyric_raw_dialog_last_time = _lyric_raw_time;
 
                         if (_lyric_add_newline)
                         {
