@@ -767,6 +767,10 @@ namespace BXPlayer
                 if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)) && this.PlayState == PlayState.Playing)
                 {
 
+                    if (@event == "GenericText" && text.StartsWith("@")) {
+                        return;
+                    }
+
                     if (!FileHasLyrics && @event == "GenericText")
                     {
                         FileHasLyrics = true;
