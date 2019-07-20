@@ -1433,7 +1433,7 @@ namespace BXPlayerGUI
                         _lyric_raw_dialog_last_time = DateTime.Now;
                         return;
                     }
-                    if (_lyric_raw_dialog_last_time != _lyric_raw_time)
+                    if (_lyric_raw_dialog_last_time < _lyric_raw_time)
                     {
 
                         string lyrics = _lyric_raw;

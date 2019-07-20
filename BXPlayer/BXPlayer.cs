@@ -97,6 +97,7 @@ namespace BXPlayer
             Title = null;
             Lyric = "";
             _file_has_lyrics_meta = false;
+            _karaoke_title_detected = false;
             FileHasLyrics = false;
             _bx_prev_loud_mode = LoudMode;
             _bx_loud_mode = true; // Beatnik is gonna reset it
@@ -767,7 +768,7 @@ namespace BXPlayer
                 if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)) && this.PlayState == PlayState.Playing)
                 {
 
-                    if (@event == "GenericText" && text.StartsWith("@")) {
+                    if (@event == "GenericText" && text.StartsWith("@") && !text.StartsWith("@T")) {
                         return;
                     }
 
