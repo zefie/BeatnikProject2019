@@ -364,6 +364,7 @@
             this.lyriclbl.Name = "lyriclbl";
             this.lyriclbl.Size = new System.Drawing.Size(410, 13);
             this.lyriclbl.TabIndex = 45;
+            this.lyriclbl.Click += new System.EventHandler(this.LyricLog_Click);
             // 
             // lyriclbl2
             // 
@@ -371,6 +372,7 @@
             this.lyriclbl2.Name = "lyriclbl2";
             this.lyriclbl2.Size = new System.Drawing.Size(410, 13);
             this.lyriclbl2.TabIndex = 44;
+            this.lyriclbl2.Click += new System.EventHandler(this.LyricLog_Click);
             // 
             // reverbpnl
             // 

@@ -795,12 +795,20 @@ namespace BXPlayer
                         {
                             Lyric = text.Substring(1);
                         }
+                        if (text.StartsWith(" /") || text.StartsWith(" \\"))
+                        {
+                            Lyric = text.Substring(2);
+                        }
                     }
                     else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
                     {
                         if (text.StartsWith("/") || text.StartsWith("\\"))
                         {
                             Lyric = text.Substring(1);
+                        }
+                        if (text.StartsWith(" /") || text.StartsWith(" \\"))
+                        {
+                            Lyric = text.Substring(2);
                         }
                         else if (@event == "Lyric" && text == "")
                         {

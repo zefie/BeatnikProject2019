@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bemani.cs" />
+    <Compile Include="Controls.cs" />
     <Compile Include="Cryptography.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Directory.cs" />
