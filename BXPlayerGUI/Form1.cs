@@ -716,12 +716,19 @@ namespace BXPlayerGUI
             }
             else
             {
-                if (bx.FileHasLyrics)
+                if (e.RawMeta.Key == "GenericText" && e.RawMeta.Value.StartsWith("@"))
+                {
+                    // this was a bug that happened when the file looped but will be useful
+                    ClearLyricsLabels();
+                }
+                if (bx.FileHasLyrics && e.Lyric != null)
                 {
                     if ((bx.FileHasLyricsMeta && e.RawMeta.Key == "Lyric") || (!bx.FileHasLyricsMeta && e.RawMeta.Key == "GenericText"))
                     {
-                        _lyric_raw = e.RawMeta.Value;
-                        _lyric_raw_time = DateTime.Now;
+                        if (!(e.RawMeta.Key == "GenericText" && e.RawMeta.Value.StartsWith("@"))) {
+                            _lyric_raw = e.RawMeta.Value;
+                            _lyric_raw_time = DateTime.Now;
+                        }
                     }
                     string lyriclogged = GetLabelText(lyriclbl);
                     if (e.Lyric.Length == 0)
@@ -1067,8 +1074,10 @@ namespace BXPlayerGUI
             _lyric_add_newline = false;
             _lyric_raw_time = new DateTime(1);
             _lyric_raw_dialog_last_time = new DateTime(0);
+            _lyric_raw = "";
             SetLabelText(lyriclbl, "");
             SetLabelText(lyriclbl2, "");
+            if (LyricDialogTextbox != null) SetTextboxText(LyricDialogTextbox, "");
         }
 
         private void PlayFile(string file, bool loop = false)
@@ -1371,7 +1380,6 @@ namespace BXPlayerGUI
                 if (LyricDialog == null)
                 {
                     Size s = new Size();
-                    Padding p = new Padding();
                     LyricDialog = new Form {
                         Text = "Lyrics",
                         ShowIcon = false,

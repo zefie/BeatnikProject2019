@@ -26,6 +26,7 @@ namespace BXPlayer
         private bool _file_using_marker_title = false;
         private bool _lyrics_delete_next = false;
         private bool _karaoke_title_detected = false;
+        private bool _karaoke_title_update = true;
         private int _file_default_tempo = -1;
         private int _file_user_tempo = -1;
         private bool _using_custom_reverb = false;
@@ -98,6 +99,7 @@ namespace BXPlayer
             Lyric = "";
             _file_has_lyrics_meta = false;
             _karaoke_title_detected = false;
+            _karaoke_title_update = true;
             FileHasLyrics = false;
             _bx_prev_loud_mode = LoudMode;
             _bx_loud_mode = true; // Beatnik is gonna reset it
@@ -748,7 +750,7 @@ namespace BXPlayer
                 // Karaoke GenericText @T style titles
                 if (@event == "GenericText" && text.StartsWith("@T"))
                 {
-                    if (_karaoke_title_detected && !KaraokeShortTitles)
+                    if (_karaoke_title_detected && !KaraokeShortTitles && _karaoke_title_update)
                     {
                         Title = text.Substring(2) + " - " + Title;
                     }
@@ -760,6 +762,12 @@ namespace BXPlayer
                         Title = text.Substring(2);
                     }
                 }
+
+                if (@event == "GenericText" && text.StartsWith("@K") && _karaoke_title_detected)
+                {
+                    _karaoke_title_update = false;
+                }
+
 
                 // WebTV Classic style titles
                 if (@event == "Marker" && Title == null)
@@ -774,63 +782,62 @@ namespace BXPlayer
                 if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)) && this.PlayState == PlayState.Playing)
                 {
 
-                    if (@event == "GenericText" && text.StartsWith("@") && !text.StartsWith("@T")) {
-                        return;
-                    }
-
-                    if (!FileHasLyrics && @event == "GenericText")
+                    if (!(@event == "GenericText" && text.StartsWith("@") && _karaoke_title_detected))
                     {
-                        FileHasLyrics = true;
-                        Debug.WriteLine("Detected file has GenericText lyric metadata");
-                    }
-
-                    if (@event == "Lyric" && !_file_has_lyrics_meta)
-                    {
-                        _file_has_lyrics_meta = true;
-                        FileHasLyrics = true;
-                        Debug.WriteLine("Detected file has Lyric metadata");
-                    }
-
-                    if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
-                    {
-                        if (@event == "Lyric" && text == "\r")
+                        if (!FileHasLyrics && @event == "GenericText")
                         {
-                            _lyrics_delete_next = true;
+                            FileHasLyrics = true;
+                            Debug.WriteLine("Detected file has GenericText lyric metadata");
                         }
 
-                        if (text.StartsWith("/") || text.StartsWith("\\"))
+                        if (@event == "Lyric" && !_file_has_lyrics_meta)
                         {
-                            Lyric = text.Substring(1);
+                            _file_has_lyrics_meta = true;
+                            FileHasLyrics = true;
+                            Debug.WriteLine("Detected file has Lyric metadata");
                         }
-                        if (text.StartsWith(" /") || text.StartsWith(" \\"))
+
+                        if ((@event == "Lyric" && text == "\r") || @event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\")) && !_file_has_lyrics_meta)
                         {
-                            Lyric = text.Substring(2);
-                        }
-                    }
-                    else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
-                    {
-                        if (text.StartsWith("/") || text.StartsWith("\\"))
-                        {
-                            Lyric = text.Substring(1);
-                        }
-                        if (text.StartsWith(" /") || text.StartsWith(" \\"))
-                        {
-                            Lyric = text.Substring(2);
-                        }
-                        else if (@event == "Lyric" && text == "")
-                        {
-                            _lyrics_delete_next = true;
-                        }
-                        else
-                        {
-                            if (_lyrics_delete_next)
+                            if (@event == "Lyric" && text == "\r")
                             {
-                                _lyrics_delete_next = false;
-                                Lyric = text;
+                                _lyrics_delete_next = true;
+                            }
+
+                            if (text.StartsWith("/") || text.StartsWith("\\"))
+                            {
+                                Lyric = text.Substring(1);
+                            }
+                            if (text.StartsWith(" /") || text.StartsWith(" \\"))
+                            {
+                                Lyric = text.Substring(2);
+                            }
+                        }
+                        else if ((@event == "Lyric" && _file_has_lyrics_meta) || !_file_has_lyrics_meta)
+                        {
+                            if (text.StartsWith("/") || text.StartsWith("\\"))
+                            {
+                                Lyric = text.Substring(1);
+                            }
+                            if (text.StartsWith(" /") || text.StartsWith(" \\"))
+                            {
+                                Lyric = text.Substring(2);
+                            }
+                            else if (@event == "Lyric" && text == "")
+                            {
+                                _lyrics_delete_next = true;
                             }
                             else
                             {
-                                Lyric += text;
+                                if (_lyrics_delete_next)
+                                {
+                                    _lyrics_delete_next = false;
+                                    Lyric = text;
+                                }
+                                else
+                                {
+                                    Lyric += text;
+                                }
                             }
                         }
                     }
