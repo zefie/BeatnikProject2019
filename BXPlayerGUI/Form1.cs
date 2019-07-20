@@ -1539,6 +1539,11 @@ namespace BXPlayerGUI
         {
             bx.LoudMode = ((CheckBox)sender).Checked;
         }
+
+        private void Statustitle_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(((ToolStripLabel)sender).Text, "Song Title", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 
     public class NamedPipeXmlPayload

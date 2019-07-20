@@ -288,8 +288,8 @@
             this.seekbar_placeholder.Name = "seekbar_placeholder";
             this.seekbar_placeholder.Size = new System.Drawing.Size(400, 26);
             this.seekbar_placeholder.TabIndex = 31;
-            this.seekbar_placeholder.Text = "Progressbar Placeholder - Not Visible During Normal Execution\r\nPROGRESS SEEKBAR W" +
-    "ILL DISPLAY HERE WHEN EXECUTED";
+            this.seekbar_placeholder.Text = "Progressbar Placeholder - Not Visible During Normal Execution\r\nSEEKBAR WILL DISPL" +
+    "AY WHERE THIS CONTROL IS WHEN EXECUTED";
             this.seekbar_placeholder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.seekbar_placeholder.Visible = false;
             // 
@@ -1082,6 +1082,7 @@
             this.statustitle.Size = new System.Drawing.Size(556, 17);
             this.statustitle.Spring = true;
             this.statustitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statustitle.Click += new System.EventHandler(this.Statustitle_Click);
             // 
             // toolStripSpacer
             // 
