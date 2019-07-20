@@ -1003,6 +1003,7 @@ namespace BXPlayerGUI
                     Debug.WriteLine("seek: " + seekbar.Value + " (" + FormatTime(seekbar.Value) + ")");
                     Debug.WriteLine("real: " + bx.Position + " (" + FormatTime(bx.Position) + ")");
                     SetLabelText(progresslbl, FormatTime(bx.Position));
+                    ClearLyricsLabels();
                     if (bxps != PlayState.Playing)
                     {
                         bx.Play();
@@ -1245,12 +1246,17 @@ namespace BXPlayerGUI
             return !(simulated_filename == Path.GetFileNameWithoutExtension(filename));
         }
 
+        private void ClearLyricsLabels()
+        {
+            SetLabelText(lyriclbl, "");
+            SetLabelText(lyriclbl2, "");
+        }
+
         private void PlayFile(string file, bool loop = false)
         {
             SetLabelText(statustitle, "");
-            SetLabelText(lyriclbl, "");
-            SetLabelText(lyriclbl2, "");
             SetButtonEnabled(infobut, false);
+            ClearLyricsLabels();
             current_file = file;
             string bxchk = GetBXSafeFilename(file);
             bool needs_minihttp = GetBXFilenameWasAltered(file, Path.GetFileNameWithoutExtension(bxchk));
