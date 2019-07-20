@@ -606,6 +606,12 @@ namespace BXPlayer
         /// 
         public bool FileHasLyrics { get; private set; } = false;
 
+        public bool FileHasLyricsMeta {
+            get {
+                return FileHasLyrics && _file_has_lyrics_meta;
+            }
+        }
+
         /// <summary>
         /// Gets the filename of the currently loaded file. If real_file was defined in PlayFile, this is set as that.
         /// </summary>

@@ -718,8 +718,11 @@ namespace BXPlayerGUI
             {
                 if (bx.FileHasLyrics)
                 {
-                    _lyric_raw = e.RawMeta.Value;
-                    _lyric_raw_time = DateTime.Now;
+                    if ((bx.FileHasLyricsMeta && e.RawMeta.Key == "Lyric") || (!bx.FileHasLyricsMeta && e.RawMeta.Key == "GenericText"))
+                    {
+                        _lyric_raw = e.RawMeta.Value;
+                        _lyric_raw_time = DateTime.Now;
+                    }
                     string lyriclogged = GetLabelText(lyriclbl);
                     if (e.Lyric.Length == 0)
                     {
