@@ -63,9 +63,13 @@ namespace BXPatchSwitcher
             string res = InstallPatch(patchidx, outopts);
             if (res != "OK" && res != "EXIT")
             {
-                if (CheckAdministrator(rawopts))
+                if (ZefieLib.UAC.IsAdmin)
                 {
                     res = InstallPatch(patchidx, outopts);
+                }
+                else if (ZefieLib.UAC.RunAsAdministrator(rawopts))
+                {
+                    Application.Exit();
                 }
             }
             if (res == "EXIT")
@@ -195,37 +199,6 @@ namespace BXPatchSwitcher
                 }
             }
             return "";
-        }
-
-        private bool CheckAdministrator(string args)
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            var isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-            if (isAdmin == false)
-            {
-                try
-                {
-                    var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName)
-                    {
-                        Arguments = args,
-                        Verb = "runas"
-                    };
-                    System.Diagnostics.Process.Start(startInfo);
-                    Application.Exit();
-                }
-                catch
-                {
-                    DialogResult errormsg = MessageBox.Show("There was an error gaining administrative privileges", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                    if (errormsg == DialogResult.Retry)
-                    {
-                        CheckAdministrator(args);
-                    }
-                }
-                return false;
-            }
-            return true;
         }
 
         private void Init_Form()
