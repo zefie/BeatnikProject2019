@@ -1,0 +1,3 @@
+[submodule "ZefieLib"]
+	path = ZefieLib
+	url = https://github.com/zefie/ZefieLib.git
