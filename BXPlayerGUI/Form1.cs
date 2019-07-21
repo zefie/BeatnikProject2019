@@ -518,7 +518,7 @@ namespace BXPlayerGUI
                 bw.DoWork += new DoWorkEventHandler(
                     delegate (object o, DoWorkEventArgs arg)
                     {
-                        while (bx.Duration == 0 && bx.PlayState == PlayState.Playing)
+                        while ((bx.Duration == 0 && bx.PlayState == PlayState.Playing) || bx.PlayState != PlayState.Playing)
                         {
                             // fucking terrible I know
                             Thread.Sleep(100);
@@ -1409,7 +1409,7 @@ namespace BXPlayerGUI
                     if (lyric2.Length > 0) LyricDialogTextbox.AppendText(lyric2);
                     LyricChecker = new System.Windows.Forms.Timer
                     {
-                        Interval = 100,
+                        Interval = 50,
                     };
                     LyricChecker.Tick += LyricChecker_Tick;
                     LyricDialog.Controls.Add(LyricDialogTextbox);
@@ -1445,7 +1445,7 @@ namespace BXPlayerGUI
                 {
                     if (_lyric_raw_dialog_last_time == new DateTime(0))
                     {
-                        _lyric_raw_dialog_last_time = DateTime.Now.AddMilliseconds(-100);
+                        _lyric_raw_dialog_last_time = DateTime.Now.AddMilliseconds(((System.Windows.Forms.Timer)sender).Interval * -1);
                     }
                     if (_lyric_raw_dialog_last_time < _lyric_raw_time)
                     {
@@ -1477,9 +1477,10 @@ namespace BXPlayerGUI
                     int endlen = lyriclen;
                     if (_lyric_raw.StartsWith("/") || _lyric_raw.StartsWith("\\"))
                     {
+                        startlen++;
                         endlen--;
-                        startlen--;
                     }
+
                     if (_lyric_raw.EndsWith(" "))
                         endlen--;
 
