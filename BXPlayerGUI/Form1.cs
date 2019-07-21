@@ -525,12 +525,9 @@ namespace BXPlayerGUI
                         }
 
                         bx.Volume = Convert.ToInt32(options[1]);
-                        if (bx.PlayState != PlayState.Stopped)
-                        {
-                            bx.Tempo = Convert.ToInt32(options[2]);
-                            bx.Transpose = Convert.ToInt32(options[3]);
-                            bx.Position = Convert.ToInt32(options[4]);
-                        }
+                        bx.Tempo = Convert.ToInt32(options[2]);
+                        bx.Transpose = Convert.ToInt32(options[3]);
+                        bx.Position = Convert.ToInt32(options[4]);
                         SetCheckBoxChecked(midichk_1, Convert.ToBoolean(options[6]));
                         SetCheckBoxChecked(midichk_2, Convert.ToBoolean(options[7]));
                         SetCheckBoxChecked(midichk_3, Convert.ToBoolean(options[8]));
