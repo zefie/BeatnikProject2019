@@ -1419,6 +1419,7 @@ namespace BXPlayerGUI
                     LyricChecker.Start();
                 }
                 LyricDialog.Show();
+                ActivateForm(LyricDialog);
             }
         }
 
@@ -1444,8 +1445,7 @@ namespace BXPlayerGUI
                 {
                     if (_lyric_raw_dialog_last_time == new DateTime(0))
                     {
-                        _lyric_raw_dialog_last_time = DateTime.Now;
-                        return;
+                        _lyric_raw_dialog_last_time = DateTime.Now.AddMilliseconds(-100);
                     }
                     if (_lyric_raw_dialog_last_time < _lyric_raw_time)
                     {

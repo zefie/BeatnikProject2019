@@ -82,13 +82,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZefieLib\ZefieLib.csproj">
+    <Content Include="beatnik.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZefieLib\ZefieLib\ZefieLib.csproj">
       <Project>{847b2527-8a12-4433-9bd8-17c7638592e4}</Project>
       <Name>ZefieLib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="beatnik.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

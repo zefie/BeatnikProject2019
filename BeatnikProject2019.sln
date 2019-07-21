@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BXPatchSwitcher", "BXPatchS
 		{AE6382C8-D038-4A5D-93B0-48D54844E414} = {AE6382C8-D038-4A5D-93B0-48D54844E414}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZefieLib", "ZefieLib\ZefieLib.csproj", "{847B2527-8A12-4433-9BD8-17C7638592E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZefieLib", "ZefieLib\ZefieLib\ZefieLib.csproj", "{847B2527-8A12-4433-9BD8-17C7638592E4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{527A0B7C-2E2B-4606-9177-C91ED5C5EDD4}"
 	ProjectSection(SolutionItems) = preProject

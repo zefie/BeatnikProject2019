@@ -96,7 +96,7 @@
       <Project>{f1b68a09-2a12-4d11-b0e9-10a5aab202a7}</Project>
       <Name>BXPlayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZefieLib\ZefieLib.csproj">
+    <ProjectReference Include="..\ZefieLib\ZefieLib\ZefieLib.csproj">
       <Project>{847b2527-8a12-4433-9bd8-17c7638592e4}</Project>
       <Name>ZefieLib</Name>
     </ProjectReference>
