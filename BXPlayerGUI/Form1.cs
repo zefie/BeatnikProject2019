@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Security.Principal;
 using System.Security.AccessControl;
+using System.Collections.Specialized;
 using static ZefieLib.Controls;
 using static ZefieLib.Controls.Custom;
 
@@ -475,22 +476,22 @@ namespace BXPlayerGUI
                         break;
 
                     case "reverbType":
-                        if (bx.ReverbType != Convert.ToInt16(value))
+                        if (GetComboBoxIndex(reverbcb) != Convert.ToInt16(value))
                             SetComboBoxIndex(reverbcb, Convert.ToInt16(value));
                         break;
 
                     case "allowMidiReverbConfig":
-                        if (bx.UseMidiProvidedReverbChorusValues != Convert.ToBoolean(value))
+                        if (GetCheckBoxChecked(cbMidiProvidedReverb) != Convert.ToBoolean(value))
                             SetCheckBoxChecked(cbMidiProvidedReverb, Convert.ToBoolean(value));
                         break;
 
                     case "useLoudMode":
-                        if (bx.LoudMode != Convert.ToBoolean(value))
+                        if (GetCheckBoxChecked(bx_loud_mode) != Convert.ToBoolean(value))
                             SetCheckBoxChecked(bx_loud_mode, Convert.ToBoolean(value));
                         break;
 
                     case "loopPlayback":
-                        if (bx.Loop != Convert.ToBoolean(value))
+                        if (GetCheckBoxChecked(bx_loop_cb) != Convert.ToBoolean(value))
                             SetCheckBoxChecked(bx_loop_cb, Convert.ToBoolean(value));
                         break;
                 }
