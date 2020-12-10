@@ -65,7 +65,7 @@ namespace BXPlayer
             bx.enableMetaEvents(true);
             bx.OnMetaEvent += Bx_OnMetaEvent;
             active = true;
-            Debug.WriteLine("BXPlayer v"+Version+" (BeatnikX v"+BeatnikVersion+") Initalized");
+            Debug.WriteLine("BXPlayer v" + Version + " (BeatnikX v" + BeatnikVersion + ") Initalized");
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace BXPlayer
             LoadedFile = file;
 
             Debug.WriteLine("Loading file: " + file);
-            Debug.WriteLine("Loop enabled: " + loop);            
+            Debug.WriteLine("Loop enabled: " + loop);
             bx.play(loop, file);
             bx.stopSimple();
             if (!fileChangeHelperTimer.Enabled)
@@ -355,7 +355,7 @@ namespace BXPlayer
         {
             get
             {
-                return Tempo != 0;                
+                return Tempo != 0;
             }
         }
 
@@ -383,7 +383,8 @@ namespace BXPlayer
         public int Tempo
         {
             get => bx.getTempo();
-            set {
+            set
+            {
                 _file_user_tempo = value;
                 bx.setTempo(value);
                 Debug.WriteLine("Set Tempo: " + value.ToString());
@@ -608,8 +609,10 @@ namespace BXPlayer
         /// 
         public bool FileHasLyrics { get; private set; } = false;
 
-        public bool FileHasLyricsMeta {
-            get {
+        public bool FileHasLyricsMeta
+        {
+            get
+            {
                 return FileHasLyrics && _file_has_lyrics_meta;
             }
         }
@@ -779,7 +782,7 @@ namespace BXPlayer
                 // TODO: Other title formats
 
                 // Lyric Support
-                if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)) && this.PlayState == PlayState.Playing)
+                if (@event == "Lyric" || (@event == "GenericText" && (text.StartsWith("/") || text.StartsWith("\\") || FileHasLyrics)) && PlayState == PlayState.Playing)
                 {
 
                     if (!(@event == "GenericText" && text.StartsWith("@") && _karaoke_title_detected))

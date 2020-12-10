@@ -1,25 +1,24 @@
-﻿using System;
+﻿using BXPlayer;
+using BXPlayerEvents;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.IO.Pipes;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using System.Threading;
-using BXPlayer;
-using BXPlayerEvents;
-using System.ComponentModel;
-using System.Text;
-using System.Reflection;
-using System.Drawing;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.IO.Pipes;
-using System.Security.Principal;
-using System.Security.AccessControl;
-using System.Collections.Specialized;
 using static ZefieLib.Controls;
 using static ZefieLib.Controls.Custom;
 
@@ -56,7 +55,7 @@ namespace BXPlayerGUI
         private DateTime _lyric_raw_time = new DateTime(0);
         private DateTime _lyric_raw_dialog_last_time = new DateTime(0);
         private readonly int default_reverb = 0;
-        
+
         private NamedPipeServerStream _namedPipeServerStream;
         private NamedPipeXmlPayload _namedPipeXmlPayload;
         private readonly ColorProgressBar seekbar;
@@ -109,8 +108,8 @@ namespace BXPlayerGUI
             seekbar.Step = 1000;
             seekbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             seekbar.TabIndex = 26;
-            seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseMove);
-            seekbar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Seekbar_MouseUp);
+            seekbar.MouseMove += new System.Windows.Forms.MouseEventHandler(Seekbar_MouseMove);
+            seekbar.MouseUp += new System.Windows.Forms.MouseEventHandler(Seekbar_MouseUp);
             seekbar.Colors = new Color[2]
             {
                 Color.Violet,
@@ -724,7 +723,8 @@ namespace BXPlayerGUI
                 {
                     if ((bx.FileHasLyricsMeta && e.RawMeta.Key == "Lyric") || (!bx.FileHasLyricsMeta && e.RawMeta.Key == "GenericText"))
                     {
-                        if (!(e.RawMeta.Key == "GenericText" && e.RawMeta.Value.StartsWith("@"))) {
+                        if (!(e.RawMeta.Key == "GenericText" && e.RawMeta.Value.StartsWith("@")))
+                        {
                             _lyric_raw = e.RawMeta.Value;
                             _lyric_raw_time = DateTime.Now;
                         }
@@ -835,7 +835,8 @@ namespace BXPlayerGUI
                     {
                         bx.Play();
                     }
-                } else
+                }
+                else
                 {
                     ZefieLib.Prompts.ShowError("Unfortunately, due to a bug in the Beatnik Player, you cannot seek Non-MIDI files past 1:37.");
                 }
@@ -1291,7 +1292,8 @@ namespace BXPlayerGUI
 
         private void Reverbcb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!settingReverbCB) {
+            if (!settingReverbCB)
+            {
                 bx.ReverbType = (((ComboBox)sender).SelectedIndex + 1);
             }
             SetControlEnabled(cbMidiProvidedReverb, (((ComboBox)sender).SelectedIndex > 0 && ((ComboBox)sender).SelectedIndex < 11));
@@ -1386,7 +1388,8 @@ namespace BXPlayerGUI
                 if (LyricDialog == null)
                 {
                     Size s = new Size();
-                    LyricDialog = new Form {
+                    LyricDialog = new Form
+                    {
                         Text = "Lyrics",
                         ShowIcon = false,
                         MaximizeBox = false,
@@ -1510,5 +1513,5 @@ namespace BXPlayerGUI
         /// </summary>
         [XmlElement("CommandLineArguments")]
         public List<string> CommandLineArguments { get; set; } = new List<string>();
-    }  
+    }
 }
