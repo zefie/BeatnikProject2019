@@ -12,8 +12,11 @@
   
   <bank src="soundbank-mid.gm" name="Java v1.5 Mid Soundbank" sha1="3e1b1f2374d3f47a5e4b4a1399a735396925700f" />
   <bank src="soundbank-deluxe.gm" name="Java v1.5 Deluxe Soundbank" sha1="e8109db5ea8133a6e1d429a8bef4a1a8cb1396e7" />
-
-  <bank src="minibae-nokia-100.hsb" name="Nokia (v1.0.0)" sha1="2a9b4813ff7df35db57da56233f4cbd6ca9a648d" />
-  <bank src="minibae-nokia-105.hsb" name="Nokia (v1.0.5)" sha1="b650b8ce69e470ed771b5a5df7aa3a529193d073" />
-  <bank src="minibae-nokia-108.hsb" name="Nokia (v1.0.8)" sha1="df1225ef07b615638513f88801aedf8a6a8767b3" />
+  <bank src="minibae-nokia-100.hsb" name="HruskaNokia (v1.0.0)" sha1="2a9b4813ff7df35db57da56233f4cbd6ca9a648d" />
+  <bank src="minibae-nokia-105.hsb" name="HruskaNokia (v1.0.5)" sha1="b650b8ce69e470ed771b5a5df7aa3a529193d073" />
+  <bank src="minibae-nokia-108.hsb" name="SalterNokia (v1.0.8)" sha1="df1225ef07b615638513f88801aedf8a6a8767b3" />
+  <bank src="minibae-nokia-3510.hsb" name="Nokia 3510 (Chippy)" sha1="E0CA456952793B8D5EE16C598A0E48712A912BBA" />
+  <bank src="minibae-nokia-7650.hsb" name="Nokia 7650 (Large)" sha1="82F15AB9938069E07DB9181934970A1D6BE37C01" />
+  <bank src="minibae-nokia-5140i.hsb" name="Nokia 5140i (Idefix)" sha1="9D887700B5489462F7F38F8EA094BCBA0C850234" />
+  <bank src="minibae-nokia-ngage.hsb" name="Nokia N-Gage (Mango)" sha1="6B89950CD76E0542AB2575C69AB3448D0F0C17B5" />
 </banks>
