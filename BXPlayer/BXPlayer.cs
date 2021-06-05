@@ -250,7 +250,7 @@ namespace BXPlayer
         /// <param name="note">Note Number 0-127</param>
         /// <param name="volume">Volume 0-127</param>
         /// </summary>
-        public void NoteOn(short channel, short note, short volume)
+        public void NoteOff(short channel, short note, short volume)
             => bx.noteOff(channel, note, volume);
 
         /// <summary>
