@@ -60,7 +60,7 @@ namespace BXPatchSwitcher
                 Debug.WriteLine("Return Session Data: " + outopts);
             }
             string res = InstallPatch(patchidx, outopts);
-            if (res != "OK" && res != "EXIT")
+            if (res == "NEEDADMIN")
             {
                 if (ZefieLib.UAC.IsAdmin)
                 {
@@ -75,7 +75,7 @@ namespace BXPatchSwitcher
             {
                 Application.Exit();
             }
-            else if (res != "OK")
+            else if (res != "OK" && res != "NEEDADMIN")
             {
                 MessageBox.Show(res, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -91,20 +91,32 @@ namespace BXPatchSwitcher
                 {
                     File.SetAttributes(bxpatch_dest, FileAttributes.Normal);
                 }
-                if (junctionchk.Checked && !junctioned)
-                {
+                if (junctionchk.Checked) {
+                    if (File.Exists(bxpatch_preferred_dest)) {
+                        File.SetAttributes(bxpatch_preferred_dest, FileAttributes.Normal);
+                    }
+                    File.Copy(source_file, bxpatch_preferred_dest, true);
                     if (File.Exists(bxpatch_default_dest))
-                    {
-                        File.Delete(bxpatch_default_dest);
+                    {                        
+                        bxpatch_dest = bxpatch_preferred_dest;
+                        junctioned = true;
                     }
-                    if (File.Exists(bxpatch_preferred_dest))
+                    else
                     {
-                        File.Delete(bxpatch_preferred_dest);
+                        if (ZefieLib.UAC.IsAdmin)
+                        {
+                            ZefieLib.Path.CreateSymbolicLink(bxpatch_default_dest, bxpatch_preferred_dest, ZefieLib.Path.SymbolicLink.File);
+                            junctioned = true;
+                        } 
+                        else
+                        {
+                            return "NEEDADMIN";
+                        }
                     }
-                    File.Copy(source_file, bxpatch_preferred_dest);
-                    ZefieLib.Path.CreateSymbolicLink(bxpatch_default_dest, bxpatch_preferred_dest, ZefieLib.Path.SymbolicLink.File);
-                    bxpatch_dest = bxpatch_preferred_dest;
-                    junctioned = true;
+                    if (!File.Exists(bxpatch_preferred_dest))
+                    {
+                        return "Unknown error when copying file from \n\"" + source_file + "\"\nto\n"+ bxpatch_preferred_dest;
+                    }
                 }
                 else
                 {
@@ -120,6 +132,8 @@ namespace BXPatchSwitcher
                     }
                     File.Copy(source_file, bxpatch_dest);
                 }
+
+
                 File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
                 FileSecurity fSecurity = File.GetAccessControl(bxpatch_dest);
 
