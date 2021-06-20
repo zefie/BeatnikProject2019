@@ -9,9 +9,9 @@
   <bank src="patches-editor.hsb" name="Beatnik Standard (v2.4.6, from editor)" sha1="c981e81b19959c981f2f46477abcbfc0df1af5a1" />
   <bank src="patchesp.hsb" name="Beatnik Pro (v3.0.0, uncomp)" sha1="ae4d88373aeca8ee2ff5ced8d6b76bbfeb91c8cc" />
   <bank src="patches111-uncompressed.hsb" name="Beatnik Standard (v1.1.1, uncomp)" sha1="b4521cd38c123c272757c58fe058944a4e29c90c" />
-  
   <bank src="soundbank-mid.gm" name="Java v1.5 Mid Soundbank" sha1="3e1b1f2374d3f47a5e4b4a1399a735396925700f" />
   <bank src="soundbank-deluxe.gm" name="Java v1.5 Deluxe Soundbank" sha1="e8109db5ea8133a6e1d429a8bef4a1a8cb1396e7" />
+  <bank src="sony-ericsson-p900.hsb" name="Sony Ericsson P900" sha1="C87EF17F4ED38FD994C7C38AA82FF94121CFA5F2" />
   <bank src="minibae-nokia-100.hsb" name="HruskaNokia (v1.0.0)" sha1="2a9b4813ff7df35db57da56233f4cbd6ca9a648d" />
   <bank src="minibae-nokia-105.hsb" name="HruskaNokia (v1.0.5)" sha1="b650b8ce69e470ed771b5a5df7aa3a529193d073" />
   <bank src="minibae-nokia-108.hsb" name="SalterNokia (v1.0.8)" sha1="df1225ef07b615638513f88801aedf8a6a8767b3" />
