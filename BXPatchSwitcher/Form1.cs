@@ -28,11 +28,7 @@ namespace BXPatchSwitcher
         public Form1()
         {
             InitializeComponent();
-#if DEBUG
-            cwd = "C:\\bin\\BeatnikProject2019";
-#else
             cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
-#endif
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
             bxpatch_preferred_dest = cwd + "\\patches.hsb";
@@ -218,25 +214,22 @@ namespace BXPatchSwitcher
         {
             if (File.Exists(bxpatch_preferred_dest) && File.Exists(bxpatch_default_dest))
             {
-                if (ZefieLib.Cryptography.Hash.SHA1(bxpatch_preferred_dest) == ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest))
+
+                try
                 {
-                    bxpatch_dest = bxpatch_preferred_dest;
-                    junctioned = true;
+                    if (ZefieLib.Cryptography.Hash.SHA1(bxpatch_preferred_dest) == ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest))
+                    {
+                        bxpatch_dest = bxpatch_preferred_dest;
+                        junctioned = true;
+                    }
+                    junctionchk.Checked = junctioned; current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest);
+                    Debug.WriteLine("Current Patches Hash: " + current_hash);
                 }
-                junctionchk.Checked = junctioned;
-                if (File.Exists(bxpatch_default_dest))
+                catch
                 {
-                    try
-                    {
-                        current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest);
-                        Debug.WriteLine("Current Patches Hash: " + current_hash);
-                    }
-                    catch
-                    {
-                        junctionchk.Checked = true;
-                        bxinsthsb.Text = "~ CANNOT READ, BROKEN JUNCTION ~";
-                        Debug.WriteLine("Could not read " + bxpatch_default_dest + ", bad junction?");
-                    }
+                    junctionchk.Checked = true;
+                    bxinsthsb.Text = "~ CANNOT READ, BROKEN JUNCTION ~";
+                    Debug.WriteLine("Could not read " + bxpatch_default_dest + ", bad junction?");
                 }
             }
             else
