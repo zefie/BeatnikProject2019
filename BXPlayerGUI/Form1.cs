@@ -674,6 +674,7 @@ namespace BXPlayerGUI
                     SetButtonEnabled(stopbut, true);
                     SetButtonImage(playbut, Properties.Resources.icon_pause);
                     SetStatusLabelText(status, "Playing.");
+                    bx.ReverbType = GetComboBoxIndex(reverbcb) + 1;
                 }
             }
             else
