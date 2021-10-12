@@ -660,6 +660,7 @@ namespace BXPlayer
         {
             if (Duration != 0 && bx.IsReady() && (bx.IsPlaying() || bx.IsPaused()))
             {
+                fileChangeHelperTimer.Stop();
                 short _bx_current_reverb = (short)bx.getController(1, 91);
                 short _bx_current_chorus = (short)bx.getController(1, 93);
 
@@ -689,10 +690,10 @@ namespace BXPlayer
                 if (LoudMode != _bx_prev_loud_mode)
                     LoudMode = _bx_prev_loud_mode;
 
-                Play();
+
                 if (_using_custom_reverb && _custom_reverb != -1) ReverbType = _custom_reverb;
                 else ReverbType = ReverbType;
-                fileChangeHelperTimer.Stop();
+
                 if (Path.GetExtension(LoadedFile).ToLower() == ".rmf")
                 {
                     Title = GetInfo("title");
@@ -706,6 +707,8 @@ namespace BXPlayer
                         OnMetaDataChanged(this, mevt);
                     }
                 }
+
+                Play();
             }
         }
 
