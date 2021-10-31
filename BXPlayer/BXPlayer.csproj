@@ -74,15 +74,6 @@
     </NativeReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BXBanks\minibae-nokia-100.hsb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="BXBanks\minibae-nokia-105.hsb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="BXBanks\minibae-nokia-108.hsb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="BXBanks\minibae-wtv.hsb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -110,6 +101,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="BXBanks\danger-hiptop.hsb" />
+    <None Include="BXBanks\minibae-hruskanokia-rev1.hsb" />
+    <None Include="BXBanks\minibae-hruskanokia-rev5.hsb" />
+    <None Include="BXBanks\minibae-nokia-3510.hsb" />
+    <None Include="BXBanks\minibae-nokia-5140i.hsb" />
+    <None Include="BXBanks\minibae-nokia-7650.hsb" />
+    <None Include="BXBanks\minibae-nokia-ngage.hsb" />
+    <None Include="BXBanks\minibae-salternokia-rev8a.hsb" />
+    <None Include="BXBanks\NokiaRev BS4.hsb" />
+    <None Include="BXBanks\sony-ericsson-p900.hsb" />
     <None Include="BXBanks\soundbank-deluxe.gm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
