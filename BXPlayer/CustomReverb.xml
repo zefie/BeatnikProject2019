@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <reverbdef xmlns="urn:beatnikx-reverbdef">
-  <reverb name="WebTV (Estimated)" bxreverb="8" reverblevel="10" choruslevel="20" />
+  <reverb name="WebTV (Estimated)" bxreverb="7" reverblevel="15" choruslevel="15" />
 </reverbdef>
 
 <!--
