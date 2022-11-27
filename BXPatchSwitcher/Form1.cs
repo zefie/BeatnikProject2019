@@ -13,8 +13,6 @@ namespace BXPatchSwitcher
     public partial class Form1 : Form
     {
         private readonly string cwd;
-        private readonly string bxpatch_default_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
-        private readonly string bxpatch_preferred_dest;
         private readonly string[] args = Environment.GetCommandLineArgs();
         private readonly string patches_dir;
         private readonly string bankfile;
@@ -28,15 +26,10 @@ namespace BXPatchSwitcher
         public Form1()
         {
             InitializeComponent();
-#if DEBUG
-            cwd = "C:\\bin\\BeatnikProject2019";
-#else
             cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
-#endif
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";
-            bxpatch_preferred_dest = cwd + "\\patches.hsb";
-            bxpatch_dest = bxpatch_default_dest;
+            bxpatch_dest = cwd + "\\patches.hsb";
         }
 
         private void BxpatchBtn_Click(object sender, EventArgs e)
@@ -44,11 +37,10 @@ namespace BXPatchSwitcher
             // store selected patch
             int patchidx = bxpatchcb.SelectedIndex;
 
-            string rawopts = patchidx.ToString() + " " + junctionchk.Checked.ToString();
+            string rawopts = patchidx.ToString();
             string outopts = "";
 
             // for handling session data from BXPlayerGUI
-
             if (options != null)
             {
                 List<string> list;
@@ -56,8 +48,6 @@ namespace BXPatchSwitcher
                 list.RemoveAt(0);
                 rawopts += " " + ZefieLib.Data.Base64Encode(String.Join("|", options));
                 outopts = ZefieLib.Data.Base64Encode(String.Join("|", list.ToArray()));
-                Debug.WriteLine("Received Session Data: " + rawopts.Split(' ')[2]);
-                Debug.WriteLine("Return Session Data: " + outopts);
             }
             string res = InstallPatch(patchidx, outopts);
             if (res == "NEEDADMIN")
@@ -91,48 +81,8 @@ namespace BXPatchSwitcher
                 {
                     File.SetAttributes(bxpatch_dest, FileAttributes.Normal);
                 }
-                if (junctionchk.Checked) {
-                    if (File.Exists(bxpatch_preferred_dest)) {
-                        File.SetAttributes(bxpatch_preferred_dest, FileAttributes.Normal);
-                    }
-                    File.Copy(source_file, bxpatch_preferred_dest, true);
-                    if (File.Exists(bxpatch_default_dest))
-                    {                        
-                        bxpatch_dest = bxpatch_preferred_dest;
-                        junctioned = true;
-                    }
-                    else
-                    {
-                        if (ZefieLib.UAC.IsAdmin)
-                        {
-                            ZefieLib.Path.CreateSymbolicLink(bxpatch_default_dest, bxpatch_preferred_dest, ZefieLib.Path.SymbolicLink.File);
-                            junctioned = true;
-                        } 
-                        else
-                        {
-                            return "NEEDADMIN";
-                        }
-                    }
-                    if (!File.Exists(bxpatch_preferred_dest))
-                    {
-                        return "Unknown error when copying file from \n\"" + source_file + "\"\nto\n"+ bxpatch_preferred_dest;
-                    }
-                }
-                else
-                {
-                    if (File.Exists(bxpatch_dest))
-                    {
-                        File.Delete(bxpatch_dest);
-                    }
-                    if (!junctionchk.Checked && junctioned)
-                    {
-                        File.Delete(bxpatch_default_dest);
-                        bxpatch_dest = bxpatch_default_dest;
-                        junctioned = false;
-                    }
-                    File.Copy(source_file, bxpatch_dest);
-                }
-
+                File.Delete(bxpatch_dest);
+                File.Copy(source_file, bxpatch_dest);
 
                 File.SetAttributes(bxpatch_dest, FileAttributes.ReadOnly);
                 FileSecurity fSecurity = File.GetAccessControl(bxpatch_dest);
@@ -142,13 +92,6 @@ namespace BXPatchSwitcher
 
                 // Set the new access settings.
                 File.SetAccessControl(bxpatch_dest, fSecurity);
-                if (!junctioned)
-                {
-                    if (File.Exists(bxpatch_preferred_dest))
-                    {
-                        File.Delete(bxpatch_preferred_dest);
-                    }
-                }
 
                 if (return_exe != null)
                 {
@@ -178,7 +121,7 @@ namespace BXPatchSwitcher
                 {
                     MessageBox.Show("Error (" + f.GetType().ToString() + "):\n\n" + f.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                return f.Message;
+                return "NEEDADMIN";
             }
         }
 
@@ -216,27 +159,17 @@ namespace BXPatchSwitcher
 
         private void Init_Form()
         {
-            if (File.Exists(bxpatch_preferred_dest) && File.Exists(bxpatch_default_dest))
+            if (File.Exists(bxpatch_dest))
             {
-                if (ZefieLib.Cryptography.Hash.SHA1(bxpatch_preferred_dest) == ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest))
+                try
                 {
-                    bxpatch_dest = bxpatch_preferred_dest;
-                    junctioned = true;
+                    current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_dest);
+                    Debug.WriteLine("Current Patches Hash: " + current_hash);
                 }
-                junctionchk.Checked = junctioned;
-                if (File.Exists(bxpatch_default_dest))
+                catch
                 {
-                    try
-                    {
-                        current_hash = ZefieLib.Cryptography.Hash.SHA1(bxpatch_default_dest);
-                        Debug.WriteLine("Current Patches Hash: " + current_hash);
-                    }
-                    catch
-                    {
-                        junctionchk.Checked = true;
-                        bxinsthsb.Text = "~ CANNOT READ, BROKEN JUNCTION ~";
-                        Debug.WriteLine("Could not read " + bxpatch_default_dest + ", bad junction?");
-                    }
+                    bxinsthsb.Text = "~ CANNOT READ PATCHES ~";
+                    Debug.WriteLine("Could not read " + bxpatch_dest);
                 }
             }
             else
@@ -328,40 +261,21 @@ namespace BXPatchSwitcher
                     bxpatchcb.SelectedIndex = argidx;
                     has_index = true;
                 }
-                if (args.Length > 3)
-                {
-                    junctionchk.Checked = Convert.ToBoolean(args[2]);
-                    options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[3])).Split('|');
-                    if (File.Exists(options[0]))
-                    {
-                        return_exe = options[0];
-                    }
-                }
-                if (args.Length > 2 || !has_index)
-                {
-                    if (has_index)
-                    {
-                        junctionchk.Checked = Convert.ToBoolean(args[2]);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            int argidx2 = has_index ? 2 : 1;
-
-                            options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[argidx2])).Split('|');
-                            if (File.Exists(options[0]))
-                            {
-                                return_exe = options[0];
-                            }
-                        }
-                        catch { }
-                    }
-                }
                 if (has_index)
                 {
                     BxpatchBtn_Click(null, null);
-                }
+                } else { 
+                    try
+                    {
+                        int argidx2 = has_index ? 2 : 1;
+                        options = Encoding.UTF8.GetString(ZefieLib.Data.Base64Decode(args[argidx2])).Split('|');
+                        if (File.Exists(options[0]))
+                        {
+                            return_exe = options[0];
+                        }
+                    }
+                    catch { }
+                } 
             }
         }
     }

@@ -8,7 +8,6 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
 - Windows XP or newer (should work on any windows supporting .NET since the Beatnik OCX worked on 98, Tested on Windows 10 x64)
   - May have minor graphical issues on Windows XP but functions propertly ([v1.1.7142.6918](https://github.com/zefie/BeatnikProject2019/releases/tag/v1.1.7142.6918) tested on Pentium 3 with WinXP and 256MB RAM)
 - .NET Framework 4.0
-- Admin access (because Beatnik is hardcoded to GetWindowsDirectoryA() + "\patches.hsb")
 
 ## Features:
 - Play Beatnik RMF, MIDI, MIDI Karaoke Files using classic Beatnik Soundbanks
@@ -26,15 +25,6 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
   - Click "Patch Bank Switcher"
   - Choose a patchset and apply it
 - Load MIDI and enjoy!
-
-## Note regarding Junction
-As stated in the requirements, Beatnik looks for the patches.hsb file in your Windows Directory.
-Therefore we will always need admin at least once. But if we install a junction (kinda like a symlink for those linux folks),
-then we can just point %WINDIR%\patches.hsb to our local folder, thus not needing admin each time you switch a patchset in the future.
-
-However, you still need to restart the program due to the Beatnik Library not releasing the patchset.
-Because of this, I have added features to help the program resume where you left off, if you choose "Yes"
-when the patch bank switcher asks if you would like to run the player again.
 
 ## Note regarding Firewalls:
 Opening .kar files runs a internal "HTTP Server" (not standard by any means),

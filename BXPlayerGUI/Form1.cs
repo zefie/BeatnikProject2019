@@ -32,7 +32,7 @@ namespace BXPlayerGUI
         private Mutex _mutexApplication;
         private bool _firstApplicationInstance;
         private readonly string cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
-        private readonly string bxpatch_dest = Environment.GetEnvironmentVariable("WINDIR") + "\\patches.hsb";
+        private readonly string bxpatch_dest = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\patches.hsb";
         private readonly string[] args = Environment.GetCommandLineArgs();
         private readonly string _patchswitcher_exe;
         private readonly string _user_config_file;

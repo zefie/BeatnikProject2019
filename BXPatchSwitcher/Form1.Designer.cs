@@ -33,8 +33,6 @@
             this.bxpatchlbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.bxinsthsb = new System.Windows.Forms.Label();
-            this.junctionchk = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // bxpatchBtn
@@ -83,33 +81,11 @@
             this.bxinsthsb.Text = "Unknown";
             this.bxinsthsb.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // junctionchk
-            // 
-            this.junctionchk.AutoSize = true;
-            this.junctionchk.Location = new System.Drawing.Point(270, 92);
-            this.junctionchk.Name = "junctionchk";
-            this.junctionchk.Size = new System.Drawing.Size(15, 14);
-            this.junctionchk.TabIndex = 11;
-            this.junctionchk.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.junctionchk.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(83, 85);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(181, 26);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Use NTFS Junction to prevent future\r\nadministrative privilege requirements.";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(300, 124);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.junctionchk);
+            this.ClientSize = new System.Drawing.Size(300, 92);
             this.Controls.Add(this.bxinsthsb);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bxpatchBtn);
@@ -133,8 +109,6 @@
         private System.Windows.Forms.Label bxpatchlbl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label bxinsthsb;
-        private System.Windows.Forms.CheckBox junctionchk;
-        private System.Windows.Forms.Label label2;
     }
 }
 
