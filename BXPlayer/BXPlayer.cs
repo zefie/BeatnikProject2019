@@ -55,6 +55,7 @@ namespace BXPlayer
         /// 
         public BXPlayerClass()
         {
+            Directory.SetCurrentDirectory(cwd);
             progressMonitor.Interval = 250;
             progressMonitor.Elapsed += ProgressMonitor_Elapsed;
             fileChangeHelperTimer.Interval = bxdelay;
