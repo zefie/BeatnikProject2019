@@ -5,7 +5,9 @@
   <bank src="patches-wtv2.hsb" name="WebTV Plus (v2.1.0, build-3454)" sha1="1780c86aeb5a3e3d85ee02d8f20200a8e3629f4b" />
   <bank src="patches-wtv.hsb" name="WebTV Plus (wtv-music)" sha1="7fa3168dae8ee9037a3935bb7cd93f26b6ce996e" />
   <bank src="patches-wtv-uncompressed.hsb" name="WebTV Plus (wtv-music, uncomp)" sha1="276bf7f476c17d5c32620e114e9f0ad5758dd80e" />
-  
+  <bank src="patches-beos.hsb" name="BeOS Patches" sha1="835f57896955b03561b33ff02c957bda6d2a938d" />
+  <bank src="big_synth-beos.hsb" name="BeOS Big Synth" sha1="41a0ec1c18e92d31645d4d70fa6af7b92660f4f0" />
+
   <bank src="soundbank-min.gm" name="Beatnik Standard (v2.4.3, from Java)" sha1="003232ab5a418f34007c525d66e8220993fe62f8" default="true" />
   <bank src="patches-editor.hsb" name="Beatnik Standard (v2.4.6, from editor)" sha1="c981e81b19959c981f2f46477abcbfc0df1af5a1" />
   <bank src="patchesp.hsb" name="Beatnik Pro (v3.0.0, uncomp)" sha1="ae4d88373aeca8ee2ff5ced8d6b76bbfeb91c8cc" />
