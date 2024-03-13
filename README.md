@@ -13,7 +13,7 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
 - Play Beatnik RMF, MIDI, MIDI Karaoke Files using classic Beatnik Soundbanks
 - Basic MIDI Controls, such as Transpose, Tempo, Volume, Seeking, Channel Mute
 - Ability to switch soundbanks almost seamlessly
-- 17 Soundbanks to choose from, including rare Soundbanks from WebTV and Nokia devices.
+- 20+ Soundbanks to choose from, including rare Soundbanks from WebTV and Nokia devices.
 - User Configuration Support to retain common settings
 - Drag-n-Drop Support
 - File association support (Use "Open With", then check "Always Open With" after browsing to BXPlayerGUI.exe)
