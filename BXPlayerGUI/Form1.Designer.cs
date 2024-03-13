@@ -132,6 +132,8 @@
             // 
             // openfile
             // 
+            this.openfile.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.openfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.openfile.Location = new System.Drawing.Point(2, 1);
             this.openfile.Name = "openfile";
             this.openfile.Size = new System.Drawing.Size(75, 23);
@@ -157,6 +159,8 @@
             // playbut
             // 
             this.playbut.Enabled = false;
+            this.playbut.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.playbut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.playbut.Image = global::BXPlayerGUI.Properties.Resources.icon_play;
             this.playbut.Location = new System.Drawing.Point(2, 25);
             this.playbut.Name = "playbut";
@@ -168,6 +172,8 @@
             // stopbut
             // 
             this.stopbut.Enabled = false;
+            this.stopbut.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.stopbut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.stopbut.Image = global::BXPlayerGUI.Properties.Resources.icon_stop;
             this.stopbut.Location = new System.Drawing.Point(54, 25);
             this.stopbut.Name = "stopbut";
@@ -259,6 +265,8 @@
             // 
             // patchswlnchr
             // 
+            this.patchswlnchr.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.patchswlnchr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.patchswlnchr.Location = new System.Drawing.Point(79, 35);
             this.patchswlnchr.Name = "patchswlnchr";
             this.patchswlnchr.Size = new System.Drawing.Size(119, 23);
@@ -546,7 +554,7 @@
             this.midichpnl.Controls.Add(this.midichlbl4, 3, 0);
             this.midichpnl.Controls.Add(this.midichk_1, 0, 1);
             this.midichpnl.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.midichpnl.Location = new System.Drawing.Point(4, 23);
+            this.midichpnl.Location = new System.Drawing.Point(4, 24);
             this.midichpnl.Name = "midichpnl";
             this.midichpnl.RowCount = 2;
             this.midichpnl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.47619F));
@@ -557,13 +565,15 @@
             // midichk_16
             // 
             this.midichk_16.AutoSize = true;
+            this.midichk_16.BackColor = System.Drawing.SystemColors.Control;
+            this.midichk_16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.midichk_16.Checked = true;
             this.midichk_16.CheckState = System.Windows.Forms.CheckState.Checked;
             this.midichk_16.Location = new System.Drawing.Point(378, 18);
             this.midichk_16.Name = "midichk_16";
             this.midichk_16.Size = new System.Drawing.Size(15, 14);
             this.midichk_16.TabIndex = 31;
-            this.midichk_16.UseVisualStyleBackColor = true;
+            this.midichk_16.UseVisualStyleBackColor = false;
             this.midichk_16.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
             // midichk_15
@@ -888,13 +898,14 @@
             // midichk_1
             // 
             this.midichk_1.AutoSize = true;
+            this.midichk_1.BackColor = System.Drawing.SystemColors.Control;
             this.midichk_1.Checked = true;
             this.midichk_1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.midichk_1.Location = new System.Drawing.Point(3, 18);
             this.midichk_1.Name = "midichk_1";
             this.midichk_1.Size = new System.Drawing.Size(15, 14);
             this.midichk_1.TabIndex = 16;
-            this.midichk_1.UseVisualStyleBackColor = true;
+            this.midichk_1.UseVisualStyleBackColor = false;
             this.midichk_1.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
             // transposevalbl
@@ -925,10 +936,12 @@
             // 
             // temporstbtn
             // 
+            this.temporstbtn.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.temporstbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.temporstbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.temporstbtn.Location = new System.Drawing.Point(351, 68);
+            this.temporstbtn.Location = new System.Drawing.Point(351, 62);
             this.temporstbtn.Name = "temporstbtn";
-            this.temporstbtn.Size = new System.Drawing.Size(54, 19);
+            this.temporstbtn.Size = new System.Drawing.Size(54, 25);
             this.temporstbtn.TabIndex = 43;
             this.temporstbtn.Text = "Reset";
             this.temporstbtn.UseVisualStyleBackColor = true;
@@ -936,10 +949,12 @@
             // 
             // transposerstbtn
             // 
+            this.transposerstbtn.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.transposerstbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.transposerstbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.transposerstbtn.Location = new System.Drawing.Point(143, 68);
+            this.transposerstbtn.Location = new System.Drawing.Point(143, 62);
             this.transposerstbtn.Name = "transposerstbtn";
-            this.transposerstbtn.Size = new System.Drawing.Size(54, 19);
+            this.transposerstbtn.Size = new System.Drawing.Size(54, 25);
             this.transposerstbtn.TabIndex = 49;
             this.transposerstbtn.Text = "Reset";
             this.transposerstbtn.UseVisualStyleBackColor = true;
@@ -947,11 +962,13 @@
             // 
             // midichrstbtn
             // 
+            this.midichrstbtn.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.midichrstbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.midichrstbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.midichrstbtn.Location = new System.Drawing.Point(338, 2);
+            this.midichrstbtn.Location = new System.Drawing.Point(338, 1);
             this.midichrstbtn.Margin = new System.Windows.Forms.Padding(0);
             this.midichrstbtn.Name = "midichrstbtn";
-            this.midichrstbtn.Size = new System.Drawing.Size(68, 19);
+            this.midichrstbtn.Size = new System.Drawing.Size(68, 21);
             this.midichrstbtn.TabIndex = 44;
             this.midichrstbtn.Text = "Unmute All";
             this.midichrstbtn.UseVisualStyleBackColor = true;
@@ -968,11 +985,13 @@
             // 
             // midich_muteall_btn
             // 
+            this.midich_muteall_btn.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.midich_muteall_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.midich_muteall_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.midich_muteall_btn.Location = new System.Drawing.Point(284, 2);
+            this.midich_muteall_btn.Location = new System.Drawing.Point(284, 1);
             this.midich_muteall_btn.Margin = new System.Windows.Forms.Padding(0);
             this.midich_muteall_btn.Name = "midich_muteall_btn";
-            this.midich_muteall_btn.Size = new System.Drawing.Size(54, 19);
+            this.midich_muteall_btn.Size = new System.Drawing.Size(54, 21);
             this.midich_muteall_btn.TabIndex = 45;
             this.midich_muteall_btn.Text = "Mute All";
             this.midich_muteall_btn.UseVisualStyleBackColor = true;
@@ -980,11 +999,13 @@
             // 
             // midich_muteinvert_btn
             // 
+            this.midich_muteinvert_btn.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.midich_muteinvert_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.midich_muteinvert_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.midich_muteinvert_btn.Location = new System.Drawing.Point(211, 2);
+            this.midich_muteinvert_btn.Location = new System.Drawing.Point(211, 1);
             this.midich_muteinvert_btn.Margin = new System.Windows.Forms.Padding(0);
             this.midich_muteinvert_btn.Name = "midich_muteinvert_btn";
-            this.midich_muteinvert_btn.Size = new System.Drawing.Size(73, 19);
+            this.midich_muteinvert_btn.Size = new System.Drawing.Size(73, 21);
             this.midich_muteinvert_btn.TabIndex = 46;
             this.midich_muteinvert_btn.Text = "Invert Mute";
             this.midich_muteinvert_btn.UseVisualStyleBackColor = true;
@@ -1033,6 +1054,8 @@
             // infobut
             // 
             this.infobut.Enabled = false;
+            this.infobut.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonShadow;
+            this.infobut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.infobut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.infobut.ForeColor = System.Drawing.SystemColors.ControlText;
             this.infobut.Image = global::BXPlayerGUI.Properties.Resources.icon_info;

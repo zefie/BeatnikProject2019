@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlueMystic;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -22,10 +23,12 @@ namespace BXPatchSwitcher
         private string[] options;
         private string return_exe;
         private string current_hash;
+        private DarkModeCS DM = null;
 
         public Form1()
         {
             InitializeComponent();
+            DM = new DarkModeCS(this);
             cwd = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\";
             patches_dir = cwd + "BXBanks\\";
             bankfile = patches_dir + "BXBanks.xml";

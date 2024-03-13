@@ -1,5 +1,7 @@
-﻿using BXPlayer;
+﻿using BlueMystic;
+using BXPlayer;
 using BXPlayerEvents;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,6 +65,7 @@ namespace BXPlayerGUI
         private Form LyricDialog = null;
         private RichTextBox LyricDialogTextbox = null;
         private System.Windows.Forms.Timer LyricChecker = null;
+        private DarkModeCS DM = null; 
 
         private bool IsApplicationFirstInstance()
         {
@@ -97,7 +100,15 @@ namespace BXPlayerGUI
             }
 
             InitializeComponent();
+            DM = new DarkModeCS(this);
             seekbar = new ColorProgressBar();
+            if (DM.IsDarkMode)
+            {
+                stopbut.Image = ZefieLib.Imaging.InvertColors(stopbut.Image);
+                infobut.Image = ZefieLib.Imaging.InvertColors(infobut.Image);
+                playbut.Image = ZefieLib.Imaging.InvertColors(playbut.Image);
+                beatnikLogo.Image = ZefieLib.Imaging.InvertColors(beatnikLogo.Image);
+            }
             progressPanel.Controls.Add(seekbar);
             seekbar.Location = seekbar_placeholder.Location;
             seekbar.Size = seekbar_placeholder.Size;
@@ -112,8 +123,8 @@ namespace BXPlayerGUI
             seekbar.MouseUp += new System.Windows.Forms.MouseEventHandler(Seekbar_MouseUp);
             seekbar.Colors = new Color[2]
             {
-                Color.Violet,
-                Color.Purple
+                DM.OScolors.AccentLight,
+                DM.OScolors.AccentDark
             };
             Assembly assembly = Assembly.GetExecutingAssembly();
             version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
@@ -664,7 +675,7 @@ namespace BXPlayerGUI
                 {
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
-                    SetButtonImage(playbut, Properties.Resources.icon_play);
+                    SetButtonImage(playbut, DM.IsDarkMode ? ZefieLib.Imaging.InvertColors(Properties.Resources.icon_play) : Properties.Resources.icon_play);
                     SetStatusLabelText(status, "Paused.");
                 }
                 if (e.State == PlayState.Playing)
@@ -672,7 +683,7 @@ namespace BXPlayerGUI
                     //SetBXParams();
                     SetButtonEnabled(playbut, true);
                     SetButtonEnabled(stopbut, true);
-                    SetButtonImage(playbut, Properties.Resources.icon_pause);
+                    SetButtonImage(playbut, DM.IsDarkMode ? ZefieLib.Imaging.InvertColors(Properties.Resources.icon_pause) : Properties.Resources.icon_pause);
                     SetStatusLabelText(status, "Playing.");
                     bx.ReverbType = GetComboBoxIndex(reverbcb) + 1;
                 }
@@ -682,7 +693,7 @@ namespace BXPlayerGUI
                 SetControlVisiblity(mainControlPanel, false);
                 SetButtonEnabled(playbut, true);
                 SetButtonEnabled(stopbut, false);
-                SetButtonImage(playbut, Properties.Resources.icon_play);
+                SetButtonImage(playbut, DM.IsDarkMode ? ZefieLib.Imaging.InvertColors(Properties.Resources.icon_play) : Properties.Resources.icon_play);
                 SetStatusLabelText(status, "Ready.");
             }
         }
