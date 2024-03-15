@@ -5,8 +5,8 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
   - Basic functionality should work, but glitches or bugs are expected to occur.
   
 ## Requirements:
-- Windows XP or newer (should work on any windows supporting .NET since the Beatnik OCX worked on 98, Tested on Windows 10 x64)
-  - May have minor graphical issues on Windows XP but functions propertly ([v1.1.7142.6918](https://github.com/zefie/BeatnikProject2019/releases/tag/v1.1.7142.6918) tested on Pentium 3 with WinXP and 256MB RAM)
+- Windows 7 or newer. (For Windows XP Support please use build [v1.1.7955.26414](https://github.com/zefie/BeatnikProject2019/releases/tag/v1.1.7955.26414))
+  - May have minor graphical issues on Windows XP but functions propertly with older version (tested on Pentium 3 with WinXP and 256MB RAM)
 - .NET Framework 4.8
 
 ## Features:
