@@ -137,7 +137,7 @@
             this.openfile.Location = new System.Drawing.Point(2, 1);
             this.openfile.Name = "openfile";
             this.openfile.Size = new System.Drawing.Size(75, 23);
-            this.openfile.TabIndex = 2;
+            this.openfile.TabIndex = 29;
             this.openfile.Text = "Open File";
             this.openfile.UseVisualStyleBackColor = true;
             this.openfile.Click += new System.EventHandler(this.OpenFile_Click);
@@ -151,7 +151,7 @@
             this.bx_loop_cb.Location = new System.Drawing.Point(80, 32);
             this.bx_loop_cb.Name = "bx_loop_cb";
             this.bx_loop_cb.Size = new System.Drawing.Size(50, 17);
-            this.bx_loop_cb.TabIndex = 21;
+            this.bx_loop_cb.TabIndex = 33;
             this.bx_loop_cb.Text = "Loop";
             this.bx_loop_cb.UseVisualStyleBackColor = false;
             this.bx_loop_cb.CheckedChanged += new System.EventHandler(this.Loopcb_CheckedChanged);
@@ -165,7 +165,7 @@
             this.playbut.Location = new System.Drawing.Point(2, 25);
             this.playbut.Name = "playbut";
             this.playbut.Size = new System.Drawing.Size(25, 23);
-            this.playbut.TabIndex = 26;
+            this.playbut.TabIndex = 30;
             this.playbut.UseVisualStyleBackColor = true;
             this.playbut.Click += new System.EventHandler(this.Playbut_Click);
             // 
@@ -178,7 +178,7 @@
             this.stopbut.Location = new System.Drawing.Point(54, 25);
             this.stopbut.Name = "stopbut";
             this.stopbut.Size = new System.Drawing.Size(23, 23);
-            this.stopbut.TabIndex = 27;
+            this.stopbut.TabIndex = 32;
             this.stopbut.UseVisualStyleBackColor = true;
             this.stopbut.Click += new System.EventHandler(this.Stopbut_Click);
             // 
@@ -226,7 +226,7 @@
             this.bx_loud_mode.Location = new System.Drawing.Point(47, 67);
             this.bx_loud_mode.Name = "bx_loud_mode";
             this.bx_loud_mode.Size = new System.Drawing.Size(80, 17);
-            this.bx_loud_mode.TabIndex = 48;
+            this.bx_loud_mode.TabIndex = 23;
             this.bx_loud_mode.Text = "Loud Mode";
             this.tt.SetToolTip(this.bx_loud_mode, "Enables Beatnik\'s \"Loud\" Mode");
             this.bx_loud_mode.UseVisualStyleBackColor = false;
@@ -248,7 +248,7 @@
             this.volumeControl.Maximum = 100;
             this.volumeControl.Name = "volumeControl";
             this.volumeControl.Size = new System.Drawing.Size(206, 45);
-            this.volumeControl.TabIndex = 32;
+            this.volumeControl.TabIndex = 26;
             this.volumeControl.TickFrequency = 10;
             this.volumeControl.Value = 100;
             this.volumeControl.Scroll += new System.EventHandler(this.VolumeControl_Scroll);
@@ -270,7 +270,7 @@
             this.patchswlnchr.Location = new System.Drawing.Point(79, 35);
             this.patchswlnchr.Name = "patchswlnchr";
             this.patchswlnchr.Size = new System.Drawing.Size(119, 23);
-            this.patchswlnchr.TabIndex = 13;
+            this.patchswlnchr.TabIndex = 20;
             this.patchswlnchr.Text = "Patch Bank Switcher";
             this.patchswlnchr.UseVisualStyleBackColor = true;
             this.patchswlnchr.Click += new System.EventHandler(this.Patchswlnchr_Click);
@@ -413,7 +413,7 @@
             this.cbMidiProvidedReverb.Location = new System.Drawing.Point(178, 6);
             this.cbMidiProvidedReverb.Name = "cbMidiProvidedReverb";
             this.cbMidiProvidedReverb.Size = new System.Drawing.Size(15, 14);
-            this.cbMidiProvidedReverb.TabIndex = 43;
+            this.cbMidiProvidedReverb.TabIndex = 28;
             this.instant_tt.SetToolTip(this.cbMidiProvidedReverb, "Use MIDI-Provided Reverb and Chorus values, if available.\r\nIgnored with custom re" +
         "verb profiles.");
             this.cbMidiProvidedReverb.UseVisualStyleBackColor = false;
@@ -443,7 +443,7 @@
             this.reverbcb.Location = new System.Drawing.Point(48, 1);
             this.reverbcb.Name = "reverbcb";
             this.reverbcb.Size = new System.Drawing.Size(125, 21);
-            this.reverbcb.TabIndex = 40;
+            this.reverbcb.TabIndex = 27;
             this.tt.SetToolTip(this.reverbcb, "Beatnik Reverb Type\r\n* means Beatnik Player Default");
             this.reverbcb.SelectedIndexChanged += new System.EventHandler(this.Reverbcb_SelectedIndexChanged);
             // 
@@ -572,7 +572,7 @@
             this.midichk_16.Location = new System.Drawing.Point(378, 18);
             this.midichk_16.Name = "midichk_16";
             this.midichk_16.Size = new System.Drawing.Size(15, 14);
-            this.midichk_16.TabIndex = 31;
+            this.midichk_16.TabIndex = 19;
             this.midichk_16.UseVisualStyleBackColor = false;
             this.midichk_16.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -584,7 +584,7 @@
             this.midichk_15.Location = new System.Drawing.Point(353, 18);
             this.midichk_15.Name = "midichk_15";
             this.midichk_15.Size = new System.Drawing.Size(15, 14);
-            this.midichk_15.TabIndex = 30;
+            this.midichk_15.TabIndex = 18;
             this.midichk_15.UseVisualStyleBackColor = true;
             this.midichk_15.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -596,7 +596,7 @@
             this.midichk_14.Location = new System.Drawing.Point(328, 18);
             this.midichk_14.Name = "midichk_14";
             this.midichk_14.Size = new System.Drawing.Size(15, 14);
-            this.midichk_14.TabIndex = 29;
+            this.midichk_14.TabIndex = 17;
             this.midichk_14.UseVisualStyleBackColor = true;
             this.midichk_14.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -608,7 +608,7 @@
             this.midichk_13.Location = new System.Drawing.Point(303, 18);
             this.midichk_13.Name = "midichk_13";
             this.midichk_13.Size = new System.Drawing.Size(15, 14);
-            this.midichk_13.TabIndex = 28;
+            this.midichk_13.TabIndex = 16;
             this.midichk_13.UseVisualStyleBackColor = true;
             this.midichk_13.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -620,7 +620,7 @@
             this.midichk_12.Location = new System.Drawing.Point(278, 18);
             this.midichk_12.Name = "midichk_12";
             this.midichk_12.Size = new System.Drawing.Size(15, 14);
-            this.midichk_12.TabIndex = 27;
+            this.midichk_12.TabIndex = 15;
             this.midichk_12.UseVisualStyleBackColor = true;
             this.midichk_12.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -632,7 +632,7 @@
             this.midichk_11.Location = new System.Drawing.Point(253, 18);
             this.midichk_11.Name = "midichk_11";
             this.midichk_11.Size = new System.Drawing.Size(15, 14);
-            this.midichk_11.TabIndex = 26;
+            this.midichk_11.TabIndex = 14;
             this.midichk_11.UseVisualStyleBackColor = true;
             this.midichk_11.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -644,7 +644,7 @@
             this.midichk_10.Location = new System.Drawing.Point(228, 18);
             this.midichk_10.Name = "midichk_10";
             this.midichk_10.Size = new System.Drawing.Size(15, 14);
-            this.midichk_10.TabIndex = 25;
+            this.midichk_10.TabIndex = 13;
             this.midichk_10.UseVisualStyleBackColor = true;
             this.midichk_10.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -656,7 +656,7 @@
             this.midichk_9.Location = new System.Drawing.Point(203, 18);
             this.midichk_9.Name = "midichk_9";
             this.midichk_9.Size = new System.Drawing.Size(15, 14);
-            this.midichk_9.TabIndex = 24;
+            this.midichk_9.TabIndex = 12;
             this.midichk_9.UseVisualStyleBackColor = true;
             this.midichk_9.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -668,7 +668,7 @@
             this.midichk_8.Location = new System.Drawing.Point(178, 18);
             this.midichk_8.Name = "midichk_8";
             this.midichk_8.Size = new System.Drawing.Size(15, 14);
-            this.midichk_8.TabIndex = 23;
+            this.midichk_8.TabIndex = 11;
             this.midichk_8.UseVisualStyleBackColor = true;
             this.midichk_8.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -680,7 +680,7 @@
             this.midichk_7.Location = new System.Drawing.Point(153, 18);
             this.midichk_7.Name = "midichk_7";
             this.midichk_7.Size = new System.Drawing.Size(15, 14);
-            this.midichk_7.TabIndex = 22;
+            this.midichk_7.TabIndex = 10;
             this.midichk_7.UseVisualStyleBackColor = true;
             this.midichk_7.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -692,7 +692,7 @@
             this.midichk_6.Location = new System.Drawing.Point(128, 18);
             this.midichk_6.Name = "midichk_6";
             this.midichk_6.Size = new System.Drawing.Size(15, 14);
-            this.midichk_6.TabIndex = 21;
+            this.midichk_6.TabIndex = 9;
             this.midichk_6.UseVisualStyleBackColor = true;
             this.midichk_6.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -704,7 +704,7 @@
             this.midichk_5.Location = new System.Drawing.Point(103, 18);
             this.midichk_5.Name = "midichk_5";
             this.midichk_5.Size = new System.Drawing.Size(15, 14);
-            this.midichk_5.TabIndex = 20;
+            this.midichk_5.TabIndex = 8;
             this.midichk_5.UseVisualStyleBackColor = true;
             this.midichk_5.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -716,7 +716,7 @@
             this.midichk_4.Location = new System.Drawing.Point(78, 18);
             this.midichk_4.Name = "midichk_4";
             this.midichk_4.Size = new System.Drawing.Size(15, 14);
-            this.midichk_4.TabIndex = 19;
+            this.midichk_4.TabIndex = 7;
             this.midichk_4.UseVisualStyleBackColor = true;
             this.midichk_4.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -728,7 +728,7 @@
             this.midichk_3.Location = new System.Drawing.Point(53, 18);
             this.midichk_3.Name = "midichk_3";
             this.midichk_3.Size = new System.Drawing.Size(15, 14);
-            this.midichk_3.TabIndex = 18;
+            this.midichk_3.TabIndex = 6;
             this.midichk_3.UseVisualStyleBackColor = true;
             this.midichk_3.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -740,7 +740,7 @@
             this.midichk_2.Location = new System.Drawing.Point(28, 18);
             this.midichk_2.Name = "midichk_2";
             this.midichk_2.Size = new System.Drawing.Size(15, 14);
-            this.midichk_2.TabIndex = 17;
+            this.midichk_2.TabIndex = 5;
             this.midichk_2.UseVisualStyleBackColor = true;
             this.midichk_2.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -904,7 +904,7 @@
             this.midichk_1.Location = new System.Drawing.Point(3, 18);
             this.midichk_1.Name = "midichk_1";
             this.midichk_1.Size = new System.Drawing.Size(15, 14);
-            this.midichk_1.TabIndex = 16;
+            this.midichk_1.TabIndex = 4;
             this.midichk_1.UseVisualStyleBackColor = false;
             this.midichk_1.CheckStateChanged += new System.EventHandler(this.MidiChannel_toggle);
             // 
@@ -942,7 +942,7 @@
             this.temporstbtn.Location = new System.Drawing.Point(351, 62);
             this.temporstbtn.Name = "temporstbtn";
             this.temporstbtn.Size = new System.Drawing.Size(54, 25);
-            this.temporstbtn.TabIndex = 43;
+            this.temporstbtn.TabIndex = 22;
             this.temporstbtn.Text = "Reset";
             this.temporstbtn.UseVisualStyleBackColor = true;
             this.temporstbtn.Click += new System.EventHandler(this.Temporstbtn_Click);
@@ -955,7 +955,7 @@
             this.transposerstbtn.Location = new System.Drawing.Point(143, 62);
             this.transposerstbtn.Name = "transposerstbtn";
             this.transposerstbtn.Size = new System.Drawing.Size(54, 25);
-            this.transposerstbtn.TabIndex = 49;
+            this.transposerstbtn.TabIndex = 21;
             this.transposerstbtn.Text = "Reset";
             this.transposerstbtn.UseVisualStyleBackColor = true;
             this.transposerstbtn.Click += new System.EventHandler(this.Transposerstbtn_Click);
@@ -969,7 +969,7 @@
             this.midichrstbtn.Margin = new System.Windows.Forms.Padding(0);
             this.midichrstbtn.Name = "midichrstbtn";
             this.midichrstbtn.Size = new System.Drawing.Size(68, 21);
-            this.midichrstbtn.TabIndex = 44;
+            this.midichrstbtn.TabIndex = 3;
             this.midichrstbtn.Text = "Unmute All";
             this.midichrstbtn.UseVisualStyleBackColor = true;
             this.midichrstbtn.Click += new System.EventHandler(this.Midichrstbtn_Click);
@@ -992,7 +992,7 @@
             this.midich_muteall_btn.Margin = new System.Windows.Forms.Padding(0);
             this.midich_muteall_btn.Name = "midich_muteall_btn";
             this.midich_muteall_btn.Size = new System.Drawing.Size(54, 21);
-            this.midich_muteall_btn.TabIndex = 45;
+            this.midich_muteall_btn.TabIndex = 2;
             this.midich_muteall_btn.Text = "Mute All";
             this.midich_muteall_btn.UseVisualStyleBackColor = true;
             this.midich_muteall_btn.Click += new System.EventHandler(this.Midich_muteall_btn_Click);
@@ -1006,7 +1006,7 @@
             this.midich_muteinvert_btn.Margin = new System.Windows.Forms.Padding(0);
             this.midich_muteinvert_btn.Name = "midich_muteinvert_btn";
             this.midich_muteinvert_btn.Size = new System.Drawing.Size(73, 21);
-            this.midich_muteinvert_btn.TabIndex = 46;
+            this.midich_muteinvert_btn.TabIndex = 1;
             this.midich_muteinvert_btn.Text = "Invert Mute";
             this.midich_muteinvert_btn.UseVisualStyleBackColor = true;
             this.midich_muteinvert_btn.Click += new System.EventHandler(this.Midich_muteinvert_btn_Click);
@@ -1018,7 +1018,7 @@
             this.transposeControl.Minimum = -10;
             this.transposeControl.Name = "transposeControl";
             this.transposeControl.Size = new System.Drawing.Size(197, 45);
-            this.transposeControl.TabIndex = 47;
+            this.transposeControl.TabIndex = 24;
             this.transposeControl.Scroll += new System.EventHandler(this.Transposetb_Scroll);
             // 
             // tempoControl
@@ -1029,7 +1029,7 @@
             this.tempoControl.Minimum = 40;
             this.tempoControl.Name = "tempoControl";
             this.tempoControl.Size = new System.Drawing.Size(198, 45);
-            this.tempoControl.TabIndex = 41;
+            this.tempoControl.TabIndex = 25;
             this.tempoControl.TickFrequency = 10;
             this.tempoControl.Value = 140;
             this.tempoControl.Scroll += new System.EventHandler(this.TempoControl_Scroll);
@@ -1062,7 +1062,7 @@
             this.infobut.Location = new System.Drawing.Point(28, 25);
             this.infobut.Name = "infobut";
             this.infobut.Size = new System.Drawing.Size(23, 23);
-            this.infobut.TabIndex = 42;
+            this.infobut.TabIndex = 31;
             this.infobut.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.infobut.UseVisualStyleBackColor = true;
             this.infobut.Click += new System.EventHandler(this.Infobut_Click);
