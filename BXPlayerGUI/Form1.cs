@@ -696,6 +696,16 @@ namespace BXPlayerGUI
                 SetButtonImage(playbut, DM.IsDarkMode ? ZefieLib.Imaging.InvertColors(Properties.Resources.icon_play) : Properties.Resources.icon_play);
                 SetStatusLabelText(status, "Ready.");
             }
+
+            foreach (Control c in midichpnl.Controls)
+            {
+                if (c is CheckBox cb)
+                {
+                    short midich = (short)Convert.ToInt16(cb.Name.Split('_')[1]);
+                    bool muted = !cb.Checked;
+                    bx.MuteChannel(midich, muted);
+                }
+            }
         }
 
         private void Bx_FileChanged(object sender, FileChangeEvent e)
