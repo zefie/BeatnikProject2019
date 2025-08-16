@@ -17,13 +17,14 @@
   <bank src="soundbank-deluxe.gm" name="Java v1.5 Deluxe Soundbank" sha1="e8109db5ea8133a6e1d429a8bef4a1a8cb1396e7" />
   <bank src="minibae-hruskanokia-rev1.hsb" name="HruskaNokia (Rev 1, unfinished)" sha1="2a9b4813ff7df35db57da56233f4cbd6ca9a648d" />
   <bank src="minibae-hruskanokia-rev5.hsb" name="HruskaNokia (Rev 5)" sha1="b650b8ce69e470ed771b5a5df7aa3a529193d073" />
-  <bank src="NokiaRev BS4.hsb" name="SalterNokia (Rev 4)" sha1="60CE5E78C62DAC0CCBF68C1C768E5C0D5D1C1FAA" />
+  <bank src="NokiaRev BS3.hsb" name="SalterNokia (Rev 3)" sha1="88f1d4813fb86ac7891dadd12c142ceff878e2f0" />
+  <bank src="NokiaRev BS4.hsb" name="SalterNokia (Rev 4)" sha1="60ce5e78c62dac0ccbf68c1c768e5c0d5d1c1faa" />
   <bank src="minibae-salternokia-rev8a.hsb" name="SalterNokia (Rev 8a)" sha1="df1225ef07b615638513f88801aedf8a6a8767b3" />
-  <bank src="sony-ericsson-p800.hsb" name="Sony Ericsson P800" sha1="C87EF17F4ED38FD994C7C38AA82FF94121CFA5F2" />
-  <bank src="sony-ericsson-p900.hsb" name="Sony Ericsson P900" sha1="A3F90A5A94B85AA686FF54BDFE899F7AA977ADA9" />
-  <bank src="minibae-nokia-3510.hsb" name="Nokia 3510 (Chippy)" sha1="E0CA456952793B8D5EE16C598A0E48712A912BBA" />
-  <bank src="minibae-nokia-7650.hsb" name="Nokia 7650 (Large)" sha1="82F15AB9938069E07DB9181934970A1D6BE37C01" />
-  <bank src="minibae-nokia-5140i.hsb" name="Nokia 5140i (Idefix)" sha1="9D887700B5489462F7F38F8EA094BCBA0C850234" />
-  <bank src="minibae-nokia-ngage.hsb" name="Nokia N-Gage (Mango)" sha1="6B89950CD76E0542AB2575C69AB3448D0F0C17B5" />
-  <bank src="danger-hiptop.hsb" name="Danger Hiptop 1.1" sha1="8BB26FC66AECF14E2DFA48D2123E2576863FA2AB" />
+  <bank src="sony-ericsson-p800.hsb" name="Sony Ericsson P800" sha1="c87ef17f4ed38fd994c7c38aa82ff94121cfa5f2" />
+  <bank src="sony-ericsson-p900.hsb" name="Sony Ericsson P900" sha1="a3f90a5a94b85aa686ff54bdfe899f7aa977ada9" />
+  <bank src="minibae-nokia-3510.hsb" name="Nokia 3510 (Chippy)" sha1="e0ca456952793b8d5ee16c598a0e48712a912bba" />
+  <bank src="minibae-nokia-7650.hsb" name="Nokia 7650 (Large)" sha1="82f15ab9938069e07db9181934970a1d6be37c01" />
+  <bank src="minibae-nokia-5140i.hsb" name="Nokia 5140i (Idefix)" sha1="9d887700b5489462f7f38f8ea094bcba0c850234" />
+  <bank src="minibae-nokia-ngage.hsb" name="Nokia N-Gage (Mango)" sha1="6b89950cd76e0542ab2575c69ab3448d0f0c17b5" />
+  <bank src="danger-hiptop.hsb" name="Danger Hiptop 1.1" sha1="8bb26fc66aecf14e2dfa48d2123e2576863fa2ab" />
 </banks>
