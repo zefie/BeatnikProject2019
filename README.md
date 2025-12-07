@@ -1,5 +1,13 @@
 # BeatnikProject2019
 Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
+
+---
+
+# Notice
+This project has been superseded by [miniBAE](https://github.com/zefie/miniBAE).
+
+---
+
 ## Status:
 - Beta
   - Basic functionality should work, but glitches or bugs are expected to occur.
