@@ -4,7 +4,7 @@ Relive your nostalgia with the Beatnik Audio Engine (Windows Only)
 ---
 
 # Notice
-This project has been superseded by [miniBAE](https://github.com/zefie/miniBAE).
+This project has been superseded by [NeoBAE](https://github.com/zefie/NeoBAE).
 
 ---
 
